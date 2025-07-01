@@ -3,8 +3,22 @@ namespace ThirdParty\BlogArticle\Block;
 
 class Article extends \Magento\Framework\View\Element\Template
 {
-    public function getHelloMessage()
+    /**
+     * @var \ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory
+     */
+    protected $collectionFactory;
+
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory $collectionFactory,
+        array $data = []
+    ) {
+        $this->collectionFactory = $collectionFactory;
+        parent::__construct($context, $data);
+    }
+
+    public function getPosts()
     {
-        return __('Hello Blog Article');
+        return $this->collectionFactory->create();
     }
 }
