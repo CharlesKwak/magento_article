@@ -9,3 +9,7 @@ After installation, navigate to `/blog/index/index` in your store frontend to vi
 
 ## Module Overview
 The module is registered under the name `ThirdParty_BlogArticle` and provides a starting point for building blog features in a Magento store.
+
+## Compatibility
+Tested with Magento 2.4.x.
+Compatible with Magento >=2.4.0 <3.0.0.
