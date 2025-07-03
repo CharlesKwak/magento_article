@@ -1,0 +1,9 @@
+<?php /** @var \ThirdParty\BlogArticle\Block\Adminhtml\Post $block */ ?>
+<?php foreach ($block->getPosts() as $post): ?>
+    <div class="blog-post">
+        <h2><?php echo $block->escapeHtml($post->getTitle()); ?></h2>
+        <div class="content">
+            <?php echo $post->getContent(); ?>
+        </div>
+    </div>
+<?php endforeach; ?>
