@@ -26,3 +26,8 @@ composer install
    ```
 3. Set a package name in `composer.json` and push a version tag to GitHub.
    The package will appear under the repository's **Packages** tab.
+
+## CI/CD Pipeline
+This repository ships with a GitHub Actions workflow that installs dependencies, runs the unit tests, packages the `app` directory and optionally deploys it using SSH.
+To enable deployment set the `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PATH` and `DEPLOY_SSH_KEY` secrets in your repository settings.
+
