@@ -1,0 +1,10 @@
+[
+  {
+    "title": "Welcome to the blog",
+    "content": "This is dummy content for the first post."
+  },
+  {
+    "title": "Second sample post",
+    "content": "This post is used to test JSON dummy data input."
+  }
+]
