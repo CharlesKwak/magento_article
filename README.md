@@ -19,6 +19,15 @@ composer install
 ./vendor/bin/phpunit --configuration tests/phpunit.xml
 ```
 
+Run a specific PHPUnit test file with a dummy JSON input file:
+
+```bash
+./tests/run_with_dummy_data.sh tests/DummyDataInputTest.php tests/dummy_posts.json
+```
+
+`run_with_dummy_data.sh` passes the JSON file path through the `DUMMY_DATA_FILE` environment variable so your test can load fixture-like dummy input dynamically.
+
+
 ## Publishing to GitHub Packages
 1. Generate a personal access token (PAT) with `write:packages` and `read:packages` permissions.
 2. Configure Composer to use your PAT:
