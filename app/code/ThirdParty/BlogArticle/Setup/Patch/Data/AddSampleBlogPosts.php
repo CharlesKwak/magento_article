@@ -4,6 +4,7 @@ namespace ThirdParty\BlogArticle\Setup\Patch\Data;
 use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use ThirdParty\BlogArticle\Setup\Patch\Schema\AddUrlKeyAndStatusColumns;
 
 /**
  * Seeds sample blog posts when the table is empty (first install / upgrade).
@@ -39,19 +40,30 @@ class AddSampleBlogPosts implements DataPatchInterface
         );
 
         if ($count === 0) {
-            $connection->insertMultiple(
-                $table,
+            $hasUrlKey = $connection->tableColumnExists($table, 'url_key');
+            $hasIsActive = $connection->tableColumnExists($table, 'is_active');
+
+            $rows = [
                 [
-                    [
-                        'title' => 'Welcome to the blog',
-                        'content' => '<p>This is the first sample article installed for verification.</p>',
-                    ],
-                    [
-                        'title' => 'Second sample post',
-                        'content' => '<p>Use <strong>Content → Blog Posts</strong> in Admin to edit or add more posts.</p>',
-                    ],
-                ]
-            );
+                    'title' => 'Welcome to the blog',
+                    'content' => '<p>This is the first sample article installed for verification.</p>',
+                ],
+                [
+                    'title' => 'Second sample post',
+                    'content' => '<p>Use <strong>Content → Blog Posts</strong> in Admin to edit or add more posts.</p>',
+                ],
+            ];
+
+            if ($hasUrlKey) {
+                $rows[0]['url_key'] = 'welcome-to-the-blog';
+                $rows[1]['url_key'] = 'second-sample-post';
+            }
+            if ($hasIsActive) {
+                $rows[0]['is_active'] = 1;
+                $rows[1]['is_active'] = 1;
+            }
+
+            $connection->insertMultiple($table, $rows);
         }
 
         $connection->endSetup();
@@ -63,7 +75,10 @@ class AddSampleBlogPosts implements DataPatchInterface
      */
     public static function getDependencies()
     {
-        return [];
+        // Prefer columns from schema patch when upgrading existing installs.
+        return [
+            AddUrlKeyAndStatusColumns::class,
+        ];
     }
 
     /**

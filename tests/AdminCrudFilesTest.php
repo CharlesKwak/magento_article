@@ -19,7 +19,15 @@ class AdminCrudFilesTest extends TestCase
             $root . '/view/adminhtml/layout/blogarticle_post_edit.xml',
             $root . '/view/adminhtml/templates/post/edit.phtml',
             $root . '/Setup/Patch/Data/AddSampleBlogPosts.php',
+            $root . '/Setup/Patch/Data/BackfillUrlKeysAndStatus.php',
+            $root . '/Setup/Patch/Schema/AddUrlKeyAndStatusColumns.php',
             $root . '/Model/PostFactory.php',
+            $root . '/Model/UrlKeyGenerator.php',
+            $root . '/Controller/Post/View.php',
+            $root . '/Block/Post/View.php',
+            $root . '/view/frontend/layout/blog_post_view.xml',
+            $root . '/view/frontend/templates/post/view.phtml',
+            $root . '/etc/adminhtml/di.xml',
         ];
 
         foreach ($paths as $path) {
@@ -27,11 +35,20 @@ class AdminCrudFilesTest extends TestCase
         }
     }
 
-    public function testModuleVersionIs110(): void
+    public function testModuleVersionIs120(): void
     {
         $path = dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/etc/module.xml';
         $content = file_get_contents($path);
         $this->assertNotFalse($content);
-        $this->assertStringContainsString('setup_version="1.1.0"', $content);
+        $this->assertStringContainsString('setup_version="1.2.0"', $content);
+    }
+
+    public function testInstallSchemaDefinesUrlKeyAndStatus(): void
+    {
+        $path = dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/Setup/InstallSchema.php';
+        $content = file_get_contents($path);
+        $this->assertNotFalse($content);
+        $this->assertStringContainsString("'url_key'", $content);
+        $this->assertStringContainsString("'is_active'", $content);
     }
 }

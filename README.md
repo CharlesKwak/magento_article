@@ -8,7 +8,7 @@ Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style ar
 |---|---|
 | Package | `thirdparty/module-blog-article` |
 | Module | `ThirdParty_BlogArticle` |
-| Version | **1.1.0** |
+| Version | **1.2.0** |
 | License | [GPL-2.0](LICENSE) (`composer.json`: `GPL-2.0-only`) |
 
 ---
@@ -24,19 +24,20 @@ Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style ar
 
 ---
 
-## Feature scope (v1.1.0)
+## Feature scope (v1.2.0)
 
 ### Included
 
-- Database table `thirdparty_blogarticle_post` (`post_id`, `title`, `content`, `creation_time`)
+- Database table `thirdparty_blogarticle_post` (`post_id`, `title`, `url_key`, `content`, `is_active`, `creation_time`, `update_time`)
 - Data patch seeds **two sample posts** when the table is empty
-- Storefront list: `/blog/index/index` (HTML allow-list on content)
-- Admin: **Content → Blog Posts** — list, **Add**, **Edit**, **Delete**
+- Storefront list: `/blog/index/index` (enabled posts, excerpt + link)
+- Storefront detail: `/blog/post/view/url_key/<key>`
+- Admin: **Content → Blog Posts** — list, **Add**, **Edit**, **Delete**, status, URL key
 - ACL: `ThirdParty_BlogArticle::posts`
 
 ### Not included
 
-- Single article detail page, categories, tags, draft status, REST/GraphQL
+- Categories, tags, REST/GraphQL, per-store content
 
 ---
 
@@ -69,8 +70,9 @@ php bin/magento cache:flush
 
 **Verify**
 
-- Storefront: `https://<store>/blog/index/index` (sample posts visible)
-- Admin: **Content → Blog Posts** → Add / Edit / Delete
+- Storefront list: `https://<store>/blog/index/index`
+- Storefront detail: `https://<store>/blog/post/view/url_key/welcome-to-the-blog`
+- Admin: **Content → Blog Posts** → Add / Edit / Delete / View
 
 Details: **[Installation Guide](docs/INSTALLATION_GUIDE.md)**.
 
@@ -97,7 +99,7 @@ Registered as `ThirdParty_BlogArticle` (`ThirdParty\BlogArticle`). On `setup:upg
 
 ```bash
 ./scripts/package_module.sh
-# → dist/thirdparty-blog-article-1.1.0.zip
+# → dist/thirdparty-blog-article-1.2.0.zip
 ```
 
 ### PDF conversion for Marketplace upload

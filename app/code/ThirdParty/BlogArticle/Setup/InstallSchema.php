@@ -1,10 +1,10 @@
 <?php
 namespace ThirdParty\BlogArticle\Setup;
 
-use Magento\Framework\Setup\InstallSchemaInterface;
-use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
 
 class InstallSchema implements InstallSchemaInterface
 {
@@ -29,17 +29,43 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false],
                 'Title'
             )->addColumn(
+                'url_key',
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => true],
+                'URL Key'
+            )->addColumn(
                 'content',
                 Table::TYPE_TEXT,
                 '64k',
                 ['nullable' => false],
                 'Content'
             )->addColumn(
+                'is_active',
+                Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => 1],
+                'Is Active'
+            )->addColumn(
                 'creation_time',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
                 'Creation Time'
+            )->addColumn(
+                'update_time',
+                Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE],
+                'Update Time'
+            )->addIndex(
+                $installer->getIdxName(
+                    'thirdparty_blogarticle_post',
+                    ['url_key'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
+                ['url_key'],
+                ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )->setComment('BlogArticle Posts');
             $installer->getConnection()->createTable($table);
         }

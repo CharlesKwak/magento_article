@@ -1,0 +1,32 @@
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Post\View $block */
+$post = $block->getPost();
+$allowedTags = $block->getAllowedContentTags();
+?>
+<div class="blog-post-view">
+    <p class="blog-back">
+        <a href="<?= $block->escapeUrl($block->getListUrl()) ?>">
+            ← <?= $block->escapeHtml(__('Back to blog')) ?>
+        </a>
+    </p>
+
+    <?php if (!$post): ?>
+        <div class="message error">
+            <span><?= $block->escapeHtml(__('This post is not available.')) ?></span>
+        </div>
+    <?php else: ?>
+        <article class="blog-post">
+            <h1><?= $block->escapeHtml($post->getTitle()) ?></h1>
+            <?php if ($post->getCreationTime()): ?>
+                <p class="blog-meta">
+                    <time datetime="<?= $block->escapeHtmlAttr((string) $post->getCreationTime()) ?>">
+                        <?= $block->escapeHtml((string) $post->getCreationTime()) ?>
+                    </time>
+                </p>
+            <?php endif; ?>
+            <div class="content">
+                <?= /* @noEscape */ $block->escapeHtml((string) $post->getContent(), $allowedTags) ?>
+            </div>
+        </article>
+    <?php endif; ?>
+</div>

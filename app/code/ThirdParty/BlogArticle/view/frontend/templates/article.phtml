@@ -1,19 +1,36 @@
 <?php
 /** @var \ThirdParty\BlogArticle\Block\Article $block */
-$allowedTags = ['p', 'br', 'em', 'strong', 'b', 'i', 'ul', 'ol', 'li', 'a', 'h2', 'h3', 'h4'];
 $posts = $block->getPosts();
 ?>
-<?php if (!$posts->getSize()): ?>
-    <div class="blog-empty">
-        <p><?= $block->escapeHtml(__('No blog posts are available yet.')) ?></p>
-    </div>
-<?php else: ?>
-    <?php foreach ($posts as $post): ?>
-        <div class="blog-post">
-            <h2><?= $block->escapeHtml($post->getTitle()) ?></h2>
-            <div class="content">
-                <?= /* @noEscape */ $block->escapeHtml((string) $post->getContent(), $allowedTags) ?>
-            </div>
+<div class="blog-post-list">
+    <?php if (!$posts->getSize()): ?>
+        <div class="blog-empty">
+            <p><?= $block->escapeHtml(__('No blog posts are available yet.')) ?></p>
         </div>
-    <?php endforeach; ?>
-<?php endif; ?>
+    <?php else: ?>
+        <?php foreach ($posts as $post): ?>
+            <article class="blog-post blog-post-summary">
+                <h2>
+                    <a href="<?= $block->escapeUrl($block->getPostUrl($post)) ?>">
+                        <?= $block->escapeHtml($post->getTitle()) ?>
+                    </a>
+                </h2>
+                <?php if ($post->getCreationTime()): ?>
+                    <p class="blog-meta">
+                        <time datetime="<?= $block->escapeHtmlAttr((string) $post->getCreationTime()) ?>">
+                            <?= $block->escapeHtml((string) $post->getCreationTime()) ?>
+                        </time>
+                    </p>
+                <?php endif; ?>
+                <div class="excerpt">
+                    <p><?= $block->escapeHtml($block->getExcerpt($post)) ?></p>
+                </div>
+                <p class="blog-read-more">
+                    <a href="<?= $block->escapeUrl($block->getPostUrl($post)) ?>">
+                        <?= $block->escapeHtml(__('Read more')) ?>
+                    </a>
+                </p>
+            </article>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>

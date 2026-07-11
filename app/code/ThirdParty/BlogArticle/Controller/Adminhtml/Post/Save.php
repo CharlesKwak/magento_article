@@ -6,6 +6,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use ThirdParty\BlogArticle\Model\PostFactory;
+use ThirdParty\BlogArticle\Model\UrlKeyGenerator;
 
 class Save extends Action
 {
@@ -21,14 +22,21 @@ class Save extends Action
      */
     private $dataPersistor;
 
+    /**
+     * @var UrlKeyGenerator
+     */
+    private $urlKeyGenerator;
+
     public function __construct(
         Context $context,
         PostFactory $postFactory,
-        DataPersistorInterface $dataPersistor
+        DataPersistorInterface $dataPersistor,
+        UrlKeyGenerator $urlKeyGenerator
     ) {
         parent::__construct($context);
         $this->postFactory = $postFactory;
         $this->dataPersistor = $dataPersistor;
+        $this->urlKeyGenerator = $urlKeyGenerator;
     }
 
     /**
@@ -56,6 +64,8 @@ class Save extends Action
 
         $title = isset($data['title']) ? trim((string) $data['title']) : '';
         $content = isset($data['content']) ? trim((string) $data['content']) : '';
+        $urlKeyInput = isset($data['url_key']) ? trim((string) $data['url_key']) : '';
+        $isActive = !empty($data['is_active']) ? 1 : 0;
 
         if ($title === '' || $content === '') {
             $this->messageManager->addErrorMessage(__('Title and content are required.'));
@@ -63,8 +73,16 @@ class Save extends Action
             return $resultRedirect->setPath('*/*/edit', ['post_id' => $postId ?: null]);
         }
 
+        $urlSource = $urlKeyInput !== '' ? $urlKeyInput : $title;
+        $urlKey = $this->urlKeyGenerator->generate(
+            $urlSource,
+            $post->getId() ? (int) $post->getId() : null
+        );
+
         $post->setTitle($title);
         $post->setContent($content);
+        $post->setUrlKey($urlKey);
+        $post->setIsActive($isActive);
 
         try {
             $post->save();

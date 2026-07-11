@@ -4,7 +4,7 @@ This guide explains how to install and verify the **ThirdParty_BlogArticle** mod
 
 Module package name: `thirdparty/module-blog-article`  
 Module code name: `ThirdParty_BlogArticle`  
-Current version: **1.1.0**
+Current version: **1.2.0**
 
 ---
 
@@ -18,15 +18,17 @@ After a successful install, the module:
 4. Exposes a **storefront list page** at `/blog/index/index` (frontName: `blog`).
 5. Exposes an **Admin list + CRUD** under **Content → Blog Posts** (Add / Edit / Delete).
 
-### Capability matrix (v1.1.0)
+### Capability matrix (v1.2.0)
 
 | Capability | Status |
 |---|---|
-| List posts on storefront | Supported |
+| List posts on storefront | Supported (enabled only) |
 | List posts in Admin | Supported |
 | Create / edit / delete posts in Admin UI | **Supported** |
 | Sample (seed) posts on install | **Supported** (empty table only) |
-| Single-post detail page / SEO URL | **Not available** |
+| Single-post detail page | **Supported** (`/blog/post/view/url_key/...`) |
+| URL key + publish status | **Supported** |
+| Categories / tags / GraphQL | **Not available** |
 
 For dependency and runtime inventory (PHP, MySQL, Magento, SBOM-style notes), see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
 
@@ -188,8 +190,11 @@ Expected columns:
 |---|---|
 | `post_id` | Primary key (auto increment) |
 | `title` | Post title (required) |
+| `url_key` | Unique slug for detail URL |
 | `content` | Post body (required; may contain HTML) |
+| `is_active` | 1 = enabled on storefront, 0 = hidden |
 | `creation_time` | Created timestamp (default: current time) |
+| `update_time` | Updated timestamp |
 
 ---
 
@@ -230,10 +235,11 @@ More field semantics and security notes: [User Guide](./USER_GUIDE.md).
 
 ### 7.1 Storefront
 
-1. Open: `https://<your-store-base-url>/blog/index/index`  
-   (also try `/blog/` depending on URL rewrite configuration)
-2. After a fresh install you should see the two sample posts (unless seed was skipped because data already existed).
-3. Empty table: page shows a friendly “no posts” message.
+1. Open list: `https://<your-store-base-url>/blog/index/index`
+2. Open a detail page, for example:  
+   `https://<your-store-base-url>/blog/post/view/url_key/welcome-to-the-blog`
+3. After a fresh install you should see two sample posts (unless seed was skipped).
+4. Empty table: list shows a friendly “no posts” message.
 
 ### 7.2 Admin
 

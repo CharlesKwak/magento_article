@@ -1,6 +1,7 @@
 <?php
 /** @var \ThirdParty\BlogArticle\Block\Adminhtml\Post\Edit $block */
 $post = $block->getPost();
+$isActive = $post->getId() ? (int) $post->getIsActive() : 1;
 ?>
 <div class="blogarticle-post-edit">
     <div class="page-actions" style="margin-bottom: 1rem;">
@@ -39,6 +40,43 @@ $post = $block->getPost();
                            required="required"
                            style="width:100%; max-width:640px;"
                            value="<?= $block->escapeHtmlAttr((string) $post->getTitle()) ?>"/>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="url_key">
+                    <span><?= $block->escapeHtml(__('URL Key')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <input class="admin__control-text"
+                           type="text"
+                           id="url_key"
+                           name="url_key"
+                           maxlength="255"
+                           style="width:100%; max-width:640px;"
+                           value="<?= $block->escapeHtmlAttr((string) $post->getUrlKey()) ?>"/>
+                    <p class="admin__field-note">
+                        <?= $block->escapeHtml(__('Leave empty to generate from the title. Used in /blog/post/view/url_key/...')) ?>
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="is_active">
+                    <span><?= $block->escapeHtml(__('Status')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <select class="admin__control-select" id="is_active" name="is_active" style="max-width:240px;">
+                        <option value="1" <?= $isActive ? 'selected="selected"' : '' ?>>
+                            <?= $block->escapeHtml(__('Enabled')) ?>
+                        </option>
+                        <option value="0" <?= !$isActive ? 'selected="selected"' : '' ?>>
+                            <?= $block->escapeHtml(__('Disabled')) ?>
+                        </option>
+                    </select>
+                    <p class="admin__field-note">
+                        <?= $block->escapeHtml(__('Disabled posts are hidden from the storefront list and detail pages.')) ?>
+                    </p>
                 </div>
             </div>
 

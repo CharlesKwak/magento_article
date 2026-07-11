@@ -1,5 +1,30 @@
 # Release Notes
 
+## 1.2.0 - 2026-07-12
+
+### Added
+- Storefront **detail page**: `/blog/post/view/url_key/<key>` (or `id/<post_id>`)
+- List page links with excerpt + **Read more**
+- Schema fields: `url_key` (unique), `is_active`, `update_time`
+- Schema patch `AddUrlKeyAndStatusColumns` + data patch `BackfillUrlKeysAndStatus`
+- Admin form fields: URL Key, Status (Enabled/Disabled)
+- Admin list columns: URL Key, Status, storefront **View** link
+- `UrlKeyGenerator` for unique slug generation from title
+- Frontend shows **enabled posts only**
+
+### Changed
+- Module / package version **1.2.0**
+- InstallSchema creates full column set for new installs
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+```
+Existing posts receive auto-generated `url_key` values; `is_active` defaults to enabled.
+
+---
+
 ## 1.1.0 - 2026-07-12
 
 ### Added
