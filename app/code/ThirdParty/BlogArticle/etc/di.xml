@@ -9,4 +9,8 @@
                 type="ThirdParty\BlogArticle\Model\CategoryRepository"/>
     <preference for="ThirdParty\BlogArticle\Api\Data\CategoryInterface"
                 type="ThirdParty\BlogArticle\Model\Data\Category"/>
+    <preference for="ThirdParty\BlogArticle\Api\TagRepositoryInterface"
+                type="ThirdParty\BlogArticle\Model\TagRepository"/>
+    <preference for="ThirdParty\BlogArticle\Api\Data\TagInterface"
+                type="ThirdParty\BlogArticle\Model\Data\Tag"/>
 </config>

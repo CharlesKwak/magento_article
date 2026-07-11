@@ -5,6 +5,7 @@
         <resource id="Magento_Backend::admin">
             <resource id="ThirdParty_BlogArticle::posts" title="Blog Posts" sortOrder="10">
                 <resource id="ThirdParty_BlogArticle::categories" title="Blog Categories" sortOrder="15"/>
+                <resource id="ThirdParty_BlogArticle::tags" title="Blog Tags" sortOrder="16"/>
                 <resource id="ThirdParty_BlogArticle::config" title="Blog Article Configuration" sortOrder="20"/>
             </resource>
         </resource>

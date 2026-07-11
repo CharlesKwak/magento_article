@@ -9,20 +9,30 @@ type BlogCategory {
     update_time: String
 }
 
+type BlogTag {
+    tag_id: Int
+    name: String
+    url_key: String
+    is_active: Int
+    creation_time: String
+    update_time: String
+}
+
 type BlogPost {
-    post_id: Int @doc(description: "Post entity ID")
-    title: String @doc(description: "Post title")
-    url_key: String @doc(description: "URL key / slug")
-    content: String @doc(description: "Post HTML/text content")
-    is_active: Int @doc(description: "1 = enabled, 0 = disabled")
-    category_id: Int @doc(description: "Optional category ID")
-    creation_time: String @doc(description: "Created at")
-    update_time: String @doc(description: "Updated at")
+    post_id: Int
+    title: String
+    url_key: String
+    content: String
+    is_active: Int
+    category_id: Int
+    tag_ids: [Int]
+    creation_time: String
+    update_time: String
 }
 
 type BlogPostList {
-    items: [BlogPost]! @doc(description: "Posts for the current page")
-    total_count: Int @doc(description: "Total matching enabled posts")
+    items: [BlogPost]!
+    total_count: Int
     page_size: Int
     current_page: Int
     total_pages: Int
@@ -30,29 +40,26 @@ type BlogPostList {
 
 type Query {
     blogPosts(
-        pageSize: Int = 10 @doc(description: "Page size (max 100)")
-        currentPage: Int = 1 @doc(description: "1-based page number")
-        search: String @doc(description: "Optional free-text search")
-        categoryId: Int @doc(description: "Optional category filter")
+        pageSize: Int = 10
+        currentPage: Int = 1
+        search: String
+        categoryId: Int
+        tagId: Int
     ): BlogPostList
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Posts")
-    @doc(description: "List enabled blog posts")
 
-    blogPost(
-        id: Int @doc(description: "Post ID")
-        url_key: String @doc(description: "Post URL key")
-    ): BlogPost
+    blogPost(id: Int, url_key: String): BlogPost
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Post")
-    @doc(description: "Get a single enabled blog post by id or url_key")
 
     blogCategories: [BlogCategory]!
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Categories")
-    @doc(description: "List enabled blog categories")
 
-    blogCategory(
-        id: Int
-        url_key: String
-    ): BlogCategory
+    blogCategory(id: Int, url_key: String): BlogCategory
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Category")
-    @doc(description: "Get an enabled blog category")
+
+    blogTags: [BlogTag]!
+    @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Tags")
+
+    blogTag(id: Int, url_key: String): BlogTag
+    @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Tag")
 }

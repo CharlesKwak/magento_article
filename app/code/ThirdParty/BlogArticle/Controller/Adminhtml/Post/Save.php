@@ -6,42 +6,32 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use ThirdParty\BlogArticle\Model\PostFactory;
+use ThirdParty\BlogArticle\Model\PostTagLink;
 use ThirdParty\BlogArticle\Model\UrlKeyGenerator;
 
 class Save extends Action
 {
     const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
 
-    /**
-     * @var PostFactory
-     */
     private $postFactory;
-
-    /**
-     * @var DataPersistorInterface
-     */
     private $dataPersistor;
-
-    /**
-     * @var UrlKeyGenerator
-     */
     private $urlKeyGenerator;
+    private $postTagLink;
 
     public function __construct(
         Context $context,
         PostFactory $postFactory,
         DataPersistorInterface $dataPersistor,
-        UrlKeyGenerator $urlKeyGenerator
+        UrlKeyGenerator $urlKeyGenerator,
+        PostTagLink $postTagLink
     ) {
         parent::__construct($context);
         $this->postFactory = $postFactory;
         $this->dataPersistor = $dataPersistor;
         $this->urlKeyGenerator = $urlKeyGenerator;
+        $this->postTagLink = $postTagLink;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
@@ -69,6 +59,9 @@ class Save extends Action
         $categoryId = isset($data['category_id']) && $data['category_id'] !== ''
             ? (int) $data['category_id']
             : null;
+        $tagIds = isset($data['tag_ids']) && is_array($data['tag_ids'])
+            ? array_map('intval', $data['tag_ids'])
+            : [];
 
         if ($title === '' || $content === '') {
             $this->messageManager->addErrorMessage(__('Title and content are required.'));
@@ -90,6 +83,7 @@ class Save extends Action
 
         try {
             $post->save();
+            $this->postTagLink->setTagsForPost((int) $post->getId(), $tagIds);
             $this->messageManager->addSuccessMessage(__('The blog post has been saved.'));
             $this->dataPersistor->clear('blogarticle_post');
 

@@ -22,10 +22,15 @@ $searchQuery = $block->getSearchQuery();
         <?php elseif ($block->getCategoryIdFilter()): ?>
             <input type="hidden" name="category_id" value="<?= (int) $block->getCategoryIdFilter() ?>"/>
         <?php endif; ?>
+        <?php if ($block->getTagKeyFilter() !== ''): ?>
+            <input type="hidden" name="tag" value="<?= $block->escapeHtmlAttr($block->getTagKeyFilter()) ?>"/>
+        <?php elseif ($block->getTagIdFilter()): ?>
+            <input type="hidden" name="tag_id" value="<?= (int) $block->getTagIdFilter() ?>"/>
+        <?php endif; ?>
         <button type="submit" class="action primary">
             <span><?= $block->escapeHtml(__('Search')) ?></span>
         </button>
-        <?php if ($searchQuery !== '' || $block->getCategoryIdFilter()): ?>
+        <?php if ($searchQuery !== '' || $block->getCategoryIdFilter() || $block->getTagIdFilter()): ?>
             <a href="<?= $block->escapeUrl($block->getUrl('blog/index/index')) ?>">
                 <?= $block->escapeHtml(__('Clear')) ?>
             </a>
@@ -34,7 +39,8 @@ $searchQuery = $block->getSearchQuery();
 
     <?php $categories = $block->getActiveCategories(); ?>
     <?php if ($categories->getSize()): ?>
-        <nav class="blog-categories" style="margin-bottom:1.25rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+        <nav class="blog-categories" style="margin-bottom:0.75rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+            <strong><?= $block->escapeHtml(__('Categories:')) ?></strong>
             <a href="<?= $block->escapeUrl($block->getUrl('blog/index/index')) ?>"
                <?= !$block->getCategoryIdFilter() ? 'style="font-weight:bold;"' : '' ?>>
                 <?= $block->escapeHtml(__('All')) ?>
@@ -43,6 +49,19 @@ $searchQuery = $block->getSearchQuery();
                 <a href="<?= $block->escapeUrl($block->getCategoryFilterUrl((string) $category->getUrlKey())) ?>"
                    <?= (int) $block->getCategoryIdFilter() === (int) $category->getId() ? 'style="font-weight:bold;"' : '' ?>>
                     <?= $block->escapeHtml($category->getName()) ?>
+                </a>
+            <?php endforeach; ?>
+        </nav>
+    <?php endif; ?>
+
+    <?php $tags = $block->getActiveTags(); ?>
+    <?php if ($tags->getSize()): ?>
+        <nav class="blog-tags" style="margin-bottom:1.25rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+            <strong><?= $block->escapeHtml(__('Tags:')) ?></strong>
+            <?php foreach ($tags as $tag): ?>
+                <a href="<?= $block->escapeUrl($block->getTagFilterUrl((string) $tag->getUrlKey())) ?>"
+                   <?= (int) $block->getTagIdFilter() === (int) $tag->getId() ? 'style="font-weight:bold;"' : '' ?>>
+                    #<?= $block->escapeHtml($tag->getName()) ?>
                 </a>
             <?php endforeach; ?>
         </nav>
@@ -83,6 +102,14 @@ $searchQuery = $block->getSearchQuery();
                         </time>
                     <?php endif; ?>
                 </p>
+                <?php $tagNames = $block->getTagNames($post); ?>
+                <?php if ($tagNames): ?>
+                    <p class="blog-post-tags">
+                        <?php foreach ($tagNames as $tagName): ?>
+                            <span class="blog-tag">#<?= $block->escapeHtml($tagName) ?></span>
+                        <?php endforeach; ?>
+                    </p>
+                <?php endif; ?>
                 <div class="excerpt">
                     <p><?= $block->escapeHtml($block->getExcerpt($post)) ?></p>
                 </div>

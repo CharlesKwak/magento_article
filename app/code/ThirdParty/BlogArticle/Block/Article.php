@@ -7,9 +7,12 @@ use ThirdParty\BlogArticle\Model\CategoryFactory;
 use ThirdParty\BlogArticle\Model\Config;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFilter;
+use ThirdParty\BlogArticle\Model\PostTagLink;
+use ThirdParty\BlogArticle\Model\TagFactory;
 use ThirdParty\BlogArticle\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\Collection;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory;
+use ThirdParty\BlogArticle\Model\ResourceModel\Tag\CollectionFactory as TagCollectionFactory;
 
 class Article extends Template
 {
@@ -39,6 +42,21 @@ class Article extends Template
     private $categoryFactory;
 
     /**
+     * @var TagCollectionFactory
+     */
+    private $tagCollectionFactory;
+
+    /**
+     * @var TagFactory
+     */
+    private $tagFactory;
+
+    /**
+     * @var PostTagLink
+     */
+    private $postTagLink;
+
+    /**
      * @var Collection|null
      */
     private $posts;
@@ -48,6 +66,11 @@ class Article extends Template
      */
     private $categoryNameCache = [];
 
+    /**
+     * @var array
+     */
+    private $tagNameCache = [];
+
     public function __construct(
         Context $context,
         CollectionFactory $collectionFactory,
@@ -55,6 +78,9 @@ class Article extends Template
         Config $config,
         CategoryCollectionFactory $categoryCollectionFactory,
         CategoryFactory $categoryFactory,
+        TagCollectionFactory $tagCollectionFactory,
+        TagFactory $tagFactory,
+        PostTagLink $postTagLink,
         array $data = []
     ) {
         $this->collectionFactory = $collectionFactory;
@@ -62,6 +88,9 @@ class Article extends Template
         $this->config = $config;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->categoryFactory = $categoryFactory;
+        $this->tagCollectionFactory = $tagCollectionFactory;
+        $this->tagFactory = $tagFactory;
+        $this->postTagLink = $postTagLink;
         parent::__construct($context, $data);
     }
 
@@ -75,6 +104,7 @@ class Article extends Template
             $this->postFilter->applyActiveOnly($collection);
             $this->postFilter->applySearch($collection, $this->getSearchQuery());
             $this->postFilter->applyCategoryId($collection, $this->getCategoryIdFilter());
+            $this->postFilter->applyTagId($collection, $this->getTagIdFilter());
             $collection->setOrder('creation_time', 'DESC');
             $collection->setPageSize($this->getPageSize());
             $collection->setCurPage($this->getCurrentPage());
@@ -125,11 +155,52 @@ class Article extends Template
     }
 
     /**
+     * Tag filter from ?tag=url_key or ?tag_id=
+     *
+     * @return int|null
+     */
+    public function getTagIdFilter(): ?int
+    {
+        $tagId = (int) $this->getRequest()->getParam('tag_id', 0);
+        if ($tagId > 0) {
+            return $tagId;
+        }
+        $tagKey = trim((string) $this->getRequest()->getParam('tag', ''));
+        if ($tagKey === '') {
+            return null;
+        }
+        $tag = $this->tagFactory->create()->load($tagKey, 'url_key');
+        if ($tag->getId() && (int) $tag->getIsActive()) {
+            return (int) $tag->getId();
+        }
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTagKeyFilter(): string
+    {
+        return trim((string) $this->getRequest()->getParam('tag', ''));
+    }
+
+    /**
      * @return \ThirdParty\BlogArticle\Model\ResourceModel\Category\Collection
      */
     public function getActiveCategories()
     {
         $collection = $this->categoryCollectionFactory->create();
+        $collection->addFieldToFilter('is_active', 1);
+        $collection->setOrder('name', 'ASC');
+        return $collection;
+    }
+
+    /**
+     * @return \ThirdParty\BlogArticle\Model\ResourceModel\Tag\Collection
+     */
+    public function getActiveTags()
+    {
+        $collection = $this->tagCollectionFactory->create();
         $collection->addFieldToFilter('is_active', 1);
         $collection->setOrder('name', 'ASC');
         return $collection;
@@ -152,6 +223,25 @@ class Article extends Template
                 : '';
         }
         return $this->categoryNameCache[$categoryId];
+    }
+
+    /**
+     * @param Post $post
+     * @return string[]
+     */
+    public function getTagNames(Post $post): array
+    {
+        $names = [];
+        foreach ($this->postTagLink->getTagIdsForPost((int) $post->getId()) as $tagId) {
+            if (!array_key_exists($tagId, $this->tagNameCache)) {
+                $tag = $this->tagFactory->create()->load($tagId);
+                $this->tagNameCache[$tagId] = $tag->getId() ? (string) $tag->getName() : '';
+            }
+            if ($this->tagNameCache[$tagId] !== '') {
+                $names[] = $this->tagNameCache[$tagId];
+            }
+        }
+        return $names;
     }
 
     /**
@@ -221,6 +311,11 @@ class Article extends Template
     public function getCategoryFilterUrl(string $urlKey): string
     {
         return $this->getUrl('blog/index/index', ['cat' => $urlKey]);
+    }
+
+    public function getTagFilterUrl(string $urlKey): string
+    {
+        return $this->getUrl('blog/index/index', ['tag' => $urlKey]);
     }
 
     /**

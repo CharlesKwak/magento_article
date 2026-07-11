@@ -132,6 +132,31 @@ class InstallSchema implements InstallSchemaInterface
             $connection->createTable($postTable);
         }
 
+
+        $tagTableName = $installer->getTable('thirdparty_blogarticle_tag');
+        if (!$connection->isTableExists($tagTableName)) {
+            $tagTable = $connection->newTable($tagTableName)
+                ->addColumn('tag_id', Table::TYPE_INTEGER, null, ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true], 'Tag ID')
+                ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable' => false], 'Name')
+                ->addColumn('url_key', Table::TYPE_TEXT, 255, ['nullable' => true], 'URL Key')
+                ->addColumn('is_active', Table::TYPE_SMALLINT, null, ['unsigned' => true, 'nullable' => false, 'default' => 1], 'Is Active')
+                ->addColumn('creation_time', Table::TYPE_TIMESTAMP, null, ['nullable' => false, 'default' => Table::TIMESTAMP_INIT], 'Creation Time')
+                ->addColumn('update_time', Table::TYPE_TIMESTAMP, null, ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE], 'Update Time')
+                ->addIndex($installer->getIdxName($tagTableName, ['url_key'], AdapterInterface::INDEX_TYPE_UNIQUE), ['url_key'], ['type' => AdapterInterface::INDEX_TYPE_UNIQUE])
+                ->setComment('BlogArticle Tags');
+            $connection->createTable($tagTable);
+        }
+
+        $linkTableName = $installer->getTable('thirdparty_blogarticle_post_tag');
+        if (!$connection->isTableExists($linkTableName)) {
+            $linkTable = $connection->newTable($linkTableName)
+                ->addColumn('post_id', Table::TYPE_INTEGER, null, ['unsigned' => true, 'nullable' => false, 'primary' => true], 'Post ID')
+                ->addColumn('tag_id', Table::TYPE_INTEGER, null, ['unsigned' => true, 'nullable' => false, 'primary' => true], 'Tag ID')
+                ->addIndex($installer->getIdxName($linkTableName, ['tag_id']), ['tag_id'])
+                ->setComment('BlogArticle Post-Tag Link');
+            $connection->createTable($linkTable);
+        }
+
         $installer->endSetup();
     }
 }

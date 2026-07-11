@@ -8,9 +8,6 @@ use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
 
 class Posts implements ResolverInterface
 {
-    /**
-     * @var PostRepositoryInterface
-     */
     private $postRepository;
 
     public function __construct(PostRepositoryInterface $postRepository)
@@ -18,31 +15,35 @@ class Posts implements ResolverInterface
         $this->postRepository = $postRepository;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function resolve(
-        Field $field,
-        $context,
-        ResolveInfo $info,
-        ?array $value = null,
-        ?array $args = null
-    ) {
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
+    {
         $pageSize = isset($args['pageSize']) ? (int) $args['pageSize'] : 10;
         $currentPage = isset($args['currentPage']) ? (int) $args['currentPage'] : 1;
         $search = isset($args['search']) ? (string) $args['search'] : null;
         $categoryId = isset($args['categoryId']) ? (int) $args['categoryId'] : null;
+        $tagId = isset($args['tagId']) ? (int) $args['tagId'] : null;
 
         $pageSize = max(1, min(100, $pageSize));
         $currentPage = max(1, $currentPage);
 
-        $items = $this->postRepository->getList($currentPage, $pageSize, $search, $categoryId);
-        $totalCount = $this->postRepository->getListTotalCount($search, $categoryId);
+        $items = $this->postRepository->getList($currentPage, $pageSize, $search, $categoryId, $tagId);
+        $totalCount = $this->postRepository->getListTotalCount($search, $categoryId, $tagId);
         $totalPages = $pageSize > 0 ? (int) ceil($totalCount / $pageSize) : 0;
 
         $mapped = [];
         foreach ($items as $item) {
-            $mapped[] = $this->mapPost($item);
+            $mapped[] = [
+                'post_id' => $item->getPostId(),
+                'title' => $item->getTitle(),
+                'url_key' => $item->getUrlKey(),
+                'content' => $item->getContent(),
+                'is_active' => $item->getIsActive(),
+                'category_id' => $item->getCategoryId(),
+                'tag_ids' => $item->getTagIds() ?: [],
+                'creation_time' => $item->getCreationTime(),
+                'update_time' => $item->getUpdateTime(),
+                'model' => $item,
+            ];
         }
 
         return [
@@ -51,25 +52,6 @@ class Posts implements ResolverInterface
             'page_size' => $pageSize,
             'current_page' => $currentPage,
             'total_pages' => $totalPages,
-        ];
-    }
-
-    /**
-     * @param \ThirdParty\BlogArticle\Api\Data\PostInterface $item
-     * @return array
-     */
-    private function mapPost($item): array
-    {
-        return [
-            'post_id' => $item->getPostId(),
-            'title' => $item->getTitle(),
-            'url_key' => $item->getUrlKey(),
-            'content' => $item->getContent(),
-            'is_active' => $item->getIsActive(),
-            'category_id' => $item->getCategoryId(),
-            'creation_time' => $item->getCreationTime(),
-            'update_time' => $item->getUpdateTime(),
-            'model' => $item,
         ];
     }
 }

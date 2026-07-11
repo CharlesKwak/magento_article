@@ -12,6 +12,7 @@ interface PostInterface
     public const CONTENT = 'content';
     public const IS_ACTIVE = 'is_active';
     public const CATEGORY_ID = 'category_id';
+    public const TAG_IDS = 'tag_ids';
     public const CREATION_TIME = 'creation_time';
     public const UPDATE_TIME = 'update_time';
 
@@ -80,6 +81,19 @@ interface PostInterface
      * @return $this
      */
     public function setCategoryId($categoryId);
+
+    /**
+     * Linked tag IDs (many-to-many).
+     *
+     * @return int[]|null
+     */
+    public function getTagIds();
+
+    /**
+     * @param int[] $tagIds
+     * @return $this
+     */
+    public function setTagIds(array $tagIds);
 
     /**
      * @return string|null

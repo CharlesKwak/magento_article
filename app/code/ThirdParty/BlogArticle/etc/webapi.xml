@@ -90,4 +90,34 @@
             <resource ref="ThirdParty_BlogArticle::categories"/>
         </resources>
     </route>
+
+    <!-- Tags -->
+    <route url="/V1/blogarticle/tags" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\TagRepositoryInterface" method="getList"/>
+        <resources><resource ref="anonymous"/></resources>
+    </route>
+    <route url="/V1/blogarticle/tags/:tagId" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\TagRepositoryInterface" method="getById"/>
+        <resources><resource ref="anonymous"/></resources>
+    </route>
+    <route url="/V1/blogarticle/tags/url/:urlKey" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\TagRepositoryInterface" method="getByUrlKey"/>
+        <resources><resource ref="anonymous"/></resources>
+    </route>
+    <route url="/V1/blogarticle/tags" method="POST">
+        <service class="ThirdParty\BlogArticle\Api\TagRepositoryInterface" method="save"/>
+        <resources><resource ref="ThirdParty_BlogArticle::tags"/></resources>
+    </route>
+    <route url="/V1/blogarticle/tags/:tagId" method="PUT">
+        <service class="ThirdParty\BlogArticle\Api\TagRepositoryInterface" method="save"/>
+        <resources><resource ref="ThirdParty_BlogArticle::tags"/></resources>
+        <data>
+            <parameter name="tag.tag_id" force="true">%tagId%</parameter>
+        </data>
+    </route>
+    <route url="/V1/blogarticle/tags/:tagId" method="DELETE">
+        <service class="ThirdParty\BlogArticle\Api\TagRepositoryInterface" method="deleteById"/>
+        <resources><resource ref="ThirdParty_BlogArticle::tags"/></resources>
+    </route>
 </routes>
+

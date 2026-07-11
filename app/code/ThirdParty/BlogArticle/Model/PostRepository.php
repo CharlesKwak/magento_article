@@ -12,35 +12,14 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory;
 
 class PostRepository implements PostRepositoryInterface
 {
-    /**
-     * @var PostFactory
-     */
     private $postFactory;
-
-    /**
-     * @var CollectionFactory
-     */
     private $collectionFactory;
-
-    /**
-     * @var PostInterfaceFactory
-     */
     private $dataFactory;
-
-    /**
-     * @var PostFilter
-     */
     private $postFilter;
-
-    /**
-     * @var UrlKeyGenerator
-     */
     private $urlKeyGenerator;
-
-    /**
-     * @var CategoryFactory
-     */
     private $categoryFactory;
+    private $postTagLink;
+    private $tagFactory;
 
     public function __construct(
         PostFactory $postFactory,
@@ -48,7 +27,9 @@ class PostRepository implements PostRepositoryInterface
         PostInterfaceFactory $dataFactory,
         PostFilter $postFilter,
         UrlKeyGenerator $urlKeyGenerator,
-        CategoryFactory $categoryFactory
+        CategoryFactory $categoryFactory,
+        PostTagLink $postTagLink,
+        TagFactory $tagFactory
     ) {
         $this->postFactory = $postFactory;
         $this->collectionFactory = $collectionFactory;
@@ -56,11 +37,10 @@ class PostRepository implements PostRepositoryInterface
         $this->postFilter = $postFilter;
         $this->urlKeyGenerator = $urlKeyGenerator;
         $this->categoryFactory = $categoryFactory;
+        $this->postTagLink = $postTagLink;
+        $this->tagFactory = $tagFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getById($postId, $activeOnly = true)
     {
         $post = $this->postFactory->create()->load((int) $postId);
@@ -72,9 +52,6 @@ class PostRepository implements PostRepositoryInterface
         return $this->toDataModel($post);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getByUrlKey($urlKey, $activeOnly = true)
     {
         $urlKey = trim((string) $urlKey);
@@ -87,19 +64,18 @@ class PostRepository implements PostRepositoryInterface
         return $this->toDataModel($post);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getList($page = 1, $pageSize = 10, $search = null, $categoryId = null)
+    public function getList($page = 1, $pageSize = 10, $search = null, $categoryId = null, $tagId = null)
     {
         $page = max(1, (int) $page);
         $pageSize = max(1, min(100, (int) $pageSize));
         $categoryId = $categoryId !== null && $categoryId !== '' ? (int) $categoryId : null;
+        $tagId = $tagId !== null && $tagId !== '' ? (int) $tagId : null;
 
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
         $this->postFilter->applySearch($collection, $search !== null ? (string) $search : null);
         $this->postFilter->applyCategoryId($collection, $categoryId);
+        $this->postFilter->applyTagId($collection, $tagId);
         $collection->setOrder('creation_time', 'DESC');
         $collection->setPageSize($pageSize);
         $collection->setCurPage($page);
@@ -111,22 +87,18 @@ class PostRepository implements PostRepositoryInterface
         return $items;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getListTotalCount($search = null, $categoryId = null)
+    public function getListTotalCount($search = null, $categoryId = null, $tagId = null)
     {
         $categoryId = $categoryId !== null && $categoryId !== '' ? (int) $categoryId : null;
+        $tagId = $tagId !== null && $tagId !== '' ? (int) $tagId : null;
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
         $this->postFilter->applySearch($collection, $search !== null ? (string) $search : null);
         $this->postFilter->applyCategoryId($collection, $categoryId);
+        $this->postFilter->applyTagId($collection, $tagId);
         return (int) $collection->getSize();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function save(PostInterface $post)
     {
         $model = $this->postFactory->create();
@@ -164,6 +136,23 @@ class PostRepository implements PostRepositoryInterface
             $categoryId = null;
         }
 
+        $tagIds = $post->getTagIds();
+        if ($tagIds === null) {
+            $tagIds = $model->getId() ? $this->postTagLink->getTagIdsForPost((int) $model->getId()) : [];
+        }
+        $normalizedTagIds = [];
+        foreach ((array) $tagIds as $tagId) {
+            $tagId = (int) $tagId;
+            if ($tagId <= 0) {
+                continue;
+            }
+            $tag = $this->tagFactory->create()->load($tagId);
+            if (!$tag->getId()) {
+                throw new LocalizedException(__('Tag with ID "%1" does not exist.', $tagId));
+            }
+            $normalizedTagIds[] = $tagId;
+        }
+
         $isActive = $post->getIsActive();
         if ($isActive === null) {
             $isActive = 1;
@@ -177,6 +166,9 @@ class PostRepository implements PostRepositoryInterface
 
         try {
             $model->save();
+            $this->postTagLink->setTagsForPost((int) $model->getId(), $normalizedTagIds);
+        } catch (LocalizedException $e) {
+            throw $e;
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Could not save the blog post: %1', $e->getMessage()), $e);
         }
@@ -184,9 +176,6 @@ class PostRepository implements PostRepositoryInterface
         return $this->toDataModel($model);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function deleteById($postId)
     {
         $model = $this->postFactory->create()->load((int) $postId);
@@ -194,6 +183,7 @@ class PostRepository implements PostRepositoryInterface
             throw new NoSuchEntityException(__('The blog post with ID "%1" does not exist.', $postId));
         }
         try {
+            $this->postTagLink->setTagsForPost((int) $postId, []);
             $model->delete();
         } catch (\Exception $e) {
             throw new CouldNotDeleteException(__('Could not delete the blog post: %1', $e->getMessage()), $e);
@@ -201,10 +191,6 @@ class PostRepository implements PostRepositoryInterface
         return true;
     }
 
-    /**
-     * @param Post $post
-     * @return PostInterface
-     */
     private function toDataModel(Post $post): PostInterface
     {
         /** @var PostInterface $data */
@@ -215,6 +201,7 @@ class PostRepository implements PostRepositoryInterface
         $data->setContent((string) $post->getContent());
         $data->setIsActive((int) $post->getIsActive());
         $data->setCategoryId($post->getCategoryId() ? (int) $post->getCategoryId() : null);
+        $data->setTagIds($this->postTagLink->getTagIdsForPost((int) $post->getId()));
         $data->setCreationTime((string) $post->getCreationTime());
         $data->setUpdateTime((string) $post->getUpdateTime());
         return $data;

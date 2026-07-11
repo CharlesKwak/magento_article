@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **1.5.0**
+Version covered: **1.6.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -23,7 +23,7 @@ This module provides a **database-backed blog post list** with Admin management:
 | REST | `/rest/V1/blogarticle/posts*` | Public read + search |
 | GraphQL | `/graphql` (`blogPosts`, `blogPost`) | Public read + search |
 
-### What you can do in v1.5.0
+### What you can do in v1.6.0
 
 - Search and page through the storefront blog list.
 - Filter Admin posts by keyword and status.
@@ -146,6 +146,13 @@ ACL: `ThirdParty_BlogArticle::posts` (config: `ThirdParty_BlogArticle::config`)
 2. Add / edit categories (name, URL key, status).
 3. Categories with assigned posts cannot be deleted until posts are reassigned.
 
+### 3.2b Manage tags
+
+1. Go to **Content → Blog Tags**.
+2. Add / edit tags.
+3. Assign tags on the post edit form (multi-select).
+4. Tags with assigned posts cannot be deleted until unlinked.
+
 ### 3.3 Create a post
 
 1. Click **Add New Post**.
@@ -239,7 +246,7 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v1.5.0 |
+| Topic | Behavior in v1.6.0 |
 |---|---|
 | Multi-website / store view | No `store_id` column; **all posts show on all store views** that can reach the route |
 | Translation of post content | Not supported; store raw title/content per row only |

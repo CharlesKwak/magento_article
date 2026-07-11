@@ -54,4 +54,25 @@ class PostFilter
         }
         $collection->addFieldToFilter('category_id', $categoryId);
     }
+
+    /**
+     * Filter posts that have the given tag (join link table).
+     *
+     * @param Collection $collection
+     * @param int|null $tagId
+     * @return void
+     */
+    public function applyTagId(Collection $collection, ?int $tagId): void
+    {
+        if ($tagId === null || $tagId <= 0) {
+            return;
+        }
+        $linkTable = $collection->getTable('thirdparty_blogarticle_post_tag');
+        $collection->getSelect()->join(
+            ['blog_pt' => $linkTable],
+            'main_table.post_id = blog_pt.post_id',
+            []
+        )->where('blog_pt.tag_id = ?', $tagId)
+            ->group('main_table.post_id');
+    }
 }

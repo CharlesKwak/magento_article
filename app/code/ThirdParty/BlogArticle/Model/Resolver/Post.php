@@ -53,6 +53,7 @@ class Post implements ResolverInterface
             'content' => $item->getContent(),
             'is_active' => $item->getIsActive(),
             'category_id' => $item->getCategoryId(),
+            'tag_ids' => $item->getTagIds() ?: [],
             'creation_time' => $item->getCreationTime(),
             'update_time' => $item->getUpdateTime(),
             'model' => $item,

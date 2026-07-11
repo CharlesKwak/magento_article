@@ -1,0 +1,49 @@
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Adminhtml\Tag $block */
+$tags = $block->getTags();
+?>
+<div class="blogarticle-tag-list">
+    <div class="page-actions" style="margin-bottom:1rem;">
+        <a class="action-default scalable primary" href="<?= $block->escapeUrl($block->getNewUrl()) ?>">
+            <span><?= $block->escapeHtml(__('Add New Tag')) ?></span>
+        </a>
+    </div>
+
+    <?php if (!$tags->getSize()): ?>
+        <div class="message info">
+            <span><?= $block->escapeHtml(__('No tags yet.')) ?></span>
+        </div>
+    <?php else: ?>
+        <table class="data-grid" style="width:100%; border-collapse:collapse;">
+            <thead>
+            <tr>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('ID')) ?></th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('Name')) ?></th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('URL Key')) ?></th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('Status')) ?></th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('Actions')) ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($tags as $tag): ?>
+                <tr>
+                    <td style="padding:8px;border-bottom:1px solid #eee;"><?= $block->escapeHtml((string) $tag->getId()) ?></td>
+                    <td style="padding:8px;border-bottom:1px solid #eee;"><?= $block->escapeHtml($tag->getName()) ?></td>
+                    <td style="padding:8px;border-bottom:1px solid #eee;"><code><?= $block->escapeHtml((string) $tag->getUrlKey()) ?></code></td>
+                    <td style="padding:8px;border-bottom:1px solid #eee;">
+                        <?= $block->escapeHtml((int) $tag->getIsActive() ? __('Enabled') : __('Disabled')) ?>
+                    </td>
+                    <td style="padding:8px;border-bottom:1px solid #eee;">
+                        <a href="<?= $block->escapeUrl($block->getEditUrl($tag->getId())) ?>"><?= $block->escapeHtml(__('Edit')) ?></a>
+                        &nbsp;|&nbsp;
+                        <a href="<?= $block->escapeUrl($block->getDeleteUrl($tag->getId())) ?>"
+                           onclick="return confirm('<?= $block->escapeJs(__('Delete this tag?')) ?>');">
+                            <?= $block->escapeHtml(__('Delete')) ?>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+</div>

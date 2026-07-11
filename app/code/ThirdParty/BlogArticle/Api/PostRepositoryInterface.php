@@ -5,9 +5,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use ThirdParty\BlogArticle\Api\Data\PostInterface;
 
-/**
- * Blog post repository (public read + authenticated write).
- */
 interface PostRepositoryInterface
 {
     /**
@@ -31,20 +28,20 @@ interface PostRepositoryInterface
      * @param int $pageSize
      * @param string|null $search
      * @param int|null $categoryId
+     * @param int|null $tagId
      * @return \ThirdParty\BlogArticle\Api\Data\PostInterface[]
      */
-    public function getList($page = 1, $pageSize = 10, $search = null, $categoryId = null);
+    public function getList($page = 1, $pageSize = 10, $search = null, $categoryId = null, $tagId = null);
 
     /**
      * @param string|null $search
      * @param int|null $categoryId
+     * @param int|null $tagId
      * @return int
      */
-    public function getListTotalCount($search = null, $categoryId = null);
+    public function getListTotalCount($search = null, $categoryId = null, $tagId = null);
 
     /**
-     * Create or update a post (Admin token required via webapi ACL).
-     *
      * @param \ThirdParty\BlogArticle\Api\Data\PostInterface $post
      * @return \ThirdParty\BlogArticle\Api\Data\PostInterface
      * @throws LocalizedException

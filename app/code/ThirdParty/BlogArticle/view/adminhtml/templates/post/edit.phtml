@@ -99,6 +99,31 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
             </div>
 
             <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="tag_ids">
+                    <span><?= $block->escapeHtml(__('Tags')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <?php $selectedTags = $block->getSelectedTagIds(); ?>
+                    <select class="admin__control-multiselect"
+                            id="tag_ids"
+                            name="tag_ids[]"
+                            multiple="multiple"
+                            size="6"
+                            style="min-width:320px; max-width:480px;">
+                        <?php foreach ($block->getTagOptions() as $tag): ?>
+                            <option value="<?= (int) $tag->getId() ?>"
+                                <?= in_array((int) $tag->getId(), $selectedTags, true) ? 'selected="selected"' : '' ?>>
+                                <?= $block->escapeHtml($tag->getName()) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <p class="admin__field-note">
+                        <?= $block->escapeHtml(__('Hold Ctrl/Cmd to select multiple tags.')) ?>
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
                 <label class="admin__field-label" for="content">
                     <span><?= $block->escapeHtml(__('Content')) ?> *</span>
                 </label>

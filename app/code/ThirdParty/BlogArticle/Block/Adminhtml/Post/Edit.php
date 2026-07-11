@@ -7,33 +7,18 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Data\Form\FormKey;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFactory;
+use ThirdParty\BlogArticle\Model\PostTagLink;
 use ThirdParty\BlogArticle\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use ThirdParty\BlogArticle\Model\ResourceModel\Tag\CollectionFactory as TagCollectionFactory;
 
 class Edit extends Template
 {
-    /**
-     * @var PostFactory
-     */
     private $postFactory;
-
-    /**
-     * @var FormKey
-     */
     private $formKey;
-
-    /**
-     * @var DataPersistorInterface
-     */
     private $dataPersistor;
-
-    /**
-     * @var CategoryCollectionFactory
-     */
     private $categoryCollectionFactory;
-
-    /**
-     * @var Post|null
-     */
+    private $tagCollectionFactory;
+    private $postTagLink;
     private $post;
 
     public function __construct(
@@ -42,18 +27,19 @@ class Edit extends Template
         FormKey $formKey,
         DataPersistorInterface $dataPersistor,
         CategoryCollectionFactory $categoryCollectionFactory,
+        TagCollectionFactory $tagCollectionFactory,
+        PostTagLink $postTagLink,
         array $data = []
     ) {
         $this->postFactory = $postFactory;
         $this->formKey = $formKey;
         $this->dataPersistor = $dataPersistor;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
+        $this->tagCollectionFactory = $tagCollectionFactory;
+        $this->postTagLink = $postTagLink;
         parent::__construct($context, $data);
     }
 
-    /**
-     * @return Post
-     */
     public function getPost()
     {
         if ($this->post === null) {
@@ -73,17 +59,36 @@ class Edit extends Template
         return $this->post;
     }
 
-    /**
-     * Active categories for the assignment dropdown.
-     *
-     * @return \ThirdParty\BlogArticle\Model\ResourceModel\Category\Collection
-     */
     public function getCategoryOptions()
     {
         $collection = $this->categoryCollectionFactory->create();
         $collection->addFieldToFilter('is_active', 1);
         $collection->setOrder('name', 'ASC');
         return $collection;
+    }
+
+    public function getTagOptions()
+    {
+        $collection = $this->tagCollectionFactory->create();
+        $collection->addFieldToFilter('is_active', 1);
+        $collection->setOrder('name', 'ASC');
+        return $collection;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getSelectedTagIds(): array
+    {
+        $post = $this->getPost();
+        $persisted = $post->getData('tag_ids');
+        if (is_array($persisted)) {
+            return array_map('intval', $persisted);
+        }
+        if ($post->getId()) {
+            return $this->postTagLink->getTagIdsForPost((int) $post->getId());
+        }
+        return [];
     }
 
     public function getFormKey()

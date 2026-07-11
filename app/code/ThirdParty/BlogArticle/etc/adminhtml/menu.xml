@@ -15,5 +15,12 @@
              parent="Magento_Backend::content"
              resource="ThirdParty_BlogArticle::categories"
              action="blogarticle/category/index"/>
+        <add id="ThirdParty_BlogArticle::tags"
+             title="Blog Tags"
+             module="ThirdParty_BlogArticle"
+             sortOrder="120"
+             parent="Magento_Backend::content"
+             resource="ThirdParty_BlogArticle::tags"
+             action="blogarticle/tag/index"/>
     </menu>
 </config>

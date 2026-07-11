@@ -1,5 +1,28 @@
 # Release Notes
 
+## 1.6.0 - 2026-07-12
+
+### Added
+- **Tags** (`thirdparty_blogarticle_tag` + `thirdparty_blogarticle_post_tag` M2M)
+- Admin **Content → Blog Tags** CRUD
+- Post multi-select tags; storefront tag cloud filter (`?tag=news`)
+- Sample tags **News** / **Guide** and links to sample posts
+- REST `/V1/blogarticle/tags*` (read anonymous, write ACL)
+- GraphQL `blogTags`, `blogTag`, `blogPosts(tagId)`, `tag_ids` on posts
+- `PostInterface.tag_ids` for REST write
+
+### Changed
+- Module / package version **1.6.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+
+---
+
 ## 1.5.0 - 2026-07-12
 
 ### Added
