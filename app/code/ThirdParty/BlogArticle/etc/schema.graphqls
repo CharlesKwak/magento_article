@@ -1,0 +1,36 @@
+# Copyright © ThirdParty. Blog Article GraphQL schema.
+
+type BlogPost {
+    post_id: Int @doc(description: "Post entity ID")
+    title: String @doc(description: "Post title")
+    url_key: String @doc(description: "URL key / slug")
+    content: String @doc(description: "Post HTML/text content")
+    is_active: Int @doc(description: "1 = enabled, 0 = disabled")
+    creation_time: String @doc(description: "Created at")
+    update_time: String @doc(description: "Updated at")
+}
+
+type BlogPostList {
+    items: [BlogPost]! @doc(description: "Posts for the current page")
+    total_count: Int @doc(description: "Total matching enabled posts")
+    page_size: Int
+    current_page: Int
+    total_pages: Int
+}
+
+type Query {
+    blogPosts(
+        pageSize: Int = 10 @doc(description: "Page size (max 100)")
+        currentPage: Int = 1 @doc(description: "1-based page number")
+        search: String @doc(description: "Optional free-text search")
+    ): BlogPostList
+    @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Posts")
+    @doc(description: "List enabled blog posts")
+
+    blogPost(
+        id: Int @doc(description: "Post ID")
+        url_key: String @doc(description: "Post URL key")
+    ): BlogPost
+    @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Post")
+    @doc(description: "Get a single enabled blog post by id or url_key")
+}

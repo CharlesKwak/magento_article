@@ -24,14 +24,21 @@ class PostRepository implements PostRepositoryInterface
      */
     private $dataFactory;
 
+    /**
+     * @var PostFilter
+     */
+    private $postFilter;
+
     public function __construct(
         PostFactory $postFactory,
         CollectionFactory $collectionFactory,
-        PostInterfaceFactory $dataFactory
+        PostInterfaceFactory $dataFactory,
+        PostFilter $postFilter
     ) {
         $this->postFactory = $postFactory;
         $this->collectionFactory = $collectionFactory;
         $this->dataFactory = $dataFactory;
+        $this->postFilter = $postFilter;
     }
 
     /**
@@ -66,13 +73,14 @@ class PostRepository implements PostRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($page = 1, $pageSize = 10)
+    public function getList($page = 1, $pageSize = 10, $search = null)
     {
         $page = max(1, (int) $page);
         $pageSize = max(1, min(100, (int) $pageSize));
 
         $collection = $this->collectionFactory->create();
-        $collection->addFieldToFilter('is_active', 1);
+        $this->postFilter->applyActiveOnly($collection);
+        $this->postFilter->applySearch($collection, $search !== null ? (string) $search : null);
         $collection->setOrder('creation_time', 'DESC');
         $collection->setPageSize($pageSize);
         $collection->setCurPage($page);
@@ -82,6 +90,17 @@ class PostRepository implements PostRepositoryInterface
             $items[] = $this->toDataModel($post);
         }
         return $items;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getListTotalCount($search = null)
+    {
+        $collection = $this->collectionFactory->create();
+        $this->postFilter->applyActiveOnly($collection);
+        $this->postFilter->applySearch($collection, $search !== null ? (string) $search : null);
+        return (int) $collection->getSize();
     }
 
     /**

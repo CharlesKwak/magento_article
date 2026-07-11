@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="thirdparty" translate="label" sortOrder="400">
+            <label>Third Party</label>
+        </tab>
+        <section id="blogarticle" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Blog Article</label>
+            <tab>thirdparty</tab>
+            <resource>ThirdParty_BlogArticle::config</resource>
+            <group id="list" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Storefront List</label>
+                <field id="page_size" translate="label comment" type="text" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Posts Per Page</label>
+                    <comment>Number of posts on the blog list (1–50). Default: 5.</comment>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

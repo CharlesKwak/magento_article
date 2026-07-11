@@ -3,18 +3,28 @@ namespace ThirdParty\BlogArticle\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use ThirdParty\BlogArticle\Model\Config;
 use ThirdParty\BlogArticle\Model\Post;
+use ThirdParty\BlogArticle\Model\PostFilter;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\Collection;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory;
 
 class Article extends Template
 {
-    public const DEFAULT_PAGE_SIZE = 5;
-
     /**
      * @var CollectionFactory
      */
     protected $collectionFactory;
+
+    /**
+     * @var PostFilter
+     */
+    private $postFilter;
+
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * @var Collection|null
@@ -24,14 +34,18 @@ class Article extends Template
     public function __construct(
         Context $context,
         CollectionFactory $collectionFactory,
+        PostFilter $postFilter,
+        Config $config,
         array $data = []
     ) {
         $this->collectionFactory = $collectionFactory;
+        $this->postFilter = $postFilter;
+        $this->config = $config;
         parent::__construct($context, $data);
     }
 
     /**
-     * Active posts only, newest first, paginated.
+     * Active posts only, newest first, optional search, paginated.
      *
      * @return Collection
      */
@@ -39,7 +53,8 @@ class Article extends Template
     {
         if ($this->posts === null) {
             $collection = $this->collectionFactory->create();
-            $collection->addFieldToFilter('is_active', 1);
+            $this->postFilter->applyActiveOnly($collection);
+            $this->postFilter->applySearch($collection, $this->getSearchQuery());
             $collection->setOrder('creation_time', 'DESC');
             $collection->setPageSize($this->getPageSize());
             $collection->setCurPage($this->getCurrentPage());
@@ -47,6 +62,14 @@ class Article extends Template
         }
 
         return $this->posts;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSearchQuery(): string
+    {
+        return trim((string) $this->getRequest()->getParam('q', ''));
     }
 
     /**
@@ -64,7 +87,10 @@ class Article extends Template
     public function getPageSize(): int
     {
         $size = (int) $this->getData('page_size');
-        return $size > 0 ? $size : self::DEFAULT_PAGE_SIZE;
+        if ($size > 0) {
+            return $size;
+        }
+        return $this->config->getPageSize();
     }
 
     /**
@@ -95,7 +121,19 @@ class Article extends Template
         } else {
             $params['p'] = null;
         }
+        $q = $this->getSearchQuery();
+        if ($q !== '') {
+            $params['q'] = $q;
+        }
         return $this->getUrl('blog/index/index', $params);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSearchFormAction(): string
+    {
+        return $this->getUrl('blog/index/index');
     }
 
     /**

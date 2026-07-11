@@ -1,5 +1,33 @@
 # Release Notes
 
+## 1.4.0 - 2026-07-12
+
+### Added
+- **Storefront search** (`?q=`) on title, content, and url_key
+- **Admin list filters**: free-text search + status (All / Enabled / Disabled)
+- **GraphQL** queries:
+  - `blogPosts(pageSize, currentPage, search)`
+  - `blogPost(id, url_key)`
+- Admin config: **Stores → Configuration → Third Party → Blog Article → Posts Per Page**
+- REST `GET /V1/blogarticle/posts/count?search=`
+- REST/GraphQL list `search` parameter
+- Shared `PostFilter` + `Config` helpers
+- Module sequence: Backend, Store, GraphQl
+
+### Changed
+- Module / package version **1.4.0**
+- Default list page size still 5 (now configurable 1–50)
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile   # production / GraphQL schema
+```
+No DB schema change from 1.3.0.
+
+---
+
 ## 1.3.0 - 2026-07-12
 
 ### Added

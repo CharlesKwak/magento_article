@@ -37,12 +37,12 @@ class ApiAndRoutingFilesTest extends TestCase
         $this->assertStringContainsString('anonymous', $content);
     }
 
-    public function testModuleVersionIs130(): void
+    public function testModuleVersionIsCurrent(): void
     {
         $content = file_get_contents(
             dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/etc/module.xml'
         );
         $this->assertNotFalse($content);
-        $this->assertStringContainsString('setup_version="1.3.0"', $content);
+        $this->assertStringContainsString('setup_version="1.4.0"', $content);
     }
 }

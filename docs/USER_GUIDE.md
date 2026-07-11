@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **1.3.0**
+Version covered: **1.4.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -16,22 +16,24 @@ This module provides a **database-backed blog post list** with Admin management:
 
 | Surface | URL / navigation | Behavior |
 |---|---|---|
-| Storefront list | `/blog/` (`?p=2` for page 2) | Enabled posts, excerpt, **pagination** (5/page) |
+| Storefront list | `/blog/` (`?p=2`, `?q=keyword`) | Search + pagination |
 | Storefront detail | `/blog/<url_key>` | Full article body |
-| Admin | **Content → Blog Posts** | List, create, edit, delete, enable/disable |
-| REST API | `/rest/V1/blogarticle/posts*` | Public read of enabled posts |
+| Admin | **Content → Blog Posts** | CRUD + search/status filters |
+| Config | **Stores → Configuration → Third Party → Blog Article** | Posts per page |
+| REST | `/rest/V1/blogarticle/posts*` | Public read + search |
+| GraphQL | `/graphql` (`blogPosts`, `blogPost`) | Public read + search |
 
-### What you can do in v1.3.0
+### What you can do in v1.4.0
 
-- Browse the paginated storefront list and open clean detail URLs.
-- Create, edit, delete posts in Admin (URL Key + Status).
-- Consume posts via REST from headless or integrations.
-- Rely on sample posts after a fresh install (when the table was empty).
+- Search and page through the storefront blog list.
+- Filter Admin posts by keyword and status.
+- Integrate via REST or GraphQL.
+- Configure list page size per store.
 
 ### Not available yet
 
 - Categories, tags, authors, scheduled publish.
-- GraphQL / write REST APIs / Magento CLI for posts.
+- Write REST/GraphQL mutations / Magento CLI for posts.
 - Per-store-view content.
 
 ---
@@ -49,8 +51,9 @@ This module provides a **database-backed blog post list** with Admin management:
    https://<your-store-base-url>/blog/?p=2
    ```
 
-3. Each **enabled** post shows title, date, excerpt, and a **Read more** link.
-4. Default page size is **5**. Use Previous/Next or page numbers when more posts exist.
+3. Use the **Search** box to filter by title, content, or URL key (`?q=`).
+4. Each **enabled** post shows title, date, excerpt, and a **Read more** link.
+5. Default page size is **5** (configurable in Admin). Use pager controls when needed.
 
 ### 2.2 Open an article detail page
 
@@ -71,17 +74,32 @@ Disabled or missing posts return Magento’s no-route (404) response.
 
 ### 2.3 REST API (read-only)
 
-Base path (store code may vary; default often omits code or uses `default`):
-
 ```text
-GET /rest/V1/blogarticle/posts?page=1&pageSize=10
+GET /rest/V1/blogarticle/posts?page=1&pageSize=10&search=welcome
+GET /rest/V1/blogarticle/posts/count?search=welcome
 GET /rest/V1/blogarticle/posts/1
 GET /rest/V1/blogarticle/posts/url/welcome-to-the-blog
 ```
 
-- Anonymous access is allowed.
-- Only **enabled** posts are returned.
-- `pageSize` is capped at **100**.
+- Anonymous access; **enabled** posts only; `pageSize` max **100**.
+
+### 2.3.1 GraphQL (read-only)
+
+`POST /graphql` with body:
+
+```graphql
+query {
+  blogPosts(pageSize: 5, currentPage: 1, search: "welcome") {
+    total_count
+    total_pages
+    items { post_id title url_key content creation_time }
+  }
+  blogPost(url_key: "welcome-to-the-blog") {
+    title
+    content
+  }
+}
+```
 
 ### 2.4 How content is rendered
 
@@ -112,10 +130,15 @@ If the table has zero rows, the page shows: *“No blog posts are available yet.
 
 1. Log in to Magento Admin.
 2. Go to **Content → Blog Posts**.
-3. Review the table (ID, title, created time, actions).
+3. Optionally filter by **Search** and **Status**, then click **Filter**.
+4. Review the table (ID, title, URL key, status, actions).
 
 Admin route frontName: `blogarticle`  
-ACL: `ThirdParty_BlogArticle::posts`
+ACL: `ThirdParty_BlogArticle::posts` (config: `ThirdParty_BlogArticle::config`)
+
+### 3.1.1 Configure page size
+
+**Stores → Configuration → Third Party → Blog Article → Storefront List → Posts Per Page** (1–50).
 
 ### 3.2 Create a post
 
@@ -210,7 +233,7 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v1.3.0 |
+| Topic | Behavior in v1.4.0 |
 |---|---|
 | Multi-website / store view | No `store_id` column; **all posts show on all store views** that can reach the route |
 | Translation of post content | Not supported; store raw title/content per row only |

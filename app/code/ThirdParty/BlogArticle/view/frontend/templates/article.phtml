@@ -3,11 +3,45 @@
 $posts = $block->getPosts();
 $currentPage = $block->getCurrentPage();
 $lastPage = $block->getLastPageNumber();
+$searchQuery = $block->getSearchQuery();
 ?>
 <div class="blog-post-list">
+    <form class="blog-search" method="get" action="<?= $block->escapeUrl($block->getSearchFormAction()) ?>"
+          style="margin-bottom: 1.25rem; display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+        <label for="blog-search-q" class="label">
+            <span><?= $block->escapeHtml(__('Search')) ?></span>
+        </label>
+        <input type="search"
+               id="blog-search-q"
+               name="q"
+               value="<?= $block->escapeHtmlAttr($searchQuery) ?>"
+               placeholder="<?= $block->escapeHtmlAttr(__('Search posts…')) ?>"
+               style="min-width: 220px;"/>
+        <button type="submit" class="action primary">
+            <span><?= $block->escapeHtml(__('Search')) ?></span>
+        </button>
+        <?php if ($searchQuery !== ''): ?>
+            <a href="<?= $block->escapeUrl($block->getUrl('blog/index/index')) ?>">
+                <?= $block->escapeHtml(__('Clear')) ?>
+            </a>
+        <?php endif; ?>
+    </form>
+
+    <?php if ($searchQuery !== ''): ?>
+        <p class="blog-search-summary">
+            <?= $block->escapeHtml(
+                __('Results for “%1” (%2)', $searchQuery, $block->getTotalCount())
+            ) ?>
+        </p>
+    <?php endif; ?>
+
     <?php if (!$posts->getSize()): ?>
         <div class="blog-empty">
-            <p><?= $block->escapeHtml(__('No blog posts are available yet.')) ?></p>
+            <?php if ($searchQuery !== ''): ?>
+                <p><?= $block->escapeHtml(__('No posts matched your search.')) ?></p>
+            <?php else: ?>
+                <p><?= $block->escapeHtml(__('No blog posts are available yet.')) ?></p>
+            <?php endif; ?>
         </div>
     <?php else: ?>
         <?php foreach ($posts as $post): ?>

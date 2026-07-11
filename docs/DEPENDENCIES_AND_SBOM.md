@@ -4,7 +4,7 @@ This document describes what **ThirdParty_BlogArticle** depends on, what runs in
 
 It is an **SBOM-style inventory for humans**, not a machine-generated CycloneDX/SPDX file. Generate a formal SBOM from your Magento root if compliance tooling requires it (see [§6](#6-generating-a-machine-readable-sbom)).
 
-Module version: **1.3.0**  
+Module version: **1.4.0**  
 Package name: `thirdparty/module-blog-article`
 
 ---
@@ -63,7 +63,7 @@ Always prefer Adobe’s official system requirements for your exact Magento vers
 
 | Component | Version / constraint | Supplier | License (as packaged) | Required |
 |---|---|---|---|---|
-| `ThirdParty_BlogArticle` source | 1.3.0 | This repository | GPL-2.0 (root `LICENSE`; `composer.json` → `GPL-2.0-only`) | Yes |
+| `ThirdParty_BlogArticle` source | 1.4.0 | This repository | GPL-2.0 (root `LICENSE`; `composer.json` → `GPL-2.0-only`) | Yes |
 | PHP | ≥ 8.1 | php.net / distro | PHP License | Yes |
 | `magento/framework` | ^103.0 | Adobe / Magento | OSL-3.0 / AFL-3.0 (Magento components) | Yes (peer via Magento) |
 
@@ -144,7 +144,7 @@ No foreign keys, no views, no triggers, no stored procedures.
 
 | Topic | Note |
 |---|---|
-| Attack surface | Public frontend (`blog` list/detail + clean `/blog/{url_key}`); public read REST `/V1/blogarticle/posts*`; Admin routes behind Magento Admin auth + ACL |
+| Attack surface | Public storefront search/list/detail; public REST + GraphQL read; Admin CRUD/config behind ACL |
 | XSS | Storefront `content` uses HTML allow-list escaping; still restrict Admin access to trusted staff |
 | Secrets | Module introduces no new credentials or API keys |
 | License | Root `LICENSE` = GPL-2.0; `composer.json` = `GPL-2.0-only` (aligned from 1.1.0) |
@@ -213,7 +213,7 @@ Also note the workflow listens to branch name `main`, while this project histori
 - `LICENSE`
 - `docs/`
 
-Package artifact name: `thirdparty-blog-article-1.3.0.zip`.
+Package artifact name: `thirdparty-blog-article-1.4.0.zip`.
 
 It does **not** ship `vendor/`, `composer.lock`, or Magento core. Target systems must already have Magento + PHP + MySQL.
 

@@ -7,6 +7,12 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/blogarticle/posts/count" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\PostRepositoryInterface" method="getListTotalCount"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
     <route url="/V1/blogarticle/posts/:postId" method="GET">
         <service class="ThirdParty\BlogArticle\Api\PostRepositoryInterface" method="getById"/>
         <resources>

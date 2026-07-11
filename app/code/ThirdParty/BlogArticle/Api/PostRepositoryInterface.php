@@ -32,7 +32,16 @@ interface PostRepositoryInterface
      *
      * @param int $page
      * @param int $pageSize
+     * @param string|null $search Free-text filter on title, content, url_key
      * @return \ThirdParty\BlogArticle\Api\Data\PostInterface[]
      */
-    public function getList($page = 1, $pageSize = 10);
+    public function getList($page = 1, $pageSize = 10, $search = null);
+
+    /**
+     * Total enabled posts matching optional search (ignores pagination).
+     *
+     * @param string|null $search
+     * @return int
+     */
+    public function getListTotalCount($search = null);
 }
