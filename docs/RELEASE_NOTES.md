@@ -1,5 +1,29 @@
 # Release Notes
 
+## 1.5.0 - 2026-07-12
+
+### Added
+- **Blog categories** table `thirdparty_blogarticle_category` and `post.category_id`
+- Admin **Content → Blog Categories** CRUD
+- Post form category assignment; Admin/storefront category filters
+- Default **General** category seed + assign existing posts
+- REST category read/write (`/V1/blogarticle/categories*`)
+- REST post **write** (POST/PUT/DELETE) with ACL `ThirdParty_BlogArticle::posts`
+- GraphQL `blogCategories`, `blogCategory`, `blogPosts(categoryId)`
+- Storefront category nav (`?cat=general`)
+
+### Changed
+- Module / package version **1.5.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+
+---
+
 ## 1.4.0 - 2026-07-12
 
 ### Added

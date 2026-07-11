@@ -1,0 +1,50 @@
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Adminhtml\Category\Edit $block */
+$category = $block->getCategory();
+$isActive = $category->getId() ? (int) $category->getIsActive() : 1;
+?>
+<div class="blogarticle-category-edit">
+    <div class="page-actions" style="margin-bottom:1rem;">
+        <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>"><?= $block->escapeHtml(__('Back to list')) ?></a>
+        <?php if ($block->isExisting()): ?>
+            &nbsp;|&nbsp;
+            <a href="<?= $block->escapeUrl($block->getDeleteUrl()) ?>"
+               onclick="return confirm('<?= $block->escapeJs(__('Delete this category?')) ?>');">
+                <?= $block->escapeHtml(__('Delete')) ?>
+            </a>
+        <?php endif; ?>
+    </div>
+
+    <form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post">
+        <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>"/>
+        <?php if ($category->getId()): ?>
+            <input type="hidden" name="category_id" value="<?= $block->escapeHtmlAttr((string) $category->getId()) ?>"/>
+        <?php endif; ?>
+
+        <div style="margin-bottom:1rem;">
+            <label for="name"><?= $block->escapeHtml(__('Name')) ?> *</label><br/>
+            <input type="text" id="name" name="name" required="required" maxlength="255"
+                   style="width:100%;max-width:480px;"
+                   value="<?= $block->escapeHtmlAttr((string) $category->getName()) ?>"/>
+        </div>
+        <div style="margin-bottom:1rem;">
+            <label for="url_key"><?= $block->escapeHtml(__('URL Key')) ?></label><br/>
+            <input type="text" id="url_key" name="url_key" maxlength="255"
+                   style="width:100%;max-width:480px;"
+                   value="<?= $block->escapeHtmlAttr((string) $category->getUrlKey()) ?>"/>
+        </div>
+        <div style="margin-bottom:1rem;">
+            <label for="is_active"><?= $block->escapeHtml(__('Status')) ?></label><br/>
+            <select id="is_active" name="is_active">
+                <option value="1" <?= $isActive ? 'selected="selected"' : '' ?>><?= $block->escapeHtml(__('Enabled')) ?></option>
+                <option value="0" <?= !$isActive ? 'selected="selected"' : '' ?>><?= $block->escapeHtml(__('Disabled')) ?></option>
+            </select>
+        </div>
+        <button type="submit" class="action-default scalable primary">
+            <span><?= $block->escapeHtml(__('Save Category')) ?></span>
+        </button>
+        <button type="submit" class="action-default scalable" name="back" value="1" style="margin-left:0.5rem;">
+            <span><?= $block->escapeHtml(__('Save and Continue Edit')) ?></span>
+        </button>
+    </form>
+</div>

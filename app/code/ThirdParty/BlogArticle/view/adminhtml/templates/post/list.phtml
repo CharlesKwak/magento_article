@@ -3,6 +3,7 @@
 $posts = $block->getPosts();
 $searchQuery = $block->getSearchQuery();
 $statusFilter = $block->getStatusFilter();
+$categoryFilter = $block->getCategoryIdFilter();
 ?>
 <div class="blogarticle-post-list">
     <div class="page-actions" style="margin-bottom: 1rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
@@ -38,10 +39,22 @@ $statusFilter = $block->getStatusFilter();
             </select>
         </div>
         <div>
+            <label for="admin-blog-category"><?= $block->escapeHtml(__('Category')) ?></label><br/>
+            <select id="admin-blog-category" name="category_id">
+                <option value=""><?= $block->escapeHtml(__('All')) ?></option>
+                <?php foreach ($block->getCategoryOptions() as $category): ?>
+                    <option value="<?= (int) $category->getId() ?>"
+                        <?= $categoryFilter === (int) $category->getId() ? 'selected="selected"' : '' ?>>
+                        <?= $block->escapeHtml($category->getName()) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div>
             <button type="submit" class="action-default scalable">
                 <span><?= $block->escapeHtml(__('Filter')) ?></span>
             </button>
-            <?php if ($searchQuery !== '' || $statusFilter !== ''): ?>
+            <?php if ($searchQuery !== '' || $statusFilter !== '' || $categoryFilter): ?>
                 <a href="<?= $block->escapeUrl($block->getFilterFormAction()) ?>" style="margin-left:0.5rem;">
                     <?= $block->escapeHtml(__('Reset')) ?>
                 </a>
@@ -51,7 +64,7 @@ $statusFilter = $block->getStatusFilter();
 
     <?php if (!$posts->getSize()): ?>
         <div class="message info">
-            <?php if ($searchQuery !== '' || $statusFilter !== ''): ?>
+            <?php if ($searchQuery !== '' || $statusFilter !== '' || $categoryFilter): ?>
                 <span><?= $block->escapeHtml(__('No posts match the current filters.')) ?></span>
             <?php else: ?>
                 <span><?= $block->escapeHtml(__('No blog posts yet. Click “Add New Post” to create one.')) ?></span>
@@ -63,6 +76,7 @@ $statusFilter = $block->getStatusFilter();
             <tr>
                 <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('ID')) ?></th>
                 <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('Title')) ?></th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('Category')) ?></th>
                 <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('URL Key')) ?></th>
                 <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('Status')) ?></th>
                 <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('Created')) ?></th>
@@ -77,6 +91,9 @@ $statusFilter = $block->getStatusFilter();
                     </td>
                     <td style="padding:8px; border-bottom:1px solid #eee;">
                         <?= $block->escapeHtml($post->getTitle()) ?>
+                    </td>
+                    <td style="padding:8px; border-bottom:1px solid #eee;">
+                        <?= $block->escapeHtml($block->getCategoryName($post) ?: '—') ?>
                     </td>
                     <td style="padding:8px; border-bottom:1px solid #eee;">
                         <code><?= $block->escapeHtml((string) $post->getUrlKey()) ?></code>

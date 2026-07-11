@@ -3,9 +3,11 @@ namespace ThirdParty\BlogArticle\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use ThirdParty\BlogArticle\Model\CategoryFactory;
 use ThirdParty\BlogArticle\Model\Config;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFilter;
+use ThirdParty\BlogArticle\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\Collection;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory;
 
@@ -27,26 +29,43 @@ class Article extends Template
     private $config;
 
     /**
+     * @var CategoryCollectionFactory
+     */
+    private $categoryCollectionFactory;
+
+    /**
+     * @var CategoryFactory
+     */
+    private $categoryFactory;
+
+    /**
      * @var Collection|null
      */
     private $posts;
+
+    /**
+     * @var array
+     */
+    private $categoryNameCache = [];
 
     public function __construct(
         Context $context,
         CollectionFactory $collectionFactory,
         PostFilter $postFilter,
         Config $config,
+        CategoryCollectionFactory $categoryCollectionFactory,
+        CategoryFactory $categoryFactory,
         array $data = []
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->postFilter = $postFilter;
         $this->config = $config;
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
+        $this->categoryFactory = $categoryFactory;
         parent::__construct($context, $data);
     }
 
     /**
-     * Active posts only, newest first, optional search, paginated.
-     *
      * @return Collection
      */
     public function getPosts()
@@ -55,6 +74,7 @@ class Article extends Template
             $collection = $this->collectionFactory->create();
             $this->postFilter->applyActiveOnly($collection);
             $this->postFilter->applySearch($collection, $this->getSearchQuery());
+            $this->postFilter->applyCategoryId($collection, $this->getCategoryIdFilter());
             $collection->setOrder('creation_time', 'DESC');
             $collection->setPageSize($this->getPageSize());
             $collection->setCurPage($this->getCurrentPage());
@@ -70,6 +90,68 @@ class Article extends Template
     public function getSearchQuery(): string
     {
         return trim((string) $this->getRequest()->getParam('q', ''));
+    }
+
+    /**
+     * Category filter from ?cat=url_key or ?category_id=
+     *
+     * @return int|null
+     */
+    public function getCategoryIdFilter(): ?int
+    {
+        $categoryId = (int) $this->getRequest()->getParam('category_id', 0);
+        if ($categoryId > 0) {
+            return $categoryId;
+        }
+
+        $catKey = trim((string) $this->getRequest()->getParam('cat', ''));
+        if ($catKey === '') {
+            return null;
+        }
+
+        $category = $this->categoryFactory->create()->load($catKey, 'url_key');
+        if ($category->getId() && (int) $category->getIsActive()) {
+            return (int) $category->getId();
+        }
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryKeyFilter(): string
+    {
+        return trim((string) $this->getRequest()->getParam('cat', ''));
+    }
+
+    /**
+     * @return \ThirdParty\BlogArticle\Model\ResourceModel\Category\Collection
+     */
+    public function getActiveCategories()
+    {
+        $collection = $this->categoryCollectionFactory->create();
+        $collection->addFieldToFilter('is_active', 1);
+        $collection->setOrder('name', 'ASC');
+        return $collection;
+    }
+
+    /**
+     * @param Post $post
+     * @return string
+     */
+    public function getCategoryName(Post $post): string
+    {
+        $categoryId = (int) $post->getCategoryId();
+        if ($categoryId <= 0) {
+            return '';
+        }
+        if (!array_key_exists($categoryId, $this->categoryNameCache)) {
+            $category = $this->categoryFactory->create()->load($categoryId);
+            $this->categoryNameCache[$categoryId] = $category->getId()
+                ? (string) $category->getName()
+                : '';
+        }
+        return $this->categoryNameCache[$categoryId];
     }
 
     /**
@@ -121,10 +203,6 @@ class Article extends Template
         } else {
             $params['p'] = null;
         }
-        $q = $this->getSearchQuery();
-        if ($q !== '') {
-            $params['q'] = $q;
-        }
         return $this->getUrl('blog/index/index', $params);
     }
 
@@ -137,6 +215,15 @@ class Article extends Template
     }
 
     /**
+     * @param string $urlKey
+     * @return string
+     */
+    public function getCategoryFilterUrl(string $urlKey): string
+    {
+        return $this->getUrl('blog/index/index', ['cat' => $urlKey]);
+    }
+
+    /**
      * @return bool
      */
     public function hasPager(): bool
@@ -145,8 +232,6 @@ class Article extends Template
     }
 
     /**
-     * Prefer clean URL /blog/{url_key} when available.
-     *
      * @param Post $post
      * @return string
      */

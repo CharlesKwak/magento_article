@@ -2,28 +2,28 @@
 namespace ThirdParty\BlogArticle\Model\Data;
 
 use Magento\Framework\DataObject;
-use ThirdParty\BlogArticle\Api\Data\PostInterface;
+use ThirdParty\BlogArticle\Api\Data\CategoryInterface;
 
-class Post extends DataObject implements PostInterface
+class Category extends DataObject implements CategoryInterface
 {
-    public function getPostId()
+    public function getCategoryId()
     {
-        return $this->getData(self::POST_ID) !== null ? (int) $this->getData(self::POST_ID) : null;
+        return $this->getData(self::CATEGORY_ID) !== null ? (int) $this->getData(self::CATEGORY_ID) : null;
     }
 
-    public function setPostId($postId)
+    public function setCategoryId($categoryId)
     {
-        return $this->setData(self::POST_ID, $postId);
+        return $this->setData(self::CATEGORY_ID, $categoryId);
     }
 
-    public function getTitle()
+    public function getName()
     {
-        return $this->getData(self::TITLE);
+        return $this->getData(self::NAME);
     }
 
-    public function setTitle($title)
+    public function setName($name)
     {
-        return $this->setData(self::TITLE, $title);
+        return $this->setData(self::NAME, $name);
     }
 
     public function getUrlKey()
@@ -36,16 +36,6 @@ class Post extends DataObject implements PostInterface
         return $this->setData(self::URL_KEY, $urlKey);
     }
 
-    public function getContent()
-    {
-        return $this->getData(self::CONTENT);
-    }
-
-    public function setContent($content)
-    {
-        return $this->setData(self::CONTENT, $content);
-    }
-
     public function getIsActive()
     {
         return $this->getData(self::IS_ACTIVE) !== null ? (int) $this->getData(self::IS_ACTIVE) : null;
@@ -54,18 +44,6 @@ class Post extends DataObject implements PostInterface
     public function setIsActive($isActive)
     {
         return $this->setData(self::IS_ACTIVE, $isActive);
-    }
-
-    public function getCategoryId()
-    {
-        return $this->getData(self::CATEGORY_ID) !== null && $this->getData(self::CATEGORY_ID) !== ''
-            ? (int) $this->getData(self::CATEGORY_ID)
-            : null;
-    }
-
-    public function setCategoryId($categoryId)
-    {
-        return $this->setData(self::CATEGORY_ID, $categoryId);
     }
 
     public function getCreationTime()

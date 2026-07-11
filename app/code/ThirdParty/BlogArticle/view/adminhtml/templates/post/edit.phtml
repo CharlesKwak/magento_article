@@ -81,6 +81,24 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
             </div>
 
             <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="category_id">
+                    <span><?= $block->escapeHtml(__('Category')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <?php $selectedCategory = (int) $post->getCategoryId(); ?>
+                    <select class="admin__control-select" id="category_id" name="category_id" style="max-width:320px;">
+                        <option value=""><?= $block->escapeHtml(__('— None —')) ?></option>
+                        <?php foreach ($block->getCategoryOptions() as $category): ?>
+                            <option value="<?= (int) $category->getId() ?>"
+                                <?= $selectedCategory === (int) $category->getId() ? 'selected="selected"' : '' ?>>
+                                <?= $block->escapeHtml($category->getName()) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
                 <label class="admin__field-label" for="content">
                     <span><?= $block->escapeHtml(__('Content')) ?> *</span>
                 </label>

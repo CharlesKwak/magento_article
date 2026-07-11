@@ -7,18 +7,18 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
+use ThirdParty\BlogArticle\Api\CategoryRepositoryInterface;
 
-class Post implements ResolverInterface
+class Category implements ResolverInterface
 {
     /**
-     * @var PostRepositoryInterface
+     * @var CategoryRepositoryInterface
      */
-    private $postRepository;
+    private $categoryRepository;
 
-    public function __construct(PostRepositoryInterface $postRepository)
+    public function __construct(CategoryRepositoryInterface $categoryRepository)
     {
-        $this->postRepository = $postRepository;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -39,23 +39,20 @@ class Post implements ResolverInterface
         }
 
         try {
-            $item = $id
-                ? $this->postRepository->getById($id)
-                : $this->postRepository->getByUrlKey($urlKey);
+            $category = $id
+                ? $this->categoryRepository->getById($id)
+                : $this->categoryRepository->getByUrlKey($urlKey);
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         }
 
         return [
-            'post_id' => $item->getPostId(),
-            'title' => $item->getTitle(),
-            'url_key' => $item->getUrlKey(),
-            'content' => $item->getContent(),
-            'is_active' => $item->getIsActive(),
-            'category_id' => $item->getCategoryId(),
-            'creation_time' => $item->getCreationTime(),
-            'update_time' => $item->getUpdateTime(),
-            'model' => $item,
+            'category_id' => $category->getCategoryId(),
+            'name' => $category->getName(),
+            'url_key' => $category->getUrlKey(),
+            'is_active' => $category->getIsActive(),
+            'creation_time' => $category->getCreationTime(),
+            'update_time' => $category->getUpdateTime(),
         ];
     }
 }

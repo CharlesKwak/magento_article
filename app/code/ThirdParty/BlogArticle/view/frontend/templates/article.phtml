@@ -7,7 +7,7 @@ $searchQuery = $block->getSearchQuery();
 ?>
 <div class="blog-post-list">
     <form class="blog-search" method="get" action="<?= $block->escapeUrl($block->getSearchFormAction()) ?>"
-          style="margin-bottom: 1.25rem; display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+          style="margin-bottom: 1rem; display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
         <label for="blog-search-q" class="label">
             <span><?= $block->escapeHtml(__('Search')) ?></span>
         </label>
@@ -17,15 +17,36 @@ $searchQuery = $block->getSearchQuery();
                value="<?= $block->escapeHtmlAttr($searchQuery) ?>"
                placeholder="<?= $block->escapeHtmlAttr(__('Search posts…')) ?>"
                style="min-width: 220px;"/>
+        <?php if ($block->getCategoryKeyFilter() !== ''): ?>
+            <input type="hidden" name="cat" value="<?= $block->escapeHtmlAttr($block->getCategoryKeyFilter()) ?>"/>
+        <?php elseif ($block->getCategoryIdFilter()): ?>
+            <input type="hidden" name="category_id" value="<?= (int) $block->getCategoryIdFilter() ?>"/>
+        <?php endif; ?>
         <button type="submit" class="action primary">
             <span><?= $block->escapeHtml(__('Search')) ?></span>
         </button>
-        <?php if ($searchQuery !== ''): ?>
+        <?php if ($searchQuery !== '' || $block->getCategoryIdFilter()): ?>
             <a href="<?= $block->escapeUrl($block->getUrl('blog/index/index')) ?>">
                 <?= $block->escapeHtml(__('Clear')) ?>
             </a>
         <?php endif; ?>
     </form>
+
+    <?php $categories = $block->getActiveCategories(); ?>
+    <?php if ($categories->getSize()): ?>
+        <nav class="blog-categories" style="margin-bottom:1.25rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+            <a href="<?= $block->escapeUrl($block->getUrl('blog/index/index')) ?>"
+               <?= !$block->getCategoryIdFilter() ? 'style="font-weight:bold;"' : '' ?>>
+                <?= $block->escapeHtml(__('All')) ?>
+            </a>
+            <?php foreach ($categories as $category): ?>
+                <a href="<?= $block->escapeUrl($block->getCategoryFilterUrl((string) $category->getUrlKey())) ?>"
+                   <?= (int) $block->getCategoryIdFilter() === (int) $category->getId() ? 'style="font-weight:bold;"' : '' ?>>
+                    <?= $block->escapeHtml($category->getName()) ?>
+                </a>
+            <?php endforeach; ?>
+        </nav>
+    <?php endif; ?>
 
     <?php if ($searchQuery !== ''): ?>
         <p class="blog-search-summary">
@@ -51,13 +72,17 @@ $searchQuery = $block->getSearchQuery();
                         <?= $block->escapeHtml($post->getTitle()) ?>
                     </a>
                 </h2>
-                <?php if ($post->getCreationTime()): ?>
-                    <p class="blog-meta">
+                <p class="blog-meta">
+                    <?php if ($block->getCategoryName($post) !== ''): ?>
+                        <span class="blog-category"><?= $block->escapeHtml($block->getCategoryName($post)) ?></span>
+                        &middot;
+                    <?php endif; ?>
+                    <?php if ($post->getCreationTime()): ?>
                         <time datetime="<?= $block->escapeHtmlAttr((string) $post->getCreationTime()) ?>">
                             <?= $block->escapeHtml((string) $post->getCreationTime()) ?>
                         </time>
-                    </p>
-                <?php endif; ?>
+                    <?php endif; ?>
+                </p>
                 <div class="excerpt">
                     <p><?= $block->escapeHtml($block->getExcerpt($post)) ?></p>
                 </div>

@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <!-- Public post read -->
     <route url="/V1/blogarticle/posts" method="GET">
         <service class="ThirdParty\BlogArticle\Api\PostRepositoryInterface" method="getList"/>
         <resources>
@@ -23,6 +24,70 @@
         <service class="ThirdParty\BlogArticle\Api\PostRepositoryInterface" method="getByUrlKey"/>
         <resources>
             <resource ref="anonymous"/>
+        </resources>
+    </route>
+
+    <!-- Admin post write -->
+    <route url="/V1/blogarticle/posts" method="POST">
+        <service class="ThirdParty\BlogArticle\Api\PostRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="ThirdParty_BlogArticle::posts"/>
+        </resources>
+    </route>
+    <route url="/V1/blogarticle/posts/:postId" method="PUT">
+        <service class="ThirdParty\BlogArticle\Api\PostRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="ThirdParty_BlogArticle::posts"/>
+        </resources>
+        <data>
+            <parameter name="post.post_id" force="true">%postId%</parameter>
+        </data>
+    </route>
+    <route url="/V1/blogarticle/posts/:postId" method="DELETE">
+        <service class="ThirdParty\BlogArticle\Api\PostRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="ThirdParty_BlogArticle::posts"/>
+        </resources>
+    </route>
+
+    <!-- Categories -->
+    <route url="/V1/blogarticle/categories" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\CategoryRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/blogarticle/categories/:categoryId" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\CategoryRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/blogarticle/categories/url/:urlKey" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\CategoryRepositoryInterface" method="getByUrlKey"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/blogarticle/categories" method="POST">
+        <service class="ThirdParty\BlogArticle\Api\CategoryRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="ThirdParty_BlogArticle::categories"/>
+        </resources>
+    </route>
+    <route url="/V1/blogarticle/categories/:categoryId" method="PUT">
+        <service class="ThirdParty\BlogArticle\Api\CategoryRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="ThirdParty_BlogArticle::categories"/>
+        </resources>
+        <data>
+            <parameter name="category.category_id" force="true">%categoryId%</parameter>
+        </data>
+    </route>
+    <route url="/V1/blogarticle/categories/:categoryId" method="DELETE">
+        <service class="ThirdParty\BlogArticle\Api\CategoryRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="ThirdParty_BlogArticle::categories"/>
         </resources>
     </route>
 </routes>

@@ -1,41 +1,36 @@
 <?php
 namespace ThirdParty\BlogArticle\Api\Data;
 
-/**
- * Blog post data interface for Web API.
- */
-interface PostInterface
+interface CategoryInterface
 {
-    public const POST_ID = 'post_id';
-    public const TITLE = 'title';
-    public const URL_KEY = 'url_key';
-    public const CONTENT = 'content';
-    public const IS_ACTIVE = 'is_active';
     public const CATEGORY_ID = 'category_id';
+    public const NAME = 'name';
+    public const URL_KEY = 'url_key';
+    public const IS_ACTIVE = 'is_active';
     public const CREATION_TIME = 'creation_time';
     public const UPDATE_TIME = 'update_time';
 
     /**
      * @return int|null
      */
-    public function getPostId();
+    public function getCategoryId();
 
     /**
-     * @param int $postId
+     * @param int $categoryId
      * @return $this
      */
-    public function setPostId($postId);
+    public function setCategoryId($categoryId);
 
     /**
      * @return string|null
      */
-    public function getTitle();
+    public function getName();
 
     /**
-     * @param string $title
+     * @param string $name
      * @return $this
      */
-    public function setTitle($title);
+    public function setName($name);
 
     /**
      * @return string|null
@@ -49,17 +44,6 @@ interface PostInterface
     public function setUrlKey($urlKey);
 
     /**
-     * @return string|null
-     */
-    public function getContent();
-
-    /**
-     * @param string $content
-     * @return $this
-     */
-    public function setContent($content);
-
-    /**
      * @return int|null
      */
     public function getIsActive();
@@ -69,17 +53,6 @@ interface PostInterface
      * @return $this
      */
     public function setIsActive($isActive);
-
-    /**
-     * @return int|null
-     */
-    public function getCategoryId();
-
-    /**
-     * @param int|null $categoryId
-     * @return $this
-     */
-    public function setCategoryId($categoryId);
 
     /**
      * @return string|null

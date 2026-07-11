@@ -9,8 +9,6 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Post\Collection;
 class PostFilter
 {
     /**
-     * Apply free-text search across title, content, and url_key.
-     *
      * @param Collection $collection
      * @param string|null $search
      * @return void
@@ -22,7 +20,6 @@ class PostFilter
             return;
         }
 
-        // Escape LIKE wildcards in user input
         $escaped = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $search);
         $like = '%' . $escaped . '%';
 
@@ -37,13 +34,24 @@ class PostFilter
     }
 
     /**
-     * Restrict to enabled posts for public surfaces.
-     *
      * @param Collection $collection
      * @return void
      */
     public function applyActiveOnly(Collection $collection): void
     {
         $collection->addFieldToFilter('is_active', 1);
+    }
+
+    /**
+     * @param Collection $collection
+     * @param int|null $categoryId
+     * @return void
+     */
+    public function applyCategoryId(Collection $collection, ?int $categoryId): void
+    {
+        if ($categoryId === null || $categoryId <= 0) {
+            return;
+        }
+        $collection->addFieldToFilter('category_id', $categoryId);
     }
 }

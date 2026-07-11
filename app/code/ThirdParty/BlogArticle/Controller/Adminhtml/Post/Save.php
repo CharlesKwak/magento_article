@@ -66,6 +66,9 @@ class Save extends Action
         $content = isset($data['content']) ? trim((string) $data['content']) : '';
         $urlKeyInput = isset($data['url_key']) ? trim((string) $data['url_key']) : '';
         $isActive = !empty($data['is_active']) ? 1 : 0;
+        $categoryId = isset($data['category_id']) && $data['category_id'] !== ''
+            ? (int) $data['category_id']
+            : null;
 
         if ($title === '' || $content === '') {
             $this->messageManager->addErrorMessage(__('Title and content are required.'));
@@ -83,6 +86,7 @@ class Save extends Action
         $post->setContent($content);
         $post->setUrlKey($urlKey);
         $post->setIsActive($isActive);
+        $post->setCategoryId($categoryId);
 
         try {
             $post->save();

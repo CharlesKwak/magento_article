@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **1.4.0**
+Version covered: **1.5.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -23,7 +23,7 @@ This module provides a **database-backed blog post list** with Admin management:
 | REST | `/rest/V1/blogarticle/posts*` | Public read + search |
 | GraphQL | `/graphql` (`blogPosts`, `blogPost`) | Public read + search |
 
-### What you can do in v1.4.0
+### What you can do in v1.5.0
 
 - Search and page through the storefront blog list.
 - Filter Admin posts by keyword and status.
@@ -140,7 +140,13 @@ ACL: `ThirdParty_BlogArticle::posts` (config: `ThirdParty_BlogArticle::config`)
 
 **Stores → Configuration → Third Party → Blog Article → Storefront List → Posts Per Page** (1–50).
 
-### 3.2 Create a post
+### 3.2 Manage categories
+
+1. Go to **Content → Blog Categories**.
+2. Add / edit categories (name, URL key, status).
+3. Categories with assigned posts cannot be deleted until posts are reassigned.
+
+### 3.3 Create a post
 
 1. Click **Add New Post**.
 2. Enter **Title** (required, max 255 characters).
@@ -149,19 +155,19 @@ ACL: `ThirdParty_BlogArticle::posts` (config: `ThirdParty_BlogArticle::config`)
 5. Enter **Content** (required; basic HTML allowed).
 6. Click **Save Post** or **Save and Continue Edit**.
 
-### 3.3 Edit a post
+### 3.4 Edit a post
 
 1. On the list, click **Edit** for a row.
 2. Change title/content.
 3. Save.
 
-### 3.4 Delete a post
+### 3.5 Delete a post
 
 1. On the list (or edit form), click **Delete**.
 2. Confirm the browser dialog.
 3. The post is removed from the database and both Admin and storefront lists.
 
-### 3.5 Permissions
+### 3.6 Permissions
 
 | Role type | Expected behavior |
 |---|---|
@@ -233,7 +239,7 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v1.4.0 |
+| Topic | Behavior in v1.5.0 |
 |---|---|
 | Multi-website / store view | No `store_id` column; **all posts show on all store views** that can reach the route |
 | Translation of post content | Not supported; store raw title/content per row only |

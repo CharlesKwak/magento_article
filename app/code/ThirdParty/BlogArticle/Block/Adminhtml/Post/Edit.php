@@ -7,6 +7,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Data\Form\FormKey;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFactory;
+use ThirdParty\BlogArticle\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 
 class Edit extends Template
 {
@@ -26,6 +27,11 @@ class Edit extends Template
     private $dataPersistor;
 
     /**
+     * @var CategoryCollectionFactory
+     */
+    private $categoryCollectionFactory;
+
+    /**
      * @var Post|null
      */
     private $post;
@@ -35,11 +41,13 @@ class Edit extends Template
         PostFactory $postFactory,
         FormKey $formKey,
         DataPersistorInterface $dataPersistor,
+        CategoryCollectionFactory $categoryCollectionFactory,
         array $data = []
     ) {
         $this->postFactory = $postFactory;
         $this->formKey = $formKey;
         $this->dataPersistor = $dataPersistor;
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
         parent::__construct($context, $data);
     }
 
@@ -66,32 +74,33 @@ class Edit extends Template
     }
 
     /**
-     * @return string
+     * Active categories for the assignment dropdown.
+     *
+     * @return \ThirdParty\BlogArticle\Model\ResourceModel\Category\Collection
      */
+    public function getCategoryOptions()
+    {
+        $collection = $this->categoryCollectionFactory->create();
+        $collection->addFieldToFilter('is_active', 1);
+        $collection->setOrder('name', 'ASC');
+        return $collection;
+    }
+
     public function getFormKey()
     {
         return $this->formKey->getFormKey();
     }
 
-    /**
-     * @return string
-     */
     public function getSaveUrl()
     {
         return $this->getUrl('blogarticle/post/save');
     }
 
-    /**
-     * @return string
-     */
     public function getBackUrl()
     {
         return $this->getUrl('blogarticle/post/index');
     }
 
-    /**
-     * @return string
-     */
     public function getDeleteUrl()
     {
         $post = $this->getPost();
@@ -108,9 +117,6 @@ class Edit extends Template
         );
     }
 
-    /**
-     * @return bool
-     */
     public function isExistingPost()
     {
         return (bool) $this->getPost()->getId();

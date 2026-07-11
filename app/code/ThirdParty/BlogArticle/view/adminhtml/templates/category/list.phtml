@@ -1,0 +1,49 @@
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Adminhtml\Category $block */
+$categories = $block->getCategories();
+?>
+<div class="blogarticle-category-list">
+    <div class="page-actions" style="margin-bottom:1rem;">
+        <a class="action-default scalable primary" href="<?= $block->escapeUrl($block->getNewUrl()) ?>">
+            <span><?= $block->escapeHtml(__('Add New Category')) ?></span>
+        </a>
+    </div>
+
+    <?php if (!$categories->getSize()): ?>
+        <div class="message info">
+            <span><?= $block->escapeHtml(__('No categories yet.')) ?></span>
+        </div>
+    <?php else: ?>
+        <table class="data-grid" style="width:100%; border-collapse:collapse;">
+            <thead>
+            <tr>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('ID')) ?></th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('Name')) ?></th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('URL Key')) ?></th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('Status')) ?></th>
+                <th style="text-align:left;padding:8px;border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('Actions')) ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($categories as $category): ?>
+                <tr>
+                    <td style="padding:8px;border-bottom:1px solid #eee;"><?= $block->escapeHtml((string) $category->getId()) ?></td>
+                    <td style="padding:8px;border-bottom:1px solid #eee;"><?= $block->escapeHtml($category->getName()) ?></td>
+                    <td style="padding:8px;border-bottom:1px solid #eee;"><code><?= $block->escapeHtml((string) $category->getUrlKey()) ?></code></td>
+                    <td style="padding:8px;border-bottom:1px solid #eee;">
+                        <?= $block->escapeHtml((int) $category->getIsActive() ? __('Enabled') : __('Disabled')) ?>
+                    </td>
+                    <td style="padding:8px;border-bottom:1px solid #eee;">
+                        <a href="<?= $block->escapeUrl($block->getEditUrl($category->getId())) ?>"><?= $block->escapeHtml(__('Edit')) ?></a>
+                        &nbsp;|&nbsp;
+                        <a href="<?= $block->escapeUrl($block->getDeleteUrl($category->getId())) ?>"
+                           onclick="return confirm('<?= $block->escapeJs(__('Delete this category?')) ?>');">
+                            <?= $block->escapeHtml(__('Delete')) ?>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+</div>
