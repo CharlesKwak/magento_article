@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Menu/etc/menu.xsd">
+    <menu>
+        <add id="ThirdParty_BlogArticle::posts" title="Blog Posts" module="ThirdParty_BlogArticle" sortOrder="100" parent="Magento_Backend::content" resource="ThirdParty_BlogArticle::posts"/>
+    </menu>
+</config>
