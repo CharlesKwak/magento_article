@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **1.0.0**
+Version covered: **1.1.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -12,30 +12,28 @@ For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md
 
 ## 1. Product overview
 
-This module provides a **minimal, database-backed blog post list**:
+This module provides a **database-backed blog post list** with Admin management:
 
 | Surface | URL / navigation | Behavior |
 |---|---|---|
 | Storefront | `/blog/index/index` | Renders all rows from `thirdparty_blogarticle_post` |
-| Admin | **Content → Blog Posts** | Renders the same list for operators |
+| Admin | **Content → Blog Posts** | List, create, edit, delete posts |
 
-It is intended as a **starting sample** for Magento blog-style content—not a full CMS.
-
-### What you can do in v1.0.0
+### What you can do in v1.1.0
 
 - View the full list of posts on the storefront.
 - View the full list of posts in Admin.
+- **Create, edit, and delete** posts in Admin.
+- Rely on **sample posts** after a fresh install (when the table was empty).
 - Control Admin menu access via ACL resource `ThirdParty_BlogArticle::posts`.
 
-### What you cannot do in v1.0.0 (by design of current code)
+### Not available yet
 
-- Create, edit, or delete posts from the Admin UI.
-- Open a single-post detail page.
-- Use categories, tags, authors, draft/publish status, or SEO URL keys.
-- Call REST/GraphQL APIs for posts.
-- Import posts via Magento CLI.
-
-**Workaround for creating content:** insert rows into the database (see [§4 Managing posts](#4-managing-posts-v100)).
+- Single-post detail page / SEO-friendly URL keys.
+- Categories, tags, authors, draft/publish workflow.
+- REST/GraphQL APIs.
+- Magento CLI commands for posts.
+- Per-store-view content.
 
 ---
 
@@ -43,14 +41,14 @@ It is intended as a **starting sample** for Magento blog-style content—not a f
 
 ### 2.1 Open the article list
 
-1. Ensure the module is enabled and at least one post exists (see install guide).
-2. In a browser, open:
+1. Ensure the module is enabled.
+2. Open:
 
    ```text
    https://<your-store-base-url>/blog/index/index
    ```
 
-3. You should see one block per post: **title** (`<h2>`) and **content**.
+3. Each post shows a **title** and **content** body.
 
 There is no pagination: **all posts** are loaded.
 
@@ -58,18 +56,22 @@ There is no pagination: **all posts** are loaded.
 
 | Field | Escaping | Implication |
 |---|---|---|
-| `title` | HTML-escaped via `$block->escapeHtml()` | Safe against title XSS |
-| `content` | **Not escaped** (output as stored) | Treated as HTML; **stored XSS risk** if untrusted users can write to the DB |
+| `title` | Fully HTML-escaped | Safe against title XSS |
+| `content` | Escaped with an **allow-list** of tags | Only safe subset of HTML is kept |
+
+**Allowed tags in content (v1.1.0):**  
+`p`, `br`, `em`, `strong`, `b`, `i`, `ul`, `ol`, `li`, `a`, `h2`, `h3`, `h4`
+
+Scripts, iframes, and other tags are stripped/escaped by Magento’s escaper.
 
 **Operational guidance**
 
-- Only allow trusted operators (or trusted ETL/scripts) to insert `content`.
-- Prefer plain text or carefully reviewed HTML.
-- Do not expose direct DB write access to untrusted parties.
+- Only trusted operators should edit `content`.
+- Prefer simple HTML that matches the allow-list.
 
 ### 2.3 Empty state
 
-If the table has zero rows, the page still loads successfully but displays **no posts**. This is expected—not a routing failure.
+If the table has zero rows, the page shows: *“No blog posts are available yet.”*
 
 ---
 
@@ -79,19 +81,37 @@ If the table has zero rows, the page still loads successfully but displays **no 
 
 1. Log in to Magento Admin.
 2. Go to **Content → Blog Posts**.
-3. Review titles and content for all posts (same data source as storefront).
+3. Review the table (ID, title, created time, actions).
 
 Admin route frontName: `blogarticle`  
-Controller: `ThirdParty\BlogArticle\Controller\Adminhtml\Post\Index`  
-ACL constant: `ThirdParty_BlogArticle::posts`
+ACL: `ThirdParty_BlogArticle::posts`
 
-### 3.2 Permissions
+### 3.2 Create a post
+
+1. Click **Add New Post**.
+2. Enter **Title** (required, max 255 characters).
+3. Enter **Content** (required; basic HTML allowed).
+4. Click **Save Post** (return to list) or **Save and Continue Edit**.
+
+### 3.3 Edit a post
+
+1. On the list, click **Edit** for a row.
+2. Change title/content.
+3. Save.
+
+### 3.4 Delete a post
+
+1. On the list (or edit form), click **Delete**.
+2. Confirm the browser dialog.
+3. The post is removed from the database and both Admin and storefront lists.
+
+### 3.5 Permissions
 
 | Role type | Expected behavior |
 |---|---|
-| Administrators (full access) | Menu visible; page accessible |
+| Administrators (full access) | Full CRUD |
 | Custom role without resource | Menu hidden / access denied |
-| Custom role with `ThirdParty_BlogArticle::posts` | Menu and page available |
+| Custom role with `ThirdParty_BlogArticle::posts` | Full CRUD |
 
 Configure under:
 
@@ -99,117 +119,76 @@ Configure under:
 
 Grant **Blog Posts** (resource id `ThirdParty_BlogArticle::posts`).
 
-### 3.3 No write UI
-
-The Admin page is **read-only**. There is no “Add New Post”, mass action, or inline edit in v1.0.0.  
-Use database operations described below until a future version adds CRUD.
-
 ---
 
-## 4. Managing posts (v1.0.0)
-
-### 4.1 Data model
+## 4. Data model
 
 Table: `thirdparty_blogarticle_post`  
-(Respect Magento table prefix if configured, e.g. `m2_thirdparty_blogarticle_post`.)
+(Respect Magento table prefix if configured.)
 
 | Column | Type (logical) | Required | Description |
 |---|---|---|---|
 | `post_id` | integer, PK, auto-increment | auto | Unique post id |
 | `title` | string (up to 255) | yes | Display title |
-| `content` | text (up to ~64KB) | yes | Body; may include HTML |
+| `content` | text (up to ~64KB) | yes | Body; limited HTML |
 | `creation_time` | timestamp | default now | Created at |
 
 There is no `status`, `updated_at`, `url_key`, `store_id`, or media field.
 
-### 4.2 Create a post (SQL)
+### Sample data patch
+
+On install/upgrade, if the table is empty, two posts are inserted:
+
+1. *Welcome to the blog*
+2. *Second sample post*
+
+The patch runs only once (tracked in Magento `patch_list`) and only when count is 0 at apply time.
+
+### Optional SQL (advanced)
 
 ```sql
 INSERT INTO thirdparty_blogarticle_post (title, content)
-VALUES (
-  'My first article',
-  '<p>Hello from <em>ThirdParty_BlogArticle</em>.</p>'
-);
-```
+VALUES ('My first article', '<p>Hello from <em>ThirdParty_BlogArticle</em>.</p>');
 
-Verify:
-
-```sql
-SELECT post_id, title, LEFT(content, 80) AS content_preview, creation_time
-FROM thirdparty_blogarticle_post
-ORDER BY post_id DESC;
-```
-
-Then refresh:
-
-- Storefront: `/blog/index/index`
-- Admin: **Content → Blog Posts**
-
-Clear Magento full-page cache if enabled and content does not appear:
-
-```bash
-php bin/magento cache:flush
-```
-
-### 4.3 Update a post (SQL)
-
-```sql
 UPDATE thirdparty_blogarticle_post
-SET
-  title = 'Updated title',
-  content = '<p>Updated body</p>'
+SET title = 'Updated title', content = '<p>Updated body</p>'
 WHERE post_id = 1;
+
+DELETE FROM thirdparty_blogarticle_post WHERE post_id = 1;
 ```
 
-### 4.4 Delete a post (SQL)
-
-```sql
-DELETE FROM thirdparty_blogarticle_post
-WHERE post_id = 1;
-```
-
-### 4.5 Bulk sample data
-
-```sql
-INSERT INTO thirdparty_blogarticle_post (title, content) VALUES
-  ('Welcome to the blog', '<p>This is dummy content for the first post.</p>'),
-  ('Second sample post', '<p>This post is used to verify list rendering.</p>');
-```
-
-These titles match the repository fixture `tests/dummy_posts.json` (used only for repository tests—not auto-imported into Magento).
+Prefer the Admin UI for day-to-day work.
 
 ---
 
 ## 5. Day-to-day operator checklist
 
 - [ ] Module enabled: `php bin/magento module:status ThirdParty_BlogArticle`
-- [ ] Table exists and has rows for demos / UAT
-- [ ] Storefront list URL bookmarked for QA
+- [ ] Sample or real posts visible on storefront
+- [ ] Operators know **Content → Blog Posts** for CRUD
 - [ ] Admin role has **Blog Posts** ACL if not using full admin
-- [ ] Only trusted staff change `content` (HTML / XSS policy)
-- [ ] Back up the table before bulk SQL changes in production
+- [ ] Content HTML stays within allowed tags
+- [ ] Backup before bulk SQL changes in production
 
 ---
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v1.0.0 |
+| Topic | Behavior in v1.1.0 |
 |---|---|
 | Multi-website / store view | No `store_id` column; **all posts show on all store views** that can reach the route |
 | Translation of post content | Not supported; store raw title/content per row only |
-| Magento i18n for UI strings | Admin title uses `__('Blog Posts')`; no extensive phrase package |
-
-If you need per-store content, you must extend the schema and collection filters in a future release.
+| Magento i18n for UI strings | Admin labels use `__()`; no extensive phrase package |
 
 ---
 
 ## 7. FAQ
 
-**Q: I installed the module but the blog page is blank.**  
-A: Empty table. Insert at least one row ([§4.2](#42-create-a-post-sql)).
+**Q: I installed the module but the blog page is blank / empty message.**  
+A: Table has no rows (seed may have been skipped if data already existed). Use **Add New Post** in Admin.
 
-**Q: Where is “Add Post” in Admin?**  
-A: Not implemented in v1.0.0. Use SQL (or wait for a future CRUD release).
+**Q: Where do I add a post?**  
+A: **Content → Blog Posts → Add New Post**.
 
 **Q: Can customers comment on articles?**  
 A: No.
@@ -217,32 +196,18 @@ A: No.
 **Q: Does the module index posts in Elasticsearch?**  
 A: No. Listing is a direct DB collection load.
 
-**Q: Is HTML in content sanitized?**  
-A: No. Content is printed as stored. Treat it as trusted HTML only.
+**Q: Why did my `<script>` tag disappear?**  
+A: Storefront allow-list strips unsafe HTML. This is intentional.
 
 **Q: How do I change the URL from `/blog`?**  
-A: Change the frontend route `frontName` in `etc/frontend/routes.xml` and redeploy (developer change), or add Magento URL rewrites externally. No Admin config exists in v1.0.0.
+A: Change the frontend route `frontName` in `etc/frontend/routes.xml` and redeploy. No Admin config in v1.1.0.
 
-**Q: LICENSE vs composer license field?**  
-A: Root `LICENSE` is GPL-2.0; `composer.json` currently says MIT. See installation guide license note.
-
----
-
-## 8. Feature roadmap context (not committed)
-
-Useful next capabilities for a production “article” product (for planning only):
-
-1. Admin form + save/delete controllers (or UI Component grid)
-2. Declarative schema (`db_schema.xml`) and Data Patch seed
-3. Post detail page + `url_key` + publish status
-4. Proper HTML sanitization or Magento WYSIWYG + filter
-5. Pagination and Admin search
-
-These are **not** available in 1.0.0.
+**Q: License?**  
+A: Root `LICENSE` is GPL-2.0; `composer.json` uses `GPL-2.0-only` from 1.1.0.
 
 ---
 
-## 9. Related documents
+## 8. Related documents
 
 | Document | Purpose |
 |---|---|

@@ -1,0 +1,77 @@
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Adminhtml\Post\Edit $block */
+$post = $block->getPost();
+?>
+<div class="blogarticle-post-edit">
+    <div class="page-actions" style="margin-bottom: 1rem;">
+        <a class="action-default" href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
+            <?= $block->escapeHtml(__('Back to list')) ?>
+        </a>
+        <?php if ($block->isExistingPost()): ?>
+            &nbsp;|&nbsp;
+            <a class="action-default"
+               href="<?= $block->escapeUrl($block->getDeleteUrl()) ?>"
+               onclick="return confirm('<?= $block->escapeJs(__('Are you sure you want to delete this post?')) ?>');">
+                <?= $block->escapeHtml(__('Delete')) ?>
+            </a>
+        <?php endif; ?>
+    </div>
+
+    <form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>"
+          method="post"
+          id="blogarticle-post-form">
+        <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>"/>
+        <?php if ($post->getId()): ?>
+            <input type="hidden" name="post_id" value="<?= $block->escapeHtmlAttr((string) $post->getId()) ?>"/>
+        <?php endif; ?>
+
+        <fieldset class="admin__fieldset">
+            <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="title">
+                    <span><?= $block->escapeHtml(__('Title')) ?> *</span>
+                </label>
+                <div class="admin__field-control">
+                    <input class="admin__control-text"
+                           type="text"
+                           id="title"
+                           name="title"
+                           maxlength="255"
+                           required="required"
+                           style="width:100%; max-width:640px;"
+                           value="<?= $block->escapeHtmlAttr((string) $post->getTitle()) ?>"/>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="content">
+                    <span><?= $block->escapeHtml(__('Content')) ?> *</span>
+                </label>
+                <div class="admin__field-control">
+                    <textarea class="admin__control-textarea"
+                              id="content"
+                              name="content"
+                              required="required"
+                              rows="12"
+                              style="width:100%; max-width:640px;"><?= $block->escapeHtml((string) $post->getContent()) ?></textarea>
+                    <p class="admin__field-note">
+                        <?= $block->escapeHtml(__('Basic HTML is allowed (for example p, strong, em, a, ul, ol, li). Only trusted staff should edit content.')) ?>
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin__field">
+                <button type="submit" class="action-default scalable primary" title="<?= $block->escapeHtmlAttr(__('Save Post')) ?>">
+                    <span><?= $block->escapeHtml(__('Save Post')) ?></span>
+                </button>
+                <button type="submit"
+                        class="action-default scalable"
+                        name="back"
+                        value="1"
+                        title="<?= $block->escapeHtmlAttr(__('Save and Continue Edit')) ?>"
+                        style="margin-left: 0.5rem;">
+                    <span><?= $block->escapeHtml(__('Save and Continue Edit')) ?></span>
+                </button>
+            </div>
+        </fieldset>
+    </form>
+</div>

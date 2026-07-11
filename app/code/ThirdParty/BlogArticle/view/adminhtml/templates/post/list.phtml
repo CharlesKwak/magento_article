@@ -1,9 +1,54 @@
-<?php /** @var \ThirdParty\BlogArticle\Block\Adminhtml\Post $block */ ?>
-<?php foreach ($block->getPosts() as $post): ?>
-    <div class="blog-post">
-        <h2><?php echo $block->escapeHtml($post->getTitle()); ?></h2>
-        <div class="content">
-            <?php echo $post->getContent(); ?>
-        </div>
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Adminhtml\Post $block */
+$posts = $block->getPosts();
+?>
+<div class="blogarticle-post-list">
+    <div class="page-actions" style="margin-bottom: 1.5rem;">
+        <a class="action-default scalable primary"
+           href="<?= $block->escapeUrl($block->getNewUrl()) ?>">
+            <span><?= $block->escapeHtml(__('Add New Post')) ?></span>
+        </a>
     </div>
-<?php endforeach; ?>
+
+    <?php if (!$posts->getSize()): ?>
+        <div class="message info">
+            <span><?= $block->escapeHtml(__('No blog posts yet. Click “Add New Post” to create one.')) ?></span>
+        </div>
+    <?php else: ?>
+        <table class="data-grid" style="width:100%; border-collapse: collapse;">
+            <thead>
+            <tr>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('ID')) ?></th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('Title')) ?></th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('Created')) ?></th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #ccc;"><?= $block->escapeHtml(__('Actions')) ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($posts as $post): ?>
+                <tr>
+                    <td style="padding:8px; border-bottom:1px solid #eee;">
+                        <?= $block->escapeHtml((string) $post->getId()) ?>
+                    </td>
+                    <td style="padding:8px; border-bottom:1px solid #eee;">
+                        <?= $block->escapeHtml($post->getTitle()) ?>
+                    </td>
+                    <td style="padding:8px; border-bottom:1px solid #eee;">
+                        <?= $block->escapeHtml((string) $post->getCreationTime()) ?>
+                    </td>
+                    <td style="padding:8px; border-bottom:1px solid #eee;">
+                        <a href="<?= $block->escapeUrl($block->getEditUrl($post->getId())) ?>">
+                            <?= $block->escapeHtml(__('Edit')) ?>
+                        </a>
+                        &nbsp;|&nbsp;
+                        <a href="<?= $block->escapeUrl($block->getDeleteUrl($post->getId())) ?>"
+                           onclick="return confirm('<?= $block->escapeJs(__('Are you sure you want to delete this post?')) ?>');">
+                            <?= $block->escapeHtml(__('Delete')) ?>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+</div>

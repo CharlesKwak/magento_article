@@ -4,7 +4,7 @@ This document describes what **ThirdParty_BlogArticle** depends on, what runs in
 
 It is an **SBOM-style inventory for humans**, not a machine-generated CycloneDX/SPDX file. Generate a formal SBOM from your Magento root if compliance tooling requires it (see [§6](#6-generating-a-machine-readable-sbom)).
 
-Module version: **1.0.0**  
+Module version: **1.1.0**  
 Package name: `thirdparty/module-blog-article`
 
 ---
@@ -63,7 +63,7 @@ Always prefer Adobe’s official system requirements for your exact Magento vers
 
 | Component | Version / constraint | Supplier | License (as packaged) | Required |
 |---|---|---|---|---|
-| `ThirdParty_BlogArticle` source | 1.0.0 | This repository | See root `LICENSE` (**GPL-2.0** text); `composer.json` currently says MIT | Yes |
+| `ThirdParty_BlogArticle` source | 1.1.0 | This repository | GPL-2.0 (root `LICENSE`; `composer.json` → `GPL-2.0-only`) | Yes |
 | PHP | ≥ 8.1 | php.net / distro | PHP License | Yes |
 | `magento/framework` | ^103.0 | Adobe / Magento | OSL-3.0 / AFL-3.0 (Magento components) | Yes (peer via Magento) |
 
@@ -144,10 +144,10 @@ No foreign keys, no views, no triggers, no stored procedures.
 
 | Topic | Note |
 |---|---|
-| Attack surface | One public frontend route (`blog`); one Admin route (`blogarticle`) behind Magento Admin auth + ACL |
-| XSS | `content` is rendered unescaped—treat DB writers as trusted (see User Guide) |
+| Attack surface | One public frontend route (`blog`); Admin routes (`blogarticle/post/*`) behind Magento Admin auth + ACL |
+| XSS | Storefront `content` uses HTML allow-list escaping; still restrict Admin access to trusted staff |
 | Secrets | Module introduces no new credentials or API keys |
-| License inconsistency | Root `LICENSE` = GPL-2.0; `composer.json` license array = MIT — resolve before commercial redistribution |
+| License | Root `LICENSE` = GPL-2.0; `composer.json` = `GPL-2.0-only` (aligned from 1.1.0) |
 | PII | Default schema has no customer PII fields; content free-text may still contain personal data if authors paste it |
 
 ---
@@ -212,6 +212,8 @@ Also note the workflow listens to branch name `main`, while this project histori
 - `README.md`
 - `LICENSE`
 - `docs/`
+
+Package artifact name: `thirdparty-blog-article-1.1.0.zip`.
 
 It does **not** ship `vendor/`, `composer.lock`, or Magento core. Target systems must already have Magento + PHP + MySQL.
 

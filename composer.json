@@ -1,11 +1,11 @@
 {
     "name": "thirdparty/module-blog-article",
-    "description": "Sample Magento 2 blog article module with admin listing and frontend article page.",
+    "description": "Sample Magento 2 blog article module with admin CRUD, sample seed data, and frontend article list.",
     "type": "magento2-module",
     "license": [
-        "MIT"
+        "GPL-2.0-only"
     ],
-    "version": "1.0.0",
+    "version": "1.1.0",
     "require": {
         "php": ">=8.1",
         "magento/framework": "^103.0"

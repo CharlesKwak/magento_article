@@ -1,9 +1,19 @@
-<?php /** @var \ThirdParty\BlogArticle\Block\Article $block */ ?>
-<?php foreach ($block->getPosts() as $post): ?>
-    <div class="blog-post">
-        <h2><?php echo $block->escapeHtml($post->getTitle()); ?></h2>
-        <div class="content">
-            <?php echo $post->getContent(); ?>
-        </div>
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Article $block */
+$allowedTags = ['p', 'br', 'em', 'strong', 'b', 'i', 'ul', 'ol', 'li', 'a', 'h2', 'h3', 'h4'];
+$posts = $block->getPosts();
+?>
+<?php if (!$posts->getSize()): ?>
+    <div class="blog-empty">
+        <p><?= $block->escapeHtml(__('No blog posts are available yet.')) ?></p>
     </div>
-<?php endforeach; ?>
+<?php else: ?>
+    <?php foreach ($posts as $post): ?>
+        <div class="blog-post">
+            <h2><?= $block->escapeHtml($post->getTitle()) ?></h2>
+            <div class="content">
+                <?= /* @noEscape */ $block->escapeHtml((string) $post->getContent(), $allowedTags) ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>

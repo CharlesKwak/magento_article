@@ -4,7 +4,7 @@ This guide explains how to install and verify the **ThirdParty_BlogArticle** mod
 
 Module package name: `thirdparty/module-blog-article`  
 Module code name: `ThirdParty_BlogArticle`  
-Current version: **1.0.0**
+Current version: **1.1.0**
 
 ---
 
@@ -14,20 +14,19 @@ After a successful install, the module:
 
 1. Registers itself with Magento as `ThirdParty_BlogArticle`.
 2. Creates the database table `thirdparty_blogarticle_post` (if it does not exist).
-3. Exposes a **storefront list page** at `/blog/index/index` (frontName: `blog`).
-4. Exposes an **Admin list page** under **Content → Blog Posts**.
+3. Seeds **two sample posts** when the table is empty (data patch `AddSampleBlogPosts`).
+4. Exposes a **storefront list page** at `/blog/index/index` (frontName: `blog`).
+5. Exposes an **Admin list + CRUD** under **Content → Blog Posts** (Add / Edit / Delete).
 
-### Important limitations (v1.0.0)
+### Capability matrix (v1.1.0)
 
 | Capability | Status |
 |---|---|
 | List posts on storefront | Supported |
 | List posts in Admin | Supported |
-| Create / edit / delete posts in Admin UI | **Not available** |
-| Sample (seed) posts on install | **Not included** |
+| Create / edit / delete posts in Admin UI | **Supported** |
+| Sample (seed) posts on install | **Supported** (empty table only) |
 | Single-post detail page / SEO URL | **Not available** |
-
-After install the table is **empty**. You must insert posts manually (see [§6 Seed sample data](#6-seed-sample-data-required-for-visible-content) and the [User Guide](./USER_GUIDE.md)).
 
 For dependency and runtime inventory (PHP, MySQL, Magento, SBOM-style notes), see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
 
@@ -194,11 +193,17 @@ Expected columns:
 
 ---
 
-## 6. Seed sample data (required for visible content)
+## 6. Sample data
 
-v1.0.0 does **not** ship a Data Patch. Until you insert rows, storefront and Admin lists are empty.
+### Automatic seed (default)
 
-### Option A — SQL (recommended for first verification)
+On `setup:upgrade`, data patch `ThirdParty\BlogArticle\Setup\Patch\Data\AddSampleBlogPosts` inserts **two sample posts** if the table exists and row count is **0**.
+
+If the table already has rows (or the patch already ran), nothing is inserted again.
+
+### Manual seed (optional)
+
+Use Admin **Content → Blog Posts → Add New Post**, or SQL:
 
 ```sql
 INSERT INTO thirdparty_blogarticle_post (title, content)
@@ -209,21 +214,13 @@ VALUES
   ),
   (
     'Second sample post',
-    '<p>Use the Admin <strong>Content → Blog Posts</strong> page to review the list.</p>'
+    '<p>Use the Admin <strong>Content → Blog Posts</strong> page to manage posts.</p>'
   );
 ```
 
-If your Magento installation uses a table prefix (e.g. `m2_`), prefix the table name accordingly:
+If your Magento installation uses a table prefix (e.g. `m2_`), prefix the table name accordingly.
 
-```sql
--- Example with prefix m2_
-INSERT INTO m2_thirdparty_blogarticle_post (title, content)
-VALUES ('Welcome to the blog', '<p>Sample content</p>');
-```
-
-### Option B — Magento CLI is not provided
-
-There is no `bin/magento blog:post:create` command in v1.0.0. Use SQL or a custom script.
+There is still no `bin/magento blog:post:create` CLI command; prefer Admin UI.
 
 More field semantics and security notes: [User Guide](./USER_GUIDE.md).
 
@@ -235,14 +232,14 @@ More field semantics and security notes: [User Guide](./USER_GUIDE.md).
 
 1. Open: `https://<your-store-base-url>/blog/index/index`  
    (also try `/blog/` depending on URL rewrite configuration)
-2. **With seed data:** each post title and content should render.
-3. **Without seed data:** page loads but shows no posts (empty loop).
+2. After a fresh install you should see the two sample posts (unless seed was skipped because data already existed).
+3. Empty table: page shows a friendly “no posts” message.
 
 ### 7.2 Admin
 
 1. Log in to Magento Admin.
 2. Navigate to **Content → Blog Posts**.
-3. Confirm the same posts appear as on the storefront list.
+3. Confirm sample posts appear; open **Add New Post**, save a third post, edit and delete to verify CRUD.
 
 ### 7.3 ACL (restricted Admin roles)
 
@@ -304,7 +301,8 @@ php bin/magento cache:flush
 | `Module "ThirdParty_BlogArticle" cannot be found` | Wrong path or missing `registration.php` | Confirm `app/code/ThirdParty/BlogArticle/registration.php` exists; re-run `module:enable` |
 | Menu **Blog Posts** missing | Module disabled or ACL denied | `module:status`; grant `ThirdParty_BlogArticle::posts` |
 | Storefront 404 on `/blog` | Cache / not enabled / wrong base URL | `cache:flush`; confirm module enabled; try `/blog/index/index` |
-| Empty list on frontend & admin | No rows in table | Run [§6 seed SQL](#6-seed-sample-data-required-for-visible-content) |
+| Empty list on frontend & admin | No rows / seed skipped | Re-check table; use Admin **Add New Post** or [§6 SQL](#6-sample-data) |
+| Admin form 404 on new/edit | Cache / generated code stale | `cache:flush`; production: `setup:di:compile` |
 | Table does not exist | `setup:upgrade` not run | Re-run `setup:upgrade`; check DB user privileges |
 | Production white screen after deploy | DI / static content stale | `setup:di:compile`, `setup:static-content:deploy`, `cache:flush` |
 | Class not found | Autoload not refreshed | `composer dump-autoload` (Composer install) or clear generated code |
@@ -336,4 +334,4 @@ tail -n 100 var/log/exception.log
 ## 11. License note
 
 The repository root `LICENSE` file is **GPL-2.0**.  
-`composer.json` currently lists `"MIT"` — treat this as a known metadata inconsistency until unified. Prefer the root `LICENSE` file for distribution compliance unless your legal team advises otherwise.
+From module version **1.1.0**, `composer.json` declares `"GPL-2.0-only"` to match.
