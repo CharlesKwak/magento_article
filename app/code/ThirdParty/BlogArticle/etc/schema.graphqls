@@ -23,11 +23,16 @@ type BlogPost {
     title: String
     url_key: String
     content: String
+    featured_image: String
+    meta_title: String
+    meta_description: String
     is_active: Int
     category_id: Int
     tag_ids: [Int]
     creation_time: String
     update_time: String
+    related_posts: [BlogPost]
+        @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\RelatedPosts")
 }
 
 type BlogPostList {

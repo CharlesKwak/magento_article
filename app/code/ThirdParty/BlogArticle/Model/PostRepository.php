@@ -161,6 +161,15 @@ class PostRepository implements PostRepositoryInterface
         $model->setTitle($title);
         $model->setContent($content);
         $model->setUrlKey($urlKey);
+        if ($post->getFeaturedImage() !== null) {
+            $model->setFeaturedImage(trim((string) $post->getFeaturedImage()) ?: null);
+        }
+        if ($post->getMetaTitle() !== null) {
+            $model->setMetaTitle(trim((string) $post->getMetaTitle()) ?: null);
+        }
+        if ($post->getMetaDescription() !== null) {
+            $model->setMetaDescription(trim((string) $post->getMetaDescription()) ?: null);
+        }
         $model->setIsActive((int) $isActive ? 1 : 0);
         $model->setCategoryId($categoryId);
 
@@ -191,6 +200,38 @@ class PostRepository implements PostRepositoryInterface
         return true;
     }
 
+    public function getRelated($postId, $limit = 3)
+    {
+        $limit = max(1, min(20, (int) $limit));
+        $source = $this->postFactory->create()->load((int) $postId);
+        if (!$source->getId()) {
+            throw new NoSuchEntityException(__('The blog post with ID "%1" does not exist.', $postId));
+        }
+
+        $build = function (?int $categoryId) use ($postId, $limit) {
+            $collection = $this->collectionFactory->create();
+            $this->postFilter->applyActiveOnly($collection);
+            $collection->addFieldToFilter('post_id', ['neq' => (int) $postId]);
+            if ($categoryId) {
+                $collection->addFieldToFilter('category_id', $categoryId);
+            }
+            $collection->setOrder('creation_time', 'DESC');
+            $collection->setPageSize($limit);
+            $items = [];
+            foreach ($collection as $post) {
+                $items[] = $this->toDataModel($post);
+            }
+            return $items;
+        };
+
+        $categoryId = $source->getCategoryId() ? (int) $source->getCategoryId() : null;
+        $items = $build($categoryId);
+        if (!$items && $categoryId) {
+            $items = $build(null);
+        }
+        return $items;
+    }
+
     private function toDataModel(Post $post): PostInterface
     {
         /** @var PostInterface $data */
@@ -199,6 +240,9 @@ class PostRepository implements PostRepositoryInterface
         $data->setTitle((string) $post->getTitle());
         $data->setUrlKey((string) $post->getUrlKey());
         $data->setContent((string) $post->getContent());
+        $data->setFeaturedImage($post->getFeaturedImage() ? (string) $post->getFeaturedImage() : null);
+        $data->setMetaTitle($post->getMetaTitle() ? (string) $post->getMetaTitle() : null);
+        $data->setMetaDescription($post->getMetaDescription() ? (string) $post->getMetaDescription() : null);
         $data->setIsActive((int) $post->getIsActive());
         $data->setCategoryId($post->getCategoryId() ? (int) $post->getCategoryId() : null);
         $data->setTagIds($this->postTagLink->getTagIdsForPost((int) $post->getId()));

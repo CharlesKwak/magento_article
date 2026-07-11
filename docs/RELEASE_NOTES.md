@@ -1,5 +1,29 @@
 # Release Notes
 
+## 1.7.0 - 2026-07-12
+
+### Added
+- Post fields: `featured_image`, `meta_title`, `meta_description`
+- Schema patch `AddFeaturedImageAndMeta`
+- Admin form fields for image URL and SEO meta
+- Storefront list/detail featured image display
+- Detail page **Related posts** (same category, fallback recent)
+- REST `GET /V1/blogarticle/posts/:postId/related`
+- GraphQL `related_posts` on `BlogPost` + media/meta fields
+- Page title/description from meta fields on detail view
+
+### Changed
+- Module / package version **1.7.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+
+---
+
 ## 1.6.0 - 2026-07-12
 
 ### Added

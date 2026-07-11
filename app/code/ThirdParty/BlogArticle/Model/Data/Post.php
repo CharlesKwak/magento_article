@@ -46,6 +46,36 @@ class Post extends DataObject implements PostInterface
         return $this->setData(self::CONTENT, $content);
     }
 
+    public function getFeaturedImage()
+    {
+        return $this->getData(self::FEATURED_IMAGE);
+    }
+
+    public function setFeaturedImage($featuredImage)
+    {
+        return $this->setData(self::FEATURED_IMAGE, $featuredImage);
+    }
+
+    public function getMetaTitle()
+    {
+        return $this->getData(self::META_TITLE);
+    }
+
+    public function setMetaTitle($metaTitle)
+    {
+        return $this->setData(self::META_TITLE, $metaTitle);
+    }
+
+    public function getMetaDescription()
+    {
+        return $this->getData(self::META_DESCRIPTION);
+    }
+
+    public function setMetaDescription($metaDescription)
+    {
+        return $this->setData(self::META_DESCRIPTION, $metaDescription);
+    }
+
     public function getIsActive()
     {
         return $this->getData(self::IS_ACTIVE) !== null ? (int) $this->getData(self::IS_ACTIVE) : null;

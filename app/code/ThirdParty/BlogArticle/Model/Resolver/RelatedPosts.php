@@ -6,7 +6,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
 
-class Posts implements ResolverInterface
+class RelatedPosts implements ResolverInterface
 {
     private $postRepository;
 
@@ -17,19 +17,15 @@ class Posts implements ResolverInterface
 
     public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
-        $pageSize = isset($args['pageSize']) ? (int) $args['pageSize'] : 10;
-        $currentPage = isset($args['currentPage']) ? (int) $args['currentPage'] : 1;
-        $search = isset($args['search']) ? (string) $args['search'] : null;
-        $categoryId = isset($args['categoryId']) ? (int) $args['categoryId'] : null;
-        $tagId = isset($args['tagId']) ? (int) $args['tagId'] : null;
-
-        $pageSize = max(1, min(100, $pageSize));
-        $currentPage = max(1, $currentPage);
-
-        $items = $this->postRepository->getList($currentPage, $pageSize, $search, $categoryId, $tagId);
-        $totalCount = $this->postRepository->getListTotalCount($search, $categoryId, $tagId);
-        $totalPages = $pageSize > 0 ? (int) ceil($totalCount / $pageSize) : 0;
-
+        $postId = isset($value['post_id']) ? (int) $value['post_id'] : 0;
+        if (!$postId) {
+            return [];
+        }
+        try {
+            $items = $this->postRepository->getRelated($postId, 3);
+        } catch (\Exception $e) {
+            return [];
+        }
         $mapped = [];
         foreach ($items as $item) {
             $mapped[] = [
@@ -45,16 +41,8 @@ class Posts implements ResolverInterface
                 'tag_ids' => $item->getTagIds() ?: [],
                 'creation_time' => $item->getCreationTime(),
                 'update_time' => $item->getUpdateTime(),
-                'model' => $item,
             ];
         }
-
-        return [
-            'items' => $mapped,
-            'total_count' => $totalCount,
-            'page_size' => $pageSize,
-            'current_page' => $currentPage,
-            'total_pages' => $totalPages,
-        ];
+        return $mapped;
     }
 }

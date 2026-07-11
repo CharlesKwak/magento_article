@@ -57,7 +57,12 @@ class View extends Action
         }
 
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->set($post->getTitle());
+        $metaTitle = trim((string) $post->getMetaTitle());
+        $resultPage->getConfig()->getTitle()->set($metaTitle !== '' ? $metaTitle : $post->getTitle());
+        $metaDescription = trim((string) $post->getMetaDescription());
+        if ($metaDescription !== '') {
+            $resultPage->getConfig()->setDescription($metaDescription);
+        }
         return $resultPage;
     }
 }

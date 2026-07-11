@@ -26,6 +26,12 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/blogarticle/posts/:postId/related" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\PostRepositoryInterface" method="getRelated"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
 
     <!-- Admin post write -->
     <route url="/V1/blogarticle/posts" method="POST">

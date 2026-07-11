@@ -62,6 +62,9 @@ class Save extends Action
         $tagIds = isset($data['tag_ids']) && is_array($data['tag_ids'])
             ? array_map('intval', $data['tag_ids'])
             : [];
+        $featuredImage = isset($data['featured_image']) ? trim((string) $data['featured_image']) : '';
+        $metaTitle = isset($data['meta_title']) ? trim((string) $data['meta_title']) : '';
+        $metaDescription = isset($data['meta_description']) ? trim((string) $data['meta_description']) : '';
 
         if ($title === '' || $content === '') {
             $this->messageManager->addErrorMessage(__('Title and content are required.'));
@@ -78,6 +81,9 @@ class Save extends Action
         $post->setTitle($title);
         $post->setContent($content);
         $post->setUrlKey($urlKey);
+        $post->setFeaturedImage($featuredImage !== '' ? $featuredImage : null);
+        $post->setMetaTitle($metaTitle !== '' ? $metaTitle : null);
+        $post->setMetaDescription($metaDescription !== '' ? $metaDescription : null);
         $post->setIsActive($isActive);
         $post->setCategoryId($categoryId);
 

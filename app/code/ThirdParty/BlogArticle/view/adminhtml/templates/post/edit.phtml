@@ -124,6 +124,53 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
             </div>
 
             <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="featured_image">
+                    <span><?= $block->escapeHtml(__('Featured Image URL')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <input class="admin__control-text"
+                           type="text"
+                           id="featured_image"
+                           name="featured_image"
+                           maxlength="512"
+                           style="width:100%; max-width:640px;"
+                           value="<?= $block->escapeHtmlAttr((string) $post->getFeaturedImage()) ?>"/>
+                    <p class="admin__field-note">
+                        <?= $block->escapeHtml(__('Absolute URL or media path shown on list/detail pages.')) ?>
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="meta_title">
+                    <span><?= $block->escapeHtml(__('Meta Title')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <input class="admin__control-text"
+                           type="text"
+                           id="meta_title"
+                           name="meta_title"
+                           maxlength="255"
+                           style="width:100%; max-width:640px;"
+                           value="<?= $block->escapeHtmlAttr((string) $post->getMetaTitle()) ?>"/>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="meta_description">
+                    <span><?= $block->escapeHtml(__('Meta Description')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <textarea class="admin__control-textarea"
+                              id="meta_description"
+                              name="meta_description"
+                              rows="3"
+                              maxlength="512"
+                              style="width:100%; max-width:640px;"><?= $block->escapeHtml((string) $post->getMetaDescription()) ?></textarea>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
                 <label class="admin__field-label" for="content">
                     <span><?= $block->escapeHtml(__('Content')) ?> *</span>
                 </label>

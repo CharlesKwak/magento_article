@@ -86,6 +86,15 @@ $searchQuery = $block->getSearchQuery();
     <?php else: ?>
         <?php foreach ($posts as $post): ?>
             <article class="blog-post blog-post-summary">
+                <?php if ($post->getFeaturedImage()): ?>
+                    <p class="blog-featured-image">
+                        <a href="<?= $block->escapeUrl($block->getPostUrl($post)) ?>">
+                            <img src="<?= $block->escapeUrl((string) $post->getFeaturedImage()) ?>"
+                                 alt="<?= $block->escapeHtmlAttr((string) $post->getTitle()) ?>"
+                                 style="max-width:100%;height:auto;"/>
+                        </a>
+                    </p>
+                <?php endif; ?>
                 <h2>
                     <a href="<?= $block->escapeUrl($block->getPostUrl($post)) ?>">
                         <?= $block->escapeHtml($post->getTitle()) ?>

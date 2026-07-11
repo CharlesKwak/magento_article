@@ -2,6 +2,8 @@
 /** @var \ThirdParty\BlogArticle\Block\Post\View $block */
 $post = $block->getPost();
 $allowedTags = $block->getAllowedContentTags();
+$related = $block->getRelatedPosts();
+$tagNames = $block->getTagNames();
 ?>
 <div class="blog-post-view">
     <p class="blog-back">
@@ -24,9 +26,38 @@ $allowedTags = $block->getAllowedContentTags();
                     </time>
                 </p>
             <?php endif; ?>
+            <?php if ($tagNames): ?>
+                <p class="blog-post-tags">
+                    <?php foreach ($tagNames as $tagName): ?>
+                        <span class="blog-tag">#<?= $block->escapeHtml($tagName) ?></span>
+                    <?php endforeach; ?>
+                </p>
+            <?php endif; ?>
+            <?php if ($post->getFeaturedImage()): ?>
+                <p class="blog-featured-image">
+                    <img src="<?= $block->escapeUrl((string) $post->getFeaturedImage()) ?>"
+                         alt="<?= $block->escapeHtmlAttr((string) $post->getTitle()) ?>"
+                         style="max-width:100%;height:auto;"/>
+                </p>
+            <?php endif; ?>
             <div class="content">
                 <?= /* @noEscape */ $block->escapeHtml((string) $post->getContent(), $allowedTags) ?>
             </div>
         </article>
+
+        <?php if ($related): ?>
+            <section class="blog-related" style="margin-top:2rem;">
+                <h2><?= $block->escapeHtml(__('Related posts')) ?></h2>
+                <ul class="blog-related-list">
+                    <?php foreach ($related as $item): ?>
+                        <li>
+                            <a href="<?= $block->escapeUrl($block->getPostUrl($item)) ?>">
+                                <?= $block->escapeHtml($item->getTitle()) ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </section>
+        <?php endif; ?>
     <?php endif; ?>
 </div>

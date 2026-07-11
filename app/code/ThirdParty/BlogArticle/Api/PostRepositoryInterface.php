@@ -55,4 +55,14 @@ interface PostRepositoryInterface
      * @throws LocalizedException
      */
     public function deleteById($postId);
+
+    /**
+     * Related active posts (same category preferred, then recent).
+     *
+     * @param int $postId
+     * @param int $limit
+     * @return \ThirdParty\BlogArticle\Api\Data\PostInterface[]
+     * @throws NoSuchEntityException
+     */
+    public function getRelated($postId, $limit = 3);
 }
