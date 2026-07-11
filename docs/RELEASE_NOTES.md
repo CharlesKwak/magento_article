@@ -1,5 +1,31 @@
 # Release Notes
 
+## 1.3.0 - 2026-07-12
+
+### Added
+- Storefront **pagination** on the blog list (`?p=2`, 5 posts per page by default)
+- **Clean URLs** via custom router: `/blog/{url_key}` → post detail
+- **REST API** (anonymous read, enabled posts only):
+  - `GET /rest/V1/blogarticle/posts?page=1&pageSize=10`
+  - `GET /rest/V1/blogarticle/posts/:postId`
+  - `GET /rest/V1/blogarticle/posts/url/:urlKey`
+- Service contracts: `PostRepositoryInterface`, `PostInterface`
+
+### Changed
+- List/detail/Admin “View” links prefer `/blog/{url_key}`
+- Module / package version **1.3.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+# production:
+php bin/magento setup:di:compile
+```
+No database schema change from 1.2.0 → 1.3.0 (code/config only).
+
+---
+
 ## 1.2.0 - 2026-07-12
 
 ### Added

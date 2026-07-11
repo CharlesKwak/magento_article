@@ -64,6 +64,24 @@ class View extends Template
     }
 
     /**
+     * Canonical clean URL for the current post when url_key is set.
+     *
+     * @return string
+     */
+    public function getCanonicalUrl(): string
+    {
+        $post = $this->getPost();
+        if (!$post) {
+            return '';
+        }
+        $urlKey = (string) $post->getUrlKey();
+        if ($urlKey !== '') {
+            return $this->getUrl('', ['_direct' => 'blog/' . $urlKey]);
+        }
+        return $this->getUrl('blog/post/view', ['id' => (int) $post->getId()]);
+    }
+
+    /**
      * @return string[]
      */
     public function getAllowedContentTags(): array

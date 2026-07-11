@@ -35,12 +35,12 @@ class AdminCrudFilesTest extends TestCase
         }
     }
 
-    public function testModuleVersionIs120(): void
+    public function testModuleVersionIsCurrent(): void
     {
         $path = dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/etc/module.xml';
         $content = file_get_contents($path);
         $this->assertNotFalse($content);
-        $this->assertStringContainsString('setup_version="1.2.0"', $content);
+        $this->assertStringContainsString('setup_version="1.3.0"', $content);
     }
 
     public function testInstallSchemaDefinesUrlKeyAndStatus(): void

@@ -8,7 +8,7 @@ Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style ar
 |---|---|
 | Package | `thirdparty/module-blog-article` |
 | Module | `ThirdParty_BlogArticle` |
-| Version | **1.2.0** |
+| Version | **1.3.0** |
 | License | [GPL-2.0](LICENSE) (`composer.json`: `GPL-2.0-only`) |
 
 ---
@@ -24,20 +24,21 @@ Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style ar
 
 ---
 
-## Feature scope (v1.2.0)
+## Feature scope (v1.3.0)
 
 ### Included
 
 - Database table `thirdparty_blogarticle_post` (`post_id`, `title`, `url_key`, `content`, `is_active`, `creation_time`, `update_time`)
 - Data patch seeds **two sample posts** when the table is empty
-- Storefront list: `/blog/index/index` (enabled posts, excerpt + link)
-- Storefront detail: `/blog/post/view/url_key/<key>`
-- Admin: **Content → Blog Posts** — list, **Add**, **Edit**, **Delete**, status, URL key
+- Storefront list: `/blog/` (enabled posts, excerpt, **pagination**)
+- Storefront detail: `/blog/<url_key>` (legacy view route still works)
+- Admin: **Content → Blog Posts** — CRUD, status, URL key
+- REST read API: `/rest/V1/blogarticle/posts*`
 - ACL: `ThirdParty_BlogArticle::posts`
 
 ### Not included
 
-- Categories, tags, REST/GraphQL, per-store content
+- Categories, tags, GraphQL, write APIs, per-store content
 
 ---
 
@@ -70,8 +71,9 @@ php bin/magento cache:flush
 
 **Verify**
 
-- Storefront list: `https://<store>/blog/index/index`
-- Storefront detail: `https://<store>/blog/post/view/url_key/welcome-to-the-blog`
+- Storefront list: `https://<store>/blog/`
+- Storefront detail: `https://<store>/blog/welcome-to-the-blog`
+- REST: `https://<store>/rest/V1/blogarticle/posts`
 - Admin: **Content → Blog Posts** → Add / Edit / Delete / View
 
 Details: **[Installation Guide](docs/INSTALLATION_GUIDE.md)**.
@@ -99,7 +101,7 @@ Registered as `ThirdParty_BlogArticle` (`ThirdParty\BlogArticle`). On `setup:upg
 
 ```bash
 ./scripts/package_module.sh
-# → dist/thirdparty-blog-article-1.2.0.zip
+# → dist/thirdparty-blog-article-1.3.0.zip
 ```
 
 ### PDF conversion for Marketplace upload

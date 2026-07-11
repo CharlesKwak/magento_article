@@ -4,7 +4,7 @@ This guide explains how to install and verify the **ThirdParty_BlogArticle** mod
 
 Module package name: `thirdparty/module-blog-article`  
 Module code name: `ThirdParty_BlogArticle`  
-Current version: **1.2.0**
+Current version: **1.3.0**
 
 ---
 
@@ -18,17 +18,18 @@ After a successful install, the module:
 4. Exposes a **storefront list page** at `/blog/index/index` (frontName: `blog`).
 5. Exposes an **Admin list + CRUD** under **Content → Blog Posts** (Add / Edit / Delete).
 
-### Capability matrix (v1.2.0)
+### Capability matrix (v1.3.0)
 
 | Capability | Status |
 |---|---|
-| List posts on storefront | Supported (enabled only) |
+| List posts on storefront | Supported (enabled only, **paginated**) |
 | List posts in Admin | Supported |
 | Create / edit / delete posts in Admin UI | **Supported** |
 | Sample (seed) posts on install | **Supported** (empty table only) |
-| Single-post detail page | **Supported** (`/blog/post/view/url_key/...`) |
+| Single-post detail page | **Supported** (`/blog/{url_key}` and legacy view route) |
 | URL key + publish status | **Supported** |
-| Categories / tags / GraphQL | **Not available** |
+| REST API (read) | **Supported** (`/rest/V1/blogarticle/posts*`) |
+| Categories / tags / GraphQL write APIs | **Not available** |
 
 For dependency and runtime inventory (PHP, MySQL, Magento, SBOM-style notes), see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
 
@@ -235,11 +236,14 @@ More field semantics and security notes: [User Guide](./USER_GUIDE.md).
 
 ### 7.1 Storefront
 
-1. Open list: `https://<your-store-base-url>/blog/index/index`
-2. Open a detail page, for example:  
-   `https://<your-store-base-url>/blog/post/view/url_key/welcome-to-the-blog`
-3. After a fresh install you should see two sample posts (unless seed was skipped).
-4. Empty table: list shows a friendly “no posts” message.
+1. Open list: `https://<your-store-base-url>/blog/` or `/blog/index/index`  
+   (page 2+: `?p=2`)
+2. Open a detail page (clean URL preferred):  
+   `https://<your-store-base-url>/blog/welcome-to-the-blog`  
+   Legacy: `/blog/post/view/url_key/welcome-to-the-blog`
+3. REST smoke test:  
+   `https://<your-store-base-url>/rest/V1/blogarticle/posts`
+4. After a fresh install you should see two sample posts (unless seed was skipped).
 
 ### 7.2 Admin
 

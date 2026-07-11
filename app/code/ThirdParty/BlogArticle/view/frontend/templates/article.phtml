@@ -1,6 +1,8 @@
 <?php
 /** @var \ThirdParty\BlogArticle\Block\Article $block */
 $posts = $block->getPosts();
+$currentPage = $block->getCurrentPage();
+$lastPage = $block->getLastPageNumber();
 ?>
 <div class="blog-post-list">
     <?php if (!$posts->getSize()): ?>
@@ -32,5 +34,38 @@ $posts = $block->getPosts();
                 </p>
             </article>
         <?php endforeach; ?>
+
+        <?php if ($block->hasPager()): ?>
+            <nav class="blog-pager" aria-label="<?= $block->escapeHtmlAttr(__('Blog pagination')) ?>"
+                 style="margin-top: 1.5rem; display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
+                <?php if ($currentPage > 1): ?>
+                    <a class="action previous" href="<?= $block->escapeUrl($block->getPageUrl($currentPage - 1)) ?>">
+                        <?= $block->escapeHtml(__('Previous')) ?>
+                    </a>
+                <?php endif; ?>
+
+                <span class="blog-pager-status">
+                    <?= $block->escapeHtml(
+                        __('Page %1 of %2 (%3 posts)', $currentPage, $lastPage, $block->getTotalCount())
+                    ) ?>
+                </span>
+
+                <?php if ($currentPage < $lastPage): ?>
+                    <a class="action next" href="<?= $block->escapeUrl($block->getPageUrl($currentPage + 1)) ?>">
+                        <?= $block->escapeHtml(__('Next')) ?>
+                    </a>
+                <?php endif; ?>
+
+                <span class="blog-pager-pages" style="display:flex; gap:0.35rem;">
+                    <?php for ($page = 1; $page <= $lastPage; $page++): ?>
+                        <?php if ($page === $currentPage): ?>
+                            <strong><?= (int) $page ?></strong>
+                        <?php else: ?>
+                            <a href="<?= $block->escapeUrl($block->getPageUrl($page)) ?>"><?= (int) $page ?></a>
+                        <?php endif; ?>
+                    <?php endfor; ?>
+                </span>
+            </nav>
+        <?php endif; ?>
     <?php endif; ?>
 </div>

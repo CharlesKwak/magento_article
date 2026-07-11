@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **1.2.0**
+Version covered: **1.3.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -16,23 +16,23 @@ This module provides a **database-backed blog post list** with Admin management:
 
 | Surface | URL / navigation | Behavior |
 |---|---|---|
-| Storefront list | `/blog/index/index` | Enabled posts with excerpt + link |
-| Storefront detail | `/blog/post/view/url_key/<key>` or `.../id/<id>` | Full article body |
+| Storefront list | `/blog/` (`?p=2` for page 2) | Enabled posts, excerpt, **pagination** (5/page) |
+| Storefront detail | `/blog/<url_key>` | Full article body |
 | Admin | **Content → Blog Posts** | List, create, edit, delete, enable/disable |
+| REST API | `/rest/V1/blogarticle/posts*` | Public read of enabled posts |
 
-### What you can do in v1.2.0
+### What you can do in v1.3.0
 
-- Browse the storefront list and open each article detail page.
-- Create, edit, delete posts in Admin.
-- Set **URL Key** and **Status** (Enabled/Disabled).
+- Browse the paginated storefront list and open clean detail URLs.
+- Create, edit, delete posts in Admin (URL Key + Status).
+- Consume posts via REST from headless or integrations.
 - Rely on sample posts after a fresh install (when the table was empty).
-- Control Admin access via ACL `ThirdParty_BlogArticle::posts`.
 
 ### Not available yet
 
 - Categories, tags, authors, scheduled publish.
-- REST/GraphQL APIs / Magento CLI for posts.
-- Per-store-view content / Magento URL Rewrite admin config.
+- GraphQL / write REST APIs / Magento CLI for posts.
+- Per-store-view content.
 
 ---
 
@@ -44,14 +44,23 @@ This module provides a **database-backed blog post list** with Admin management:
 2. Open:
 
    ```text
+   https://<your-store-base-url>/blog/
    https://<your-store-base-url>/blog/index/index
+   https://<your-store-base-url>/blog/?p=2
    ```
 
 3. Each **enabled** post shows title, date, excerpt, and a **Read more** link.
-
-There is no pagination: all enabled posts are loaded.
+4. Default page size is **5**. Use Previous/Next or page numbers when more posts exist.
 
 ### 2.2 Open an article detail page
+
+Preferred clean URL:
+
+```text
+https://<your-store-base-url>/blog/welcome-to-the-blog
+```
+
+Legacy routes still work:
 
 ```text
 https://<your-store-base-url>/blog/post/view/url_key/welcome-to-the-blog
@@ -60,7 +69,21 @@ https://<your-store-base-url>/blog/post/view/id/1
 
 Disabled or missing posts return Magento’s no-route (404) response.
 
-### 2.3 How content is rendered
+### 2.3 REST API (read-only)
+
+Base path (store code may vary; default often omits code or uses `default`):
+
+```text
+GET /rest/V1/blogarticle/posts?page=1&pageSize=10
+GET /rest/V1/blogarticle/posts/1
+GET /rest/V1/blogarticle/posts/url/welcome-to-the-blog
+```
+
+- Anonymous access is allowed.
+- Only **enabled** posts are returned.
+- `pageSize` is capped at **100**.
+
+### 2.4 How content is rendered
 
 | Field | Escaping | Implication |
 |---|---|---|
@@ -77,7 +100,7 @@ Scripts, iframes, and other tags are stripped/escaped by Magento’s escaper.
 - Only trusted operators should edit `content`.
 - Prefer simple HTML that matches the allow-list.
 
-### 2.4 Empty state
+### 2.5 Empty state
 
 If the table has zero rows, the page shows: *“No blog posts are available yet.”*
 
@@ -187,7 +210,7 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v1.2.0 |
+| Topic | Behavior in v1.3.0 |
 |---|---|
 | Multi-website / store view | No `store_id` column; **all posts show on all store views** that can reach the route |
 | Translation of post content | Not supported; store raw title/content per row only |

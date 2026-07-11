@@ -97,13 +97,15 @@ class Post extends Template
      */
     public function getFrontendViewUrl($post)
     {
-        $params = ['_nosid' => true];
         $urlKey = (string) $post->getUrlKey();
         if ($urlKey !== '') {
-            $params['url_key'] = $urlKey;
-        } else {
-            $params['id'] = (int) $post->getId();
+            return $this->frontendUrlBuilder->getUrl('', ['_direct' => 'blog/' . $urlKey, '_nosid' => true]);
         }
-        return $this->frontendUrlBuilder->getUrl('blog/post/view', $params);
+
+        return $this->frontendUrlBuilder->getUrl(
+            'blog/post/view',
+            ['id' => (int) $post->getId(), '_nosid' => true]
+        );
     }
 }
+
