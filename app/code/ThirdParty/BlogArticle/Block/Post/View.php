@@ -4,6 +4,7 @@ namespace ThirdParty\BlogArticle\Block\Post;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
+use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFactory;
 use ThirdParty\BlogArticle\Model\PostTagLink;
@@ -15,6 +16,7 @@ class View extends Template
     private $postRepository;
     private $postTagLink;
     private $tagFactory;
+    private $imageUploader;
     private $post;
     private $related;
     private $tagNameCache = [];
@@ -25,12 +27,14 @@ class View extends Template
         PostRepositoryInterface $postRepository,
         PostTagLink $postTagLink,
         TagFactory $tagFactory,
+        FeaturedImageUploader $imageUploader,
         array $data = []
     ) {
         $this->postFactory = $postFactory;
         $this->postRepository = $postRepository;
         $this->postTagLink = $postTagLink;
         $this->tagFactory = $tagFactory;
+        $this->imageUploader = $imageUploader;
         parent::__construct($context, $data);
     }
 
@@ -158,5 +162,16 @@ class View extends Template
     public function getAllowedContentTags(): array
     {
         return ['p', 'br', 'em', 'strong', 'b', 'i', 'ul', 'ol', 'li', 'a', 'h2', 'h3', 'h4'];
+    }
+
+    public function getFeaturedImageUrl(): string
+    {
+        $post = $this->getPost();
+        if (!$post) {
+            return '';
+        }
+        return $this->imageUploader->resolveUrl(
+            $post->getFeaturedImage() ? (string) $post->getFeaturedImage() : null
+        );
     }
 }

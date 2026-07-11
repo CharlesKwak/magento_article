@@ -1,5 +1,29 @@
 # Release Notes
 
+## 1.8.0 - 2026-07-12
+
+### Added
+- Post `excerpt` and `published_at` fields (list summary + sort order)
+- Admin **featured image file upload** to `pub/media/blogarticle/`
+- `FeaturedImageUploader` helper (upload + URL resolve)
+- Public **RSS 2.0** feed at `/blog/rss/feed`
+- Storefront RSS link on blog list
+- List sort uses `IFNULL(published_at, creation_time) DESC`
+
+### Changed
+- Module / package version **1.8.0**
+- Manual excerpt preferred over auto-truncation when set
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+# ensure pub/media/blogarticle is writable by web/php user
+```
+
+---
+
 ## 1.7.0 - 2026-07-12
 
 ### Added

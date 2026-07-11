@@ -33,9 +33,9 @@ $tagNames = $block->getTagNames();
                     <?php endforeach; ?>
                 </p>
             <?php endif; ?>
-            <?php if ($post->getFeaturedImage()): ?>
+            <?php if ($block->getFeaturedImageUrl()): ?>
                 <p class="blog-featured-image">
-                    <img src="<?= $block->escapeUrl((string) $post->getFeaturedImage()) ?>"
+                    <img src="<?= $block->escapeUrl($block->getFeaturedImageUrl()) ?>"
                          alt="<?= $block->escapeHtmlAttr((string) $post->getTitle()) ?>"
                          style="max-width:100%;height:auto;"/>
                 </p>

@@ -20,6 +20,7 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
 
     <form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>"
           method="post"
+          enctype="multipart/form-data"
           id="blogarticle-post-form">
         <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>"/>
         <?php if ($post->getId()): ?>
@@ -124,6 +125,41 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
             </div>
 
             <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="excerpt">
+                    <span><?= $block->escapeHtml(__('Excerpt')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <textarea class="admin__control-textarea"
+                              id="excerpt"
+                              name="excerpt"
+                              rows="3"
+                              maxlength="1024"
+                              style="width:100%; max-width:640px;"><?= $block->escapeHtml((string) $post->getExcerpt()) ?></textarea>
+                    <p class="admin__field-note">
+                        <?= $block->escapeHtml(__('Optional list summary. If empty, content is auto-truncated.')) ?>
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="published_at">
+                    <span><?= $block->escapeHtml(__('Published At')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <input class="admin__control-text"
+                           type="text"
+                           id="published_at"
+                           name="published_at"
+                           placeholder="YYYY-MM-DD HH:MM:SS"
+                           style="width:100%; max-width:320px;"
+                           value="<?= $block->escapeHtmlAttr((string) $post->getPublishedAt()) ?>"/>
+                    <p class="admin__field-note">
+                        <?= $block->escapeHtml(__('Used for list sorting. Leave empty to use creation time.')) ?>
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
                 <label class="admin__field-label" for="featured_image">
                     <span><?= $block->escapeHtml(__('Featured Image URL')) ?></span>
                 </label>
@@ -136,8 +172,16 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
                            style="width:100%; max-width:640px;"
                            value="<?= $block->escapeHtmlAttr((string) $post->getFeaturedImage()) ?>"/>
                     <p class="admin__field-note">
-                        <?= $block->escapeHtml(__('Absolute URL or media path shown on list/detail pages.')) ?>
+                        <?= $block->escapeHtml(__('Absolute URL, or upload a file below (jpg/png/gif/webp).')) ?>
                     </p>
+                    <input type="file" name="featured_image_file" id="featured_image_file" accept="image/*"/>
+                    <?php if ($post->getFeaturedImage()): ?>
+                        <p style="margin-top:0.5rem;">
+                            <img src="<?= $block->escapeUrl((string) $post->getFeaturedImage()) ?>"
+                                 alt=""
+                                 style="max-width:240px;height:auto;"/>
+                        </p>
+                    <?php endif; ?>
                 </div>
             </div>
 

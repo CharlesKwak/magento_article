@@ -37,6 +37,7 @@ class Posts implements ResolverInterface
                 'title' => $item->getTitle(),
                 'url_key' => $item->getUrlKey(),
                 'content' => $item->getContent(),
+                'excerpt' => $item->getExcerpt(),
                 'featured_image' => $item->getFeaturedImage(),
                 'meta_title' => $item->getMetaTitle(),
                 'meta_description' => $item->getMetaDescription(),
@@ -45,6 +46,7 @@ class Posts implements ResolverInterface
                 'tag_ids' => $item->getTagIds() ?: [],
                 'creation_time' => $item->getCreationTime(),
                 'update_time' => $item->getUpdateTime(),
+                'published_at' => $item->getPublishedAt(),
                 'model' => $item,
             ];
         }

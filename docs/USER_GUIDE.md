@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **1.7.0**
+Version covered: **1.8.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -23,7 +23,7 @@ This module provides a **database-backed blog post list** with Admin management:
 | REST | `/rest/V1/blogarticle/posts*` | Public read + search |
 | GraphQL | `/graphql` (`blogPosts`, `blogPost`) | Public read + search |
 
-### What you can do in v1.7.0
+### What you can do in v1.8.0
 
 - Search and page through the storefront blog list.
 - Filter Admin posts by keyword and status.
@@ -49,6 +49,7 @@ This module provides a **database-backed blog post list** with Admin management:
    https://<your-store-base-url>/blog/
    https://<your-store-base-url>/blog/index/index
    https://<your-store-base-url>/blog/?p=2
+   https://<your-store-base-url>/blog/rss/feed
    ```
 
 3. Use the **Search** box to filter by title, content, or URL key (`?q=`).
@@ -247,7 +248,7 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v1.7.0 |
+| Topic | Behavior in v1.8.0 |
 |---|---|
 | Multi-website / store view | No `store_id` column; **all posts show on all store views** that can reach the route |
 | Translation of post content | Not supported; store raw title/content per row only |

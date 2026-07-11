@@ -43,6 +43,6 @@ class ApiAndRoutingFilesTest extends TestCase
             dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/etc/module.xml'
         );
         $this->assertNotFalse($content);
-        $this->assertStringContainsString('setup_version="1.7.0"', $content);
+        $this->assertStringContainsString('setup_version="1.8.0"', $content);
     }
 }

@@ -6,6 +6,11 @@ $lastPage = $block->getLastPageNumber();
 $searchQuery = $block->getSearchQuery();
 ?>
 <div class="blog-post-list">
+    <p class="blog-rss" style="margin-bottom:0.75rem;">
+        <a href="<?= $block->escapeUrl($block->getRssUrl()) ?>" rel="alternate" type="application/rss+xml">
+            <?= $block->escapeHtml(__('RSS feed')) ?>
+        </a>
+    </p>
     <form class="blog-search" method="get" action="<?= $block->escapeUrl($block->getSearchFormAction()) ?>"
           style="margin-bottom: 1rem; display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
         <label for="blog-search-q" class="label">
@@ -86,10 +91,10 @@ $searchQuery = $block->getSearchQuery();
     <?php else: ?>
         <?php foreach ($posts as $post): ?>
             <article class="blog-post blog-post-summary">
-                <?php if ($post->getFeaturedImage()): ?>
+                <?php if ($block->getFeaturedImageUrl($post)): ?>
                     <p class="blog-featured-image">
                         <a href="<?= $block->escapeUrl($block->getPostUrl($post)) ?>">
-                            <img src="<?= $block->escapeUrl((string) $post->getFeaturedImage()) ?>"
+                            <img src="<?= $block->escapeUrl($block->getFeaturedImageUrl($post)) ?>"
                                  alt="<?= $block->escapeHtmlAttr((string) $post->getTitle()) ?>"
                                  style="max-width:100%;height:auto;"/>
                         </a>

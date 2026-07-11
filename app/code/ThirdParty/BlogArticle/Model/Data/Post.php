@@ -46,6 +46,16 @@ class Post extends DataObject implements PostInterface
         return $this->setData(self::CONTENT, $content);
     }
 
+    public function getExcerpt()
+    {
+        return $this->getData(self::EXCERPT);
+    }
+
+    public function setExcerpt($excerpt)
+    {
+        return $this->setData(self::EXCERPT, $excerpt);
+    }
+
     public function getFeaturedImage()
     {
         return $this->getData(self::FEATURED_IMAGE);
@@ -134,4 +144,15 @@ class Post extends DataObject implements PostInterface
     {
         return $this->setData(self::UPDATE_TIME, $updateTime);
     }
+
+    public function getPublishedAt()
+    {
+        return $this->getData(self::PUBLISHED_AT);
+    }
+
+    public function setPublishedAt($publishedAt)
+    {
+        return $this->setData(self::PUBLISHED_AT, $publishedAt);
+    }
 }
+

@@ -94,6 +94,12 @@ class InstallSchema implements InstallSchemaInterface
                     ['nullable' => false],
                     'Content'
                 )->addColumn(
+                    'excerpt',
+                    Table::TYPE_TEXT,
+                    1024,
+                    ['nullable' => true],
+                    'Manual excerpt for list summaries'
+                )->addColumn(
                     'featured_image',
                     Table::TYPE_TEXT,
                     512,
@@ -135,6 +141,12 @@ class InstallSchema implements InstallSchemaInterface
                     null,
                     ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE],
                     'Update Time'
+                )->addColumn(
+                    'published_at',
+                    Table::TYPE_TIMESTAMP,
+                    null,
+                    ['nullable' => true],
+                    'Publish date/time for sorting'
                 )->addIndex(
                     $installer->getIdxName(
                         $postTableName,

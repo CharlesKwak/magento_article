@@ -10,6 +10,7 @@ interface PostInterface
     public const TITLE = 'title';
     public const URL_KEY = 'url_key';
     public const CONTENT = 'content';
+    public const EXCERPT = 'excerpt';
     public const FEATURED_IMAGE = 'featured_image';
     public const META_TITLE = 'meta_title';
     public const META_DESCRIPTION = 'meta_description';
@@ -18,6 +19,7 @@ interface PostInterface
     public const TAG_IDS = 'tag_ids';
     public const CREATION_TIME = 'creation_time';
     public const UPDATE_TIME = 'update_time';
+    public const PUBLISHED_AT = 'published_at';
 
     /** @return int|null */
     public function getPostId();
@@ -35,6 +37,10 @@ interface PostInterface
     public function getContent();
     /** @param string $content @return $this */
     public function setContent($content);
+    /** @return string|null */
+    public function getExcerpt();
+    /** @param string|null $excerpt @return $this */
+    public function setExcerpt($excerpt);
     /** @return string|null */
     public function getFeaturedImage();
     /** @param string|null $featuredImage @return $this */
@@ -67,4 +73,9 @@ interface PostInterface
     public function getUpdateTime();
     /** @param string $updateTime @return $this */
     public function setUpdateTime($updateTime);
+    /** @return string|null */
+    public function getPublishedAt();
+    /** @param string|null $publishedAt @return $this */
+    public function setPublishedAt($publishedAt);
 }
+

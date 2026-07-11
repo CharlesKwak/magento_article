@@ -23,6 +23,7 @@ type BlogPost {
     title: String
     url_key: String
     content: String
+    excerpt: String
     featured_image: String
     meta_title: String
     meta_description: String
@@ -31,6 +32,7 @@ type BlogPost {
     tag_ids: [Int]
     creation_time: String
     update_time: String
+    published_at: String
     related_posts: [BlogPost]
         @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\RelatedPosts")
 }

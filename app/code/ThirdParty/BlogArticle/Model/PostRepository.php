@@ -76,7 +76,7 @@ class PostRepository implements PostRepositoryInterface
         $this->postFilter->applySearch($collection, $search !== null ? (string) $search : null);
         $this->postFilter->applyCategoryId($collection, $categoryId);
         $this->postFilter->applyTagId($collection, $tagId);
-        $collection->setOrder('creation_time', 'DESC');
+        $this->postFilter->applyDefaultSort($collection);
         $collection->setPageSize($pageSize);
         $collection->setCurPage($page);
 
@@ -170,6 +170,13 @@ class PostRepository implements PostRepositoryInterface
         if ($post->getMetaDescription() !== null) {
             $model->setMetaDescription(trim((string) $post->getMetaDescription()) ?: null);
         }
+        if ($post->getExcerpt() !== null) {
+            $model->setExcerpt(trim((string) $post->getExcerpt()) ?: null);
+        }
+        if ($post->getPublishedAt() !== null) {
+            $publishedAt = trim((string) $post->getPublishedAt());
+            $model->setPublishedAt($publishedAt !== '' ? $publishedAt : null);
+        }
         $model->setIsActive((int) $isActive ? 1 : 0);
         $model->setCategoryId($categoryId);
 
@@ -215,7 +222,7 @@ class PostRepository implements PostRepositoryInterface
             if ($categoryId) {
                 $collection->addFieldToFilter('category_id', $categoryId);
             }
-            $collection->setOrder('creation_time', 'DESC');
+            $this->postFilter->applyDefaultSort($collection);
             $collection->setPageSize($limit);
             $items = [];
             foreach ($collection as $post) {
@@ -240,6 +247,7 @@ class PostRepository implements PostRepositoryInterface
         $data->setTitle((string) $post->getTitle());
         $data->setUrlKey((string) $post->getUrlKey());
         $data->setContent((string) $post->getContent());
+        $data->setExcerpt($post->getExcerpt() ? (string) $post->getExcerpt() : null);
         $data->setFeaturedImage($post->getFeaturedImage() ? (string) $post->getFeaturedImage() : null);
         $data->setMetaTitle($post->getMetaTitle() ? (string) $post->getMetaTitle() : null);
         $data->setMetaDescription($post->getMetaDescription() ? (string) $post->getMetaDescription() : null);
@@ -248,6 +256,7 @@ class PostRepository implements PostRepositoryInterface
         $data->setTagIds($this->postTagLink->getTagIdsForPost((int) $post->getId()));
         $data->setCreationTime((string) $post->getCreationTime());
         $data->setUpdateTime((string) $post->getUpdateTime());
+        $data->setPublishedAt($post->getPublishedAt() ? (string) $post->getPublishedAt() : null);
         return $data;
     }
 }

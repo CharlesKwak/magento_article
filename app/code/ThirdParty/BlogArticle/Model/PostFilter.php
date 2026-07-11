@@ -75,4 +75,19 @@ class PostFilter
         )->where('blog_pt.tag_id = ?', $tagId)
             ->group('main_table.post_id');
     }
+
+    /**
+     * Sort by published_at (fallback creation_time), newest first.
+     *
+     * @param Collection $collection
+     * @return void
+     */
+    public function applyDefaultSort(Collection $collection): void
+    {
+        $collection->getSelect()->order(
+            new \Magento\Framework\DB\Sql\Expression(
+                'IFNULL(main_table.published_at, main_table.creation_time) DESC'
+            )
+        );
+    }
 }

@@ -5,6 +5,7 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
+use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
 use ThirdParty\BlogArticle\Model\PostFactory;
 use ThirdParty\BlogArticle\Model\PostTagLink;
 use ThirdParty\BlogArticle\Model\UrlKeyGenerator;
@@ -17,19 +18,22 @@ class Save extends Action
     private $dataPersistor;
     private $urlKeyGenerator;
     private $postTagLink;
+    private $imageUploader;
 
     public function __construct(
         Context $context,
         PostFactory $postFactory,
         DataPersistorInterface $dataPersistor,
         UrlKeyGenerator $urlKeyGenerator,
-        PostTagLink $postTagLink
+        PostTagLink $postTagLink,
+        FeaturedImageUploader $imageUploader
     ) {
         parent::__construct($context);
         $this->postFactory = $postFactory;
         $this->dataPersistor = $dataPersistor;
         $this->urlKeyGenerator = $urlKeyGenerator;
         $this->postTagLink = $postTagLink;
+        $this->imageUploader = $imageUploader;
     }
 
     public function execute()
@@ -65,9 +69,22 @@ class Save extends Action
         $featuredImage = isset($data['featured_image']) ? trim((string) $data['featured_image']) : '';
         $metaTitle = isset($data['meta_title']) ? trim((string) $data['meta_title']) : '';
         $metaDescription = isset($data['meta_description']) ? trim((string) $data['meta_description']) : '';
+        $excerpt = isset($data['excerpt']) ? trim((string) $data['excerpt']) : '';
+        $publishedAt = isset($data['published_at']) ? trim((string) $data['published_at']) : '';
 
         if ($title === '' || $content === '') {
             $this->messageManager->addErrorMessage(__('Title and content are required.'));
+            $this->dataPersistor->set('blogarticle_post', $data);
+            return $resultRedirect->setPath('*/*/edit', ['post_id' => $postId ?: null]);
+        }
+
+        try {
+            $uploaded = $this->imageUploader->upload('featured_image_file');
+            if ($uploaded) {
+                $featuredImage = $uploaded;
+            }
+        } catch (LocalizedException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->dataPersistor->set('blogarticle_post', $data);
             return $resultRedirect->setPath('*/*/edit', ['post_id' => $postId ?: null]);
         }
@@ -81,9 +98,11 @@ class Save extends Action
         $post->setTitle($title);
         $post->setContent($content);
         $post->setUrlKey($urlKey);
+        $post->setExcerpt($excerpt !== '' ? $excerpt : null);
         $post->setFeaturedImage($featuredImage !== '' ? $featuredImage : null);
         $post->setMetaTitle($metaTitle !== '' ? $metaTitle : null);
         $post->setMetaDescription($metaDescription !== '' ? $metaDescription : null);
+        $post->setPublishedAt($publishedAt !== '' ? $publishedAt : null);
         $post->setIsActive($isActive);
         $post->setCategoryId($categoryId);
 

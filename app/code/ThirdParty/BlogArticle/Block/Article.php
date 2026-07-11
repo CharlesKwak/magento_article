@@ -5,6 +5,7 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use ThirdParty\BlogArticle\Model\CategoryFactory;
 use ThirdParty\BlogArticle\Model\Config;
+use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFilter;
 use ThirdParty\BlogArticle\Model\PostTagLink;
@@ -57,6 +58,11 @@ class Article extends Template
     private $postTagLink;
 
     /**
+     * @var FeaturedImageUploader
+     */
+    private $imageUploader;
+
+    /**
      * @var Collection|null
      */
     private $posts;
@@ -81,6 +87,7 @@ class Article extends Template
         TagCollectionFactory $tagCollectionFactory,
         TagFactory $tagFactory,
         PostTagLink $postTagLink,
+        FeaturedImageUploader $imageUploader,
         array $data = []
     ) {
         $this->collectionFactory = $collectionFactory;
@@ -91,6 +98,7 @@ class Article extends Template
         $this->tagCollectionFactory = $tagCollectionFactory;
         $this->tagFactory = $tagFactory;
         $this->postTagLink = $postTagLink;
+        $this->imageUploader = $imageUploader;
         parent::__construct($context, $data);
     }
 
@@ -105,7 +113,7 @@ class Article extends Template
             $this->postFilter->applySearch($collection, $this->getSearchQuery());
             $this->postFilter->applyCategoryId($collection, $this->getCategoryIdFilter());
             $this->postFilter->applyTagId($collection, $this->getTagIdFilter());
-            $collection->setOrder('creation_time', 'DESC');
+            $this->postFilter->applyDefaultSort($collection);
             $collection->setPageSize($this->getPageSize());
             $collection->setCurPage($this->getCurrentPage());
             $this->posts = $collection;
@@ -347,6 +355,10 @@ class Article extends Template
      */
     public function getExcerpt(Post $post, int $length = 200): string
     {
+        $manual = trim((string) $post->getExcerpt());
+        if ($manual !== '') {
+            return $manual;
+        }
         $text = trim(preg_replace('/\s+/', ' ', strip_tags((string) $post->getContent())) ?? '');
         if (function_exists('mb_strlen') && function_exists('mb_substr')) {
             if (mb_strlen($text) <= $length) {
@@ -359,5 +371,22 @@ class Article extends Template
             return $text;
         }
         return rtrim(substr($text, 0, $length)) . '...';
+    }
+
+    /**
+     * @param Post $post
+     * @return string
+     */
+    public function getFeaturedImageUrl(Post $post): string
+    {
+        return $this->imageUploader->resolveUrl($post->getFeaturedImage() ? (string) $post->getFeaturedImage() : null);
+    }
+
+    /**
+     * @return string
+     */
+    public function getRssUrl(): string
+    {
+        return $this->getUrl('blog/rss/feed');
     }
 }
