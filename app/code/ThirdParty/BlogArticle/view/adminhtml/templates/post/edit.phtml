@@ -257,17 +257,36 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
                     <span><?= $block->escapeHtml(__('Content')) ?> *</span>
                 </label>
                 <div class="admin__field-control">
-                    <textarea class="admin__control-textarea"
+                    <textarea class="textarea admin__control-textarea"
                               id="content"
                               name="content"
                               required="required"
-                              rows="12"
-                              style="width:100%; max-width:640px;"><?= $block->escapeHtml((string) $post->getContent()) ?></textarea>
+                              rows="16"
+                              style="width:100%; max-width:960px; min-height:320px;"><?= $block->escapeHtml((string) $post->getContent()) ?></textarea>
                     <p class="admin__field-note">
-                        <?= $block->escapeHtml(__('Basic HTML is allowed (for example p, strong, em, a, ul, ol, li). Only trusted staff should edit content.')) ?>
+                        <?= $block->escapeHtml(__('WYSIWYG editor (TinyMCE). Storefront still escapes to a safe HTML allow-list. Only trusted staff should edit content.')) ?>
                     </p>
                 </div>
             </div>
+            <script>
+                require([
+                    'jquery',
+                    'mage/adminhtml/wysiwyg/tiny_mce/setup'
+                ], function ($) {
+                    'use strict';
+                    var config = <?= /* @noEscape */ $block->getWysiwygConfigJson() ?>;
+                    var editor = new wysiwygSetup('content', config);
+                    editor.setup('exact');
+                    // Ensure TinyMCE content is written back before form submit
+                    $('#blogarticle-post-form').on('submit', function () {
+                        if (typeof tinyMCE !== 'undefined' && tinyMCE.get('content')) {
+                            tinyMCE.get('content').save();
+                        } else if (typeof tinymce !== 'undefined' && tinymce.get('content')) {
+                            tinymce.get('content').save();
+                        }
+                    });
+                });
+            </script>
 
             <div class="admin__field">
                 <button type="submit" class="action-default scalable primary" title="<?= $block->escapeHtmlAttr(__('Save Post')) ?>">

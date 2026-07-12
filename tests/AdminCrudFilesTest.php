@@ -40,7 +40,7 @@ class AdminCrudFilesTest extends TestCase
         $path = dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/etc/module.xml';
         $content = file_get_contents($path);
         $this->assertNotFalse($content);
-        $this->assertStringContainsString('setup_version="2.6.0"', $content);
+        $this->assertStringContainsString('setup_version="2.7.0"', $content);
     }
 
     public function testInstallSchemaDefinesUrlKeyAndStatus(): void

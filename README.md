@@ -8,7 +8,7 @@ Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style ar
 |---|---|
 | Package | `thirdparty/module-blog-article` |
 | Module | `ThirdParty_BlogArticle` |
-| Version | **2.6.0** |
+| Version | **2.7.0** |
 | License | [GPL-2.0](LICENSE) (`composer.json`: `GPL-2.0-only`) |
 
 ---
@@ -24,7 +24,7 @@ Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style ar
 
 ---
 
-## Feature scope (v2.6.0)
+## Feature scope (v2.7.0)
 
 ### Included
 
@@ -33,7 +33,8 @@ Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style ar
 - **SEO**: Open Graph / Twitter cards + JSON-LD Article on post detail
 - **Comments**: moderation, spam protection, email notify, one-level replies, optional reCAPTCHA
 - Admin UI grids + **mass Enable/Disable/Delete** for posts, categories, and tags
-- **CLI**: `blogarticle:post:list|show|create|set-status|delete`
+- Admin post **WYSIWYG** content editor (TinyMCE via Magento CMS)
+- **CLI**: posts (`list|show|create|set-status|delete`), categories & tags (`list|create|set-status`)
 - REST + GraphQL (read + write mutations for posts; public `submitBlogComment`)
 - ACL: posts, categories, tags, comments, config
 
@@ -103,7 +104,7 @@ Registered as `ThirdParty_BlogArticle` (`ThirdParty\BlogArticle`). On `setup:upg
 
 ```bash
 ./scripts/package_module.sh
-# → dist/thirdparty-blog-article-2.6.0.zip
+# → dist/thirdparty-blog-article-2.7.0.zip
 ```
 
 ### PDF conversion for Marketplace upload

@@ -97,6 +97,24 @@
                 <item name="blogarticle_post_delete" xsi:type="object">
                     ThirdParty\BlogArticle\Console\Command\PostDeleteCommand
                 </item>
+                <item name="blogarticle_category_list" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\CategoryListCommand
+                </item>
+                <item name="blogarticle_category_create" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\CategoryCreateCommand
+                </item>
+                <item name="blogarticle_category_set_status" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\CategorySetStatusCommand
+                </item>
+                <item name="blogarticle_tag_list" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\TagListCommand
+                </item>
+                <item name="blogarticle_tag_create" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\TagCreateCommand
+                </item>
+                <item name="blogarticle_tag_set_status" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\TagSetStatusCommand
+                </item>
             </argument>
         </arguments>
     </type>

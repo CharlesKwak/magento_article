@@ -3,8 +3,10 @@ namespace ThirdParty\BlogArticle\Block\Adminhtml\Post;
 
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
+use Magento\Cms\Model\Wysiwyg\Config as WysiwygConfig;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\System\Store as SystemStore;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFactory;
@@ -21,6 +23,8 @@ class Edit extends Template
     private $tagCollectionFactory;
     private $postTagLink;
     private $systemStore;
+    private $wysiwygConfig;
+    private $json;
     private $post;
 
     public function __construct(
@@ -32,6 +36,8 @@ class Edit extends Template
         TagCollectionFactory $tagCollectionFactory,
         PostTagLink $postTagLink,
         SystemStore $systemStore,
+        WysiwygConfig $wysiwygConfig,
+        Json $json,
         array $data = []
     ) {
         $this->postFactory = $postFactory;
@@ -41,6 +47,8 @@ class Edit extends Template
         $this->tagCollectionFactory = $tagCollectionFactory;
         $this->postTagLink = $postTagLink;
         $this->systemStore = $systemStore;
+        $this->wysiwygConfig = $wysiwygConfig;
+        $this->json = $json;
         parent::__construct($context, $data);
     }
 
@@ -149,5 +157,25 @@ class Edit extends Template
     public function isExistingPost()
     {
         return (bool) $this->getPost()->getId();
+    }
+
+    /**
+     * TinyMCE / Magento WYSIWYG config JSON for the content field.
+     */
+    public function getWysiwygConfigJson(): string
+    {
+        $config = $this->wysiwygConfig->getConfig([
+            'add_variables' => false,
+            'add_widgets' => false,
+            'add_images' => true,
+            'add_directives' => true,
+            'use_container' => true,
+            'container_class' => 'hor-scroll',
+            'height' => '400px',
+        ]);
+        $data = $config instanceof \Magento\Framework\DataObject
+            ? $config->getData()
+            : (array) $config;
+        return $this->json->serialize($data);
     }
 }

@@ -1,5 +1,28 @@
 # Release Notes
 
+## 2.7.0 - 2026-07-12
+
+### Added
+- Admin post **WYSIWYG** (TinyMCE via Magento CMS editor) for the Content field
+- Taxonomy CLI:
+  - `blogarticle:category:list|create|set-status`
+  - `blogarticle:tag:list|create|set-status`
+- Module sequence dependency on `Magento_Cms` for WYSIWYG config
+
+### Changed
+- Module / package version **2.7.0**
+- Post edit layout loads Magento `editor` handle for TinyMCE assets
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.7.0. Ensure Magento CMS module is enabled.
+
+---
+
 ## 2.6.0 - 2026-07-12
 
 ### Added
