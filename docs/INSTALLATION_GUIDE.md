@@ -4,7 +4,7 @@ This guide explains how to install and verify the **ThirdParty_BlogArticle** mod
 
 Module package name: `thirdparty/module-blog-article`  
 Module code name: `ThirdParty_BlogArticle`  
-Current version: **2.5.0**
+Current version: **2.6.0**
 
 ---
 
@@ -18,7 +18,7 @@ After a successful install, the module:
 4. Exposes a **storefront list page** at `/blog/index/index` (frontName: `blog`).
 5. Exposes an **Admin list + CRUD** under **Content → Blog Posts** (Add / Edit / Delete).
 
-### Capability matrix (v2.5.0)
+### Capability matrix (v2.6.0)
 
 | Capability | Status |
 |---|---|
@@ -32,8 +32,8 @@ After a successful install, the module:
 | Comments (moderation, replies, spam, email, reCAPTCHA) | **Supported** |
 | Post author + OG/JSON-LD SEO | **Supported** |
 | Clean `/blog/category|tag/{url_key}` URLs | **Supported** |
-| Admin mass Enable/Disable posts | **Supported** |
-| CLI list/show/set-status | **Supported** (`blogarticle:post:*`) |
+| Admin mass Enable/Disable posts/categories/tags | **Supported** |
+| CLI list/show/create/set-status/delete | **Supported** (`blogarticle:post:*`) |
 | REST API (read + write surfaces) | **Supported** |
 | GraphQL (read + mutations + comments) | **Supported** |
 | Configurable page size / comments / media | **Supported** (Admin config) |
@@ -239,10 +239,12 @@ CLI (ops / automation):
 php bin/magento blogarticle:post:list
 php bin/magento blogarticle:post:list --status=enabled --limit=20
 php bin/magento blogarticle:post:show welcome-to-the-blog
+php bin/magento blogarticle:post:create --title="Hello" --content="<p>Body</p>" --author="Ada"
 php bin/magento blogarticle:post:set-status 1 disabled
+php bin/magento blogarticle:post:delete 1 --force
 ```
 
-There is still no create-post CLI; create/edit content via Admin UI or REST/GraphQL write APIs.
+Rich HTML editing remains easiest in Admin UI; CLI/API suit automation and bulk ops.
 
 More field semantics and security notes: [User Guide](./USER_GUIDE.md).
 

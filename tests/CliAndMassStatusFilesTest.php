@@ -58,11 +58,11 @@ class CliAndMassStatusFilesTest extends TestCase
         $this->assertStringContainsString('Magento\\Framework\\Console\\CommandList', $di);
     }
 
-    public function testModuleVersionIs250(): void
+    public function testModuleVersionIs260(): void
     {
         $c = file_get_contents($this->root() . '/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.5.0"', $c);
+        $this->assertStringContainsString('setup_version="2.6.0"', $c);
         $composer = file_get_contents(dirname(__DIR__) . '/composer.json');
-        $this->assertStringContainsString('"version": "2.5.0"', $composer);
+        $this->assertStringContainsString('"version": "2.6.0"', $composer);
     }
 }

@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **2.5.0**
+Version covered: **2.6.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -25,12 +25,12 @@ This module provides a **database-backed blog post list** with Admin management:
 | REST | `/rest/V1/blogarticle/posts*` | Public read + search |
 | GraphQL | `/graphql` (`blogPosts`, `blogPost`) | Public read + search |
 
-### What you can do in v2.5.0
+### What you can do in v2.6.0
 
 - Search and page through the storefront blog list; open clean post/category/tag URLs.
 - Set an optional **author** on each post; shown on list, detail, and social meta.
-- Manage posts, categories, tags, and comments in Admin (including **mass Enable/Disable** on posts).
-- Use CLI: `blogarticle:post:list`, `blogarticle:post:show`, `blogarticle:post:set-status`.
+- Manage posts, categories, tags, and comments in Admin (**mass Enable/Disable** on posts, categories, and tags).
+- Full post CLI: list, show, create, set-status, delete.
 - Moderate comments; optional spam protection, email notify, reCAPTCHA, and one-level replies.
 - Integrate via REST or GraphQL (including `submitBlogComment` and admin post mutations).
 - Configure list page size, comments, and media limits per store.
@@ -40,7 +40,9 @@ This module provides a **database-backed blog post list** with Admin management:
 ```bash
 php bin/magento blogarticle:post:list --status=enabled --search=welcome
 php bin/magento blogarticle:post:show 1
+php bin/magento blogarticle:post:create --title="Hello" --content="<p>Body</p>" --author="Ada" --status=enabled
 php bin/magento blogarticle:post:set-status 1 enabled
+php bin/magento blogarticle:post:delete 1 --force
 ```
 
 ---
@@ -255,7 +257,7 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v2.5.0 |
+| Topic | Behavior in v2.6.0 |
 |---|---|
 | Multi-website / store view | Posts may target a store via `store_id` (0/NULL = all views) |
 | Translation of post content | Not supported; store raw title/content per row only |

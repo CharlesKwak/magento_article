@@ -1,5 +1,27 @@
 # Release Notes
 
+## 2.6.0 - 2026-07-12
+
+### Added
+- Category & tag Admin grid **mass Enable / Disable** (plus existing Delete)
+- CLI create/delete posts:
+  - `bin/magento blogarticle:post:create --title=... --content=... [options]`
+  - `bin/magento blogarticle:post:delete <id|url_key> --force`
+
+### Changed
+- Module / package version **2.6.0**
+- Full post CLI set: list, show, create, set-status, delete
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.6.0.
+
+---
+
 ## 2.5.0 - 2026-07-12
 
 ### Added

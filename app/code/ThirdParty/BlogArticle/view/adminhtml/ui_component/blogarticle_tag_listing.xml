@@ -44,6 +44,20 @@
         <filterSearch name="fulltext"/>
         <filters name="listing_filters"/>
         <massaction name="listing_massaction">
+            <action name="enable">
+                <settings>
+                    <url path="blogarticle/tag/massEnable"/>
+                    <type>enable</type>
+                    <label translate="true">Enable</label>
+                </settings>
+            </action>
+            <action name="disable">
+                <settings>
+                    <url path="blogarticle/tag/massDisable"/>
+                    <type>disable</type>
+                    <label translate="true">Disable</label>
+                </settings>
+            </action>
             <action name="delete">
                 <settings>
                     <confirm>

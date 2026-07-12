@@ -91,6 +91,12 @@
                 <item name="blogarticle_post_set_status" xsi:type="object">
                     ThirdParty\BlogArticle\Console\Command\PostSetStatusCommand
                 </item>
+                <item name="blogarticle_post_create" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\PostCreateCommand
+                </item>
+                <item name="blogarticle_post_delete" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\PostDeleteCommand
+                </item>
             </argument>
         </arguments>
     </type>
