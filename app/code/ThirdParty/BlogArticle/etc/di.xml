@@ -115,6 +115,15 @@
                 <item name="blogarticle_tag_set_status" xsi:type="object">
                     ThirdParty\BlogArticle\Console\Command\TagSetStatusCommand
                 </item>
+                <item name="blogarticle_category_delete" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\CategoryDeleteCommand
+                </item>
+                <item name="blogarticle_tag_delete" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\TagDeleteCommand
+                </item>
+                <item name="blogarticle_post_import" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\PostImportCommand
+                </item>
             </argument>
         </arguments>
     </type>

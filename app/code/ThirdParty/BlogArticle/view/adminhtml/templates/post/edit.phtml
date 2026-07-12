@@ -199,7 +199,7 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
 
             <div class="admin__field" style="margin-bottom: 1rem;">
                 <label class="admin__field-label" for="featured_image">
-                    <span><?= $block->escapeHtml(__('Featured Image URL')) ?></span>
+                    <span><?= $block->escapeHtml(__('Featured Image')) ?></span>
                 </label>
                 <div class="admin__field-control">
                     <input class="admin__control-text"
@@ -209,19 +209,75 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
                            maxlength="512"
                            style="width:100%; max-width:640px;"
                            value="<?= $block->escapeHtmlAttr((string) $post->getFeaturedImage()) ?>"/>
+                    <p style="margin-top:0.5rem;">
+                        <button type="button"
+                                class="action-default"
+                                id="featured_image_gallery_btn"
+                                title="<?= $block->escapeHtmlAttr(__('Select from Media Gallery')) ?>">
+                            <span><?= $block->escapeHtml(__('Select from Media Gallery')) ?></span>
+                        </button>
+                        <button type="button"
+                                class="action-default"
+                                id="featured_image_clear_btn"
+                                title="<?= $block->escapeHtmlAttr(__('Clear')) ?>"
+                                style="margin-left:0.35rem;">
+                            <span><?= $block->escapeHtml(__('Clear')) ?></span>
+                        </button>
+                    </p>
                     <p class="admin__field-note">
-                        <?= $block->escapeHtml(__('Absolute URL, or upload a file below (jpg/png/gif/webp).')) ?>
+                        <?= $block->escapeHtml(__('Paste an absolute URL, pick from Magento Media Gallery, or upload a file below (jpg/png/gif/webp).')) ?>
                     </p>
                     <input type="file" name="featured_image_file" id="featured_image_file" accept="image/*"/>
                     <?php if ($post->getFeaturedImage()): ?>
-                        <p style="margin-top:0.5rem;">
-                            <img src="<?= $block->escapeUrl((string) $post->getFeaturedImage()) ?>"
+                        <p style="margin-top:0.5rem;" id="featured_image_preview_wrap">
+                            <img id="featured_image_preview"
+                                 src="<?= $block->escapeUrl((string) $post->getFeaturedImage()) ?>"
                                  alt=""
                                  style="max-width:240px;height:auto;"/>
+                        </p>
+                    <?php else: ?>
+                        <p style="margin-top:0.5rem;display:none;" id="featured_image_preview_wrap">
+                            <img id="featured_image_preview" src="" alt="" style="max-width:240px;height:auto;"/>
                         </p>
                     <?php endif; ?>
                 </div>
             </div>
+            <script>
+                require([
+                    'jquery',
+                    'mage/adminhtml/browser'
+                ], function ($) {
+                    'use strict';
+                    var galleryUrl = <?= /* @noEscape */ json_encode($block->getMediaGalleryUrl()) ?>;
+                    $('#featured_image_gallery_btn').on('click', function () {
+                        if (typeof MediabrowserUtility !== 'undefined' && MediabrowserUtility.openDialog) {
+                            MediabrowserUtility.openDialog(galleryUrl, null, null, null, {
+                                closed: function () {
+                                    var val = $('#featured_image').val();
+                                    if (val) {
+                                        $('#featured_image_preview').attr('src', val);
+                                        $('#featured_image_preview_wrap').show();
+                                    }
+                                }
+                            });
+                        } else {
+                            window.open(galleryUrl, 'blogarticle_media_gallery', 'width=1000,height=700,resizable=1,scrollbars=1');
+                        }
+                    });
+                    $('#featured_image_clear_btn').on('click', function () {
+                        $('#featured_image').val('');
+                        $('#featured_image_preview').attr('src', '');
+                        $('#featured_image_preview_wrap').hide();
+                    });
+                    $('#featured_image').on('change blur', function () {
+                        var val = $(this).val();
+                        if (val) {
+                            $('#featured_image_preview').attr('src', val);
+                            $('#featured_image_preview_wrap').show();
+                        }
+                    });
+                });
+            </script>
 
             <div class="admin__field" style="margin-bottom: 1rem;">
                 <label class="admin__field-label" for="meta_title">

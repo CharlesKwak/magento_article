@@ -1,0 +1,3 @@
+title,content,url_key,author,status,excerpt,category_id,tag_ids,store_id,published_at,meta_title,meta_description,featured_image
+"CSV Welcome","<p>Imported via blogarticle:post:import sample.</p>",csv-welcome,Ada,enabled,"Short excerpt",,,0,,,,,
+"CSV Draft","<p>Disabled draft from CSV.</p>",csv-draft,Bob,disabled,"Draft excerpt",,,0,,,,,

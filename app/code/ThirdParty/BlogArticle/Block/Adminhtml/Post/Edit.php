@@ -178,4 +178,19 @@ class Edit extends Template
             : (array) $config;
         return $this->json->serialize($data);
     }
+
+    /**
+     * CMS media gallery browser URL for selecting a featured image into #featured_image.
+     */
+    public function getMediaGalleryUrl(): string
+    {
+        return $this->getUrl(
+            'cms/wysiwyg_images/index',
+            [
+                'target_element_id' => 'featured_image',
+                'type' => 'image',
+                'current_tree_path' => base64_encode('wysiwyg'),
+            ]
+        );
+    }
 }

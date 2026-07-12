@@ -1,5 +1,31 @@
 # Release Notes
 
+## 2.8.0 - 2026-07-12
+
+### Added
+- Admin **Media Gallery** picker for featured image (Magento CMS media browser)
+- Clear featured image control + live preview
+- Taxonomy delete CLI:
+  - `blogarticle:category:delete <id|url_key> --force`
+  - `blogarticle:tag:delete <id|url_key> --force`
+- CSV bulk import:
+  - `blogarticle:post:import path/to/file.csv [--dry-run] [--update]`
+  - Sample file: `docs/samples/posts_import_sample.csv`
+  - Service: `PostCsvImporter`
+
+### Changed
+- Module / package version **2.8.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns. Media Gallery requires Magento CMS media browser routes (standard Admin).
+
+---
+
 ## 2.7.0 - 2026-07-12
 
 ### Added

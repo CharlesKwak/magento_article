@@ -8,7 +8,7 @@ Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style ar
 |---|---|
 | Package | `thirdparty/module-blog-article` |
 | Module | `ThirdParty_BlogArticle` |
-| Version | **2.7.0** |
+| Version | **2.8.0** |
 | License | [GPL-2.0](LICENSE) (`composer.json`: `GPL-2.0-only`) |
 
 ---
@@ -24,7 +24,7 @@ Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style ar
 
 ---
 
-## Feature scope (v2.7.0)
+## Feature scope (v2.8.0)
 
 ### Included
 
@@ -33,14 +33,11 @@ Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style ar
 - **SEO**: Open Graph / Twitter cards + JSON-LD Article on post detail
 - **Comments**: moderation, spam protection, email notify, one-level replies, optional reCAPTCHA
 - Admin UI grids + **mass Enable/Disable/Delete** for posts, categories, and tags
-- Admin post **WYSIWYG** content editor (TinyMCE via Magento CMS)
-- **CLI**: posts (`list|show|create|set-status|delete`), categories & tags (`list|create|set-status`)
+- Admin post **WYSIWYG** + **Media Gallery** featured-image picker
+- **CLI**: posts (`list|show|create|set-status|delete|import`), categories & tags (`list|create|set-status|delete`)
+- CSV bulk import sample under `docs/samples/`
 - REST + GraphQL (read + write mutations for posts; public `submitBlogComment`)
 - ACL: posts, categories, tags, comments, config
-
-### Optional / external
-
-- Magento Media Gallery widget integration (not bundled)
 
 ---
 
@@ -104,7 +101,7 @@ Registered as `ThirdParty_BlogArticle` (`ThirdParty\BlogArticle`). On `setup:upg
 
 ```bash
 ./scripts/package_module.sh
-# → dist/thirdparty-blog-article-2.7.0.zip
+# → dist/thirdparty-blog-article-2.8.0.zip
 ```
 
 ### PDF conversion for Marketplace upload
