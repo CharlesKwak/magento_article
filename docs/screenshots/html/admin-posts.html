@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blog Posts — Magento Admin</title>
+  <style>
+    :root {
+      --bg: #f8f8f8;
+      --panel: #fff;
+      --text: #303030;
+      --muted: #8a8a8a;
+      --border: #e3e3e3;
+      --primary: #514943;
+      --action: #eb5202;
+      --link: #007bdb;
+      --row: #f5f5f5;
+      --ok: #006400;
+      --sidebar: #373330;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 100vh;
+    }
+    .sidebar {
+      background: var(--sidebar);
+      color: #c7c1bb;
+      padding: 0;
+    }
+    .sidebar .brand {
+      padding: 18px 16px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      border-bottom: 1px solid #4a443e;
+      letter-spacing: 0.02em;
+    }
+    .sidebar .brand span { color: #eb5202; }
+    .menu {
+      list-style: none;
+      margin: 12px 0 0;
+      padding: 0;
+    }
+    .menu li a {
+      display: block;
+      padding: 10px 16px;
+      color: #c7c1bb;
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .menu li a:hover { background: #2d2926; color: #fff; }
+    .menu li a.active {
+      background: #2d2926;
+      color: #fff;
+      border-left: 3px solid #eb5202;
+      padding-left: 13px;
+    }
+    .menu .section {
+      padding: 16px 16px 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #8f877d;
+    }
+    .main { min-width: 0; }
+    .topbar {
+      background: #514943;
+      color: #fff;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+    .topbar .title { font-weight: 600; font-size: 14px; }
+    .topbar .user { font-size: 12px; color: #ddd; }
+    .content { padding: 20px 24px 40px; }
+    .page-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .page-title h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 300;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      height: 34px;
+      padding: 0 14px;
+      border: 1px solid transparent;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+      border-radius: 0;
+    }
+    .btn-primary {
+      background: var(--action);
+      color: #fff;
+    }
+    .btn-default {
+      background: #e3e3e3;
+      color: #333;
+      border-color: #adadad;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+    }
+    .filters {
+      padding: 16px 18px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: end;
+      border-bottom: 1px solid var(--border);
+      background: #fafafa;
+    }
+    .filters label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .filters input, .filters select {
+      height: 32px;
+      border: 1px solid #adadad;
+      padding: 0 8px;
+      min-width: 160px;
+      font: inherit;
+      background: #fff;
+    }
+    .mass {
+      padding: 10px 18px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .mass select {
+      height: 30px;
+      border: 1px solid #adadad;
+      background: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      background: #f1f1f1;
+      border-bottom: 1px solid #d6d6d6;
+      font-size: 12px;
+      font-weight: 700;
+      color: #555;
+      white-space: nowrap;
+    }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e8e8e8;
+      vertical-align: middle;
+    }
+    tr:nth-child(even) td { background: #fafafa; }
+    tr:hover td { background: #fff8f3; }
+    a { color: var(--link); text-decoration: none; }
+    .status {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .status.enabled {
+      background: #e8f5e9;
+      color: #1b5e20;
+    }
+    .status.disabled {
+      background: #fce4ec;
+      color: #880e4f;
+    }
+    .actions a { margin-right: 10px; font-weight: 600; font-size: 12px; }
+    .actions a.danger { color: #e22626; }
+    .footer-note {
+      padding: 12px 18px;
+      color: var(--muted);
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .crumb {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .crumb a { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">Magento <span>Admin</span></div>
+      <div class="section">Content</div>
+      <ul class="menu">
+        <li><a href="#">Pages</a></li>
+        <li><a href="#">Blocks</a></li>
+        <li><a class="active" href="#">Blog Posts</a></li>
+        <li><a href="#">Blog Categories</a></li>
+        <li><a href="#">Blog Tags</a></li>
+        <li><a href="#">Blog Comments</a></li>
+      </ul>
+      <div class="section">Stores</div>
+      <ul class="menu">
+        <li><a href="#">Configuration</a></li>
+      </ul>
+    </aside>
+
+    <div class="main">
+      <div class="topbar">
+        <div class="title">Content / Blog Posts</div>
+        <div class="user">admin · English (US)</div>
+      </div>
+
+      <div class="content">
+        <p class="crumb"><a href="#">Home</a> / Content / Blog Posts</p>
+        <div class="page-title">
+          <h1>Blog Posts</h1>
+          <a class="btn btn-primary" href="#">Add New Post</a>
+        </div>
+
+        <div class="panel">
+          <form class="filters">
+            <div>
+              <label for="q">Search</label>
+              <input id="q" type="text" placeholder="Title, content, URL key" value="" />
+            </div>
+            <div>
+              <label for="status">Status</label>
+              <select id="status">
+                <option>All</option>
+                <option selected>Enabled</option>
+                <option>Disabled</option>
+              </select>
+            </div>
+            <div>
+              <label for="cat">Category</label>
+              <select id="cat">
+                <option selected>All</option>
+                <option>News</option>
+                <option>Guides</option>
+              </select>
+            </div>
+            <button class="btn btn-default" type="button">Filter</button>
+          </form>
+
+          <div class="mass">
+            <span>Actions</span>
+            <select>
+              <option>Select…</option>
+              <option>Enable</option>
+              <option>Disable</option>
+              <option>Delete</option>
+            </select>
+            <button class="btn btn-default" type="button">Submit</button>
+            <span style="margin-left:auto;">2 records found</span>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th style="width:36px;"><input type="checkbox" /></th>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>URL Key</th>
+                <th>Author</th>
+                <th>Status</th>
+                <th>Store</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox" checked /></td>
+                <td>1</td>
+                <td><a href="#"><strong>Welcome to the blog</strong></a></td>
+                <td>News</td>
+                <td><code>welcome-to-the-blog</code></td>
+                <td>Demo Author</td>
+                <td><span class="status enabled">Enabled</span></td>
+                <td>All Store Views</td>
+                <td>2026-03-01</td>
+                <td class="actions">
+                  <a href="#">Edit</a>
+                  <a class="danger" href="#">Delete</a>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" /></td>
+                <td>2</td>
+                <td><a href="#"><strong>Second sample post</strong></a></td>
+                <td>Guides</td>
+                <td><code>second-sample-post</code></td>
+                <td>Demo Author</td>
+                <td><span class="status enabled">Enabled</span></td>
+                <td>All Store Views</td>
+                <td>2026-03-02</td>
+                <td class="actions">
+                  <a href="#">Edit</a>
+                  <a class="danger" href="#">Delete</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="footer-note">
+            Admin CRUD · mass Enable / Disable / Delete · filters · WYSIWYG + Media Gallery on edit form ·
+            ThirdParty_BlogArticle v2.9.0 (illustrative screenshot)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

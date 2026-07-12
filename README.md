@@ -13,6 +13,30 @@ Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style ar
 
 ---
 
+## Screenshots
+
+Illustrative UI samples (sample seed data + Admin grid). HTML sources under [`docs/screenshots/html/`](docs/screenshots/html/) can be re-rendered if the mockups change.
+
+### Storefront — blog list
+
+Search, categories, tags, featured images, excerpts, and RSS.
+
+![Storefront blog list](docs/screenshots/storefront-list.png)
+
+### Storefront — post detail
+
+Author / category meta, reading time, share links, related posts, comments with replies, and submit form.
+
+![Storefront post detail](docs/screenshots/storefront-post.png)
+
+### Admin — Blog Posts
+
+Content → Blog Posts: filters, mass actions, grid (title, category, URL key, status, edit/delete).
+
+![Admin Blog Posts grid](docs/screenshots/admin-posts.png)
+
+---
+
 ## Documentation
 
 | Document | Audience | Contents |
