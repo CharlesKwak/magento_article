@@ -3,7 +3,6 @@
 $post = $block->getPost();
 $allowedTags = $block->getAllowedContentTags();
 $related = $block->getRelatedPosts();
-$tagNames = $block->getTagNames();
 ?>
 <div class="blog-post-view">
     <p class="blog-back">
@@ -17,23 +16,43 @@ $tagNames = $block->getTagNames();
             <span><?= $block->escapeHtml(__('This post is not available.')) ?></span>
         </div>
     <?php else: ?>
+        <?php
+        $tags = $block->getTags();
+        $share = $block->getShareLinks();
+        $prevPost = $block->getPreviousPost();
+        $nextPost = $block->getNextPost();
+        $categoryName = $block->getCategoryName();
+        $categoryUrl = $block->getCategoryUrl();
+        ?>
         <article class="blog-post">
             <h1><?= $block->escapeHtml($post->getTitle()) ?></h1>
             <p class="blog-meta">
                 <?php if ($block->getAuthorName() !== ''): ?>
                     <span class="blog-author"><?= $block->escapeHtml(__('By %1', $block->getAuthorName())) ?></span>
-                    <?php if ($post->getCreationTime()): ?>&middot;<?php endif; ?>
+                    &middot;
+                <?php endif; ?>
+                <?php if ($categoryName !== '' && $categoryUrl !== ''): ?>
+                    <a class="blog-category" href="<?= $block->escapeUrl($categoryUrl) ?>">
+                        <?= $block->escapeHtml($categoryName) ?>
+                    </a>
+                    &middot;
                 <?php endif; ?>
                 <?php if ($post->getCreationTime()): ?>
                     <time datetime="<?= $block->escapeHtmlAttr((string) $post->getCreationTime()) ?>">
                         <?= $block->escapeHtml((string) $post->getCreationTime()) ?>
                     </time>
+                    &middot;
                 <?php endif; ?>
+                <span class="blog-reading-time">
+                    <?= $block->escapeHtml(__('%1 min read', $block->getReadingMinutes())) ?>
+                </span>
             </p>
-            <?php if ($tagNames): ?>
+            <?php if ($tags): ?>
                 <p class="blog-post-tags">
-                    <?php foreach ($tagNames as $tagName): ?>
-                        <span class="blog-tag">#<?= $block->escapeHtml($tagName) ?></span>
+                    <?php foreach ($tags as $tag): ?>
+                        <a class="blog-tag" href="<?= $block->escapeUrl($tag['url']) ?>">
+                            #<?= $block->escapeHtml($tag['name']) ?>
+                        </a>
                     <?php endforeach; ?>
                 </p>
             <?php endif; ?>
@@ -48,6 +67,65 @@ $tagNames = $block->getTagNames();
                 <?= /* @noEscape */ $block->escapeHtml((string) $post->getContent(), $allowedTags) ?>
             </div>
         </article>
+
+        <section class="blog-share" style="margin-top:1.25rem;">
+            <strong><?= $block->escapeHtml(__('Share')) ?>:</strong>
+            <a href="<?= $block->escapeUrl($share['twitter']) ?>" target="_blank" rel="noopener noreferrer">
+                <?= $block->escapeHtml(__('X')) ?>
+            </a>
+            ·
+            <a href="<?= $block->escapeUrl($share['facebook']) ?>" target="_blank" rel="noopener noreferrer">
+                <?= $block->escapeHtml(__('Facebook')) ?>
+            </a>
+            ·
+            <a href="<?= $block->escapeUrl($share['linkedin']) ?>" target="_blank" rel="noopener noreferrer">
+                <?= $block->escapeHtml(__('LinkedIn')) ?>
+            </a>
+            ·
+            <a href="<?= $block->escapeHtmlAttr($share['email']) ?>">
+                <?= $block->escapeHtml(__('Email')) ?>
+            </a>
+            ·
+            <button type="button" class="action" id="blog-copy-link"
+                    data-url="<?= $block->escapeHtmlAttr($block->getCanonicalUrl()) ?>"
+                    style="border:0;background:none;color:inherit;cursor:pointer;padding:0;text-decoration:underline;">
+                <?= $block->escapeHtml(__('Copy link')) ?>
+            </button>
+            <script>
+            (function () {
+                var btn = document.getElementById('blog-copy-link');
+                if (!btn || !navigator.clipboard) { return; }
+                btn.addEventListener('click', function () {
+                    var url = btn.getAttribute('data-url') || '';
+                    navigator.clipboard.writeText(url).then(function () {
+                        btn.textContent = <?= /* @noEscape */ json_encode((string) __('Copied!')) ?>;
+                        setTimeout(function () {
+                            btn.textContent = <?= /* @noEscape */ json_encode((string) __('Copy link')) ?>;
+                        }, 1500);
+                    });
+                });
+            })();
+            </script>
+        </section>
+
+        <?php if ($prevPost || $nextPost): ?>
+            <nav class="blog-post-nav" style="margin-top:1.5rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+                <div class="blog-post-nav-prev">
+                    <?php if ($prevPost): ?>
+                        <a href="<?= $block->escapeUrl($block->getPostUrl($prevPost)) ?>">
+                            ← <?= $block->escapeHtml($prevPost->getTitle()) ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
+                <div class="blog-post-nav-next" style="text-align:right;">
+                    <?php if ($nextPost): ?>
+                        <a href="<?= $block->escapeUrl($block->getPostUrl($nextPost)) ?>">
+                            <?= $block->escapeHtml($nextPost->getTitle()) ?> →
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </nav>
+        <?php endif; ?>
 
         <?php if ($related): ?>
             <section class="blog-related" style="margin-top:2rem;">

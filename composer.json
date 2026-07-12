@@ -1,11 +1,11 @@
 {
     "name": "thirdparty/module-blog-article",
-    "description": "Magento 2 blog article module with media gallery, CSV import, taxonomy CLI, SEO, comments, and GraphQL.",
+    "description": "Magento 2 blog article module with CSV import/export, storefront UX, media gallery, SEO, comments, and GraphQL.",
     "type": "magento2-module",
     "license": [
         "GPL-2.0-only"
     ],
-    "version": "2.8.0",
+    "version": "2.9.0",
     "require": {
         "php": ">=8.1",
         "magento/framework": "^103.0"

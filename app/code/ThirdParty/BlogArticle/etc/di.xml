@@ -124,6 +124,18 @@
                 <item name="blogarticle_post_import" xsi:type="object">
                     ThirdParty\BlogArticle\Console\Command\PostImportCommand
                 </item>
+                <item name="blogarticle_post_export" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\PostExportCommand
+                </item>
+                <item name="blogarticle_comment_export" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\CommentExportCommand
+                </item>
+                <item name="blogarticle_category_export" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\CategoryExportCommand
+                </item>
+                <item name="blogarticle_tag_export" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\TagExportCommand
+                </item>
             </argument>
         </arguments>
     </type>

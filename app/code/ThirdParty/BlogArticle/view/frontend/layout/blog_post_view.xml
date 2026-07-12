@@ -3,6 +3,7 @@
       layout="1column"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceBlock name="page.main.title" remove="true"/>
         <referenceBlock name="head.additional">
             <block class="ThirdParty\BlogArticle\Block\Post\View"
                    name="blog.post.seo"
@@ -11,7 +12,8 @@
         <referenceContainer name="content">
             <block class="ThirdParty\BlogArticle\Block\Post\View"
                    name="blog.post.view"
-                   template="ThirdParty_BlogArticle::post/view.phtml"/>
+                   template="ThirdParty_BlogArticle::post/view.phtml"
+                   cacheable="true"/>
         </referenceContainer>
     </body>
 </page>

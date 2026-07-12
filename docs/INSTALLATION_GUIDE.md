@@ -4,7 +4,7 @@ This guide explains how to install and verify the **ThirdParty_BlogArticle** mod
 
 Module package name: `thirdparty/module-blog-article`  
 Module code name: `ThirdParty_BlogArticle`  
-Current version: **2.8.0**
+Current version: **2.9.0**
 
 ---
 
@@ -18,7 +18,7 @@ After a successful install, the module:
 4. Exposes a **storefront list page** at `/blog/index/index` (frontName: `blog`).
 5. Exposes an **Admin list + CRUD** under **Content → Blog Posts** (Add / Edit / Delete).
 
-### Capability matrix (v2.8.0)
+### Capability matrix (v2.9.0)
 
 | Capability | Status |
 |---|---|
@@ -33,8 +33,10 @@ After a successful install, the module:
 | Post author + OG/JSON-LD SEO | **Supported** |
 | Clean `/blog/category|tag/{url_key}` URLs | **Supported** |
 | Admin mass Enable/Disable posts/categories/tags | **Supported** |
-| CLI posts + categories + tags | **Supported** (`blogarticle:post|category|tag:*`) |
-| CSV post import | **Supported** (`blogarticle:post:import`) |
+| CLI posts + categories + tags + comments export | **Supported** (`blogarticle:*`) |
+| CSV post import / export | **Supported** (`post:import`, `post:export`) |
+| Comment / taxonomy CSV export | **Supported** |
+| Storefront share, prev/next, breadcrumbs | **Supported** |
 | Admin WYSIWYG content editor | **Supported** (TinyMCE / Magento CMS) |
 | Admin Media Gallery featured image | **Supported** (CMS media browser) |
 | REST API (read + write surfaces) | **Supported** |
@@ -247,6 +249,10 @@ php bin/magento blogarticle:post:set-status 1 disabled
 php bin/magento blogarticle:post:delete 1 --force
 php bin/magento blogarticle:post:import docs/samples/posts_import_sample.csv --dry-run
 php bin/magento blogarticle:post:import /absolute/path/posts.csv --update
+php bin/magento blogarticle:post:export --file=/tmp/posts.csv --status=enabled
+php bin/magento blogarticle:comment:export --status=pending
+php bin/magento blogarticle:category:export
+php bin/magento blogarticle:tag:export
 php bin/magento blogarticle:category:list
 php bin/magento blogarticle:category:create --name="News"
 php bin/magento blogarticle:category:set-status 1 enabled
@@ -257,7 +263,7 @@ php bin/magento blogarticle:tag:set-status 1 enabled
 php bin/magento blogarticle:tag:delete magento --force
 ```
 
-Admin post edit uses Magento **WYSIWYG** (TinyMCE) for content and **Media Gallery** for featured images. CLI/API suit automation and bulk ops.
+Admin post edit uses Magento **WYSIWYG** (TinyMCE) for content and **Media Gallery** for featured images. Storefront detail includes share, prev/next, and breadcrumbs. CLI/API suit automation and bulk ops.
 
 More field semantics and security notes: [User Guide](./USER_GUIDE.md).
 

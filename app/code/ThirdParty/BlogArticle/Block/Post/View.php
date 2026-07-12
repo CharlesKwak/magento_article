@@ -6,14 +6,18 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Store\Model\StoreManagerInterface;
 use ThirdParty\BlogArticle\Api\CommentRepositoryInterface;
 use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
+use ThirdParty\BlogArticle\Model\CategoryFactory;
 use ThirdParty\BlogArticle\Model\CommentSpamGuard;
 use ThirdParty\BlogArticle\Model\Config;
 use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFactory;
+use ThirdParty\BlogArticle\Model\PostFilter;
 use ThirdParty\BlogArticle\Model\PostTagLink;
+use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory as PostCollectionFactory;
 use ThirdParty\BlogArticle\Model\TagFactory;
 
 class View extends Template implements IdentityInterface
@@ -22,14 +26,20 @@ class View extends Template implements IdentityInterface
     private $postRepository;
     private $postTagLink;
     private $tagFactory;
+    private $categoryFactory;
     private $imageUploader;
     private $commentRepository;
     private $config;
     private $formKey;
     private $dateTime;
+    private $postFilter;
+    private $postCollectionFactory;
+    private $storeManager;
     private $post;
     private $related;
+    private $neighbors;
     private $tagNameCache = [];
+    private $tagMetaCache = [];
 
     public function __construct(
         Context $context,
@@ -37,23 +47,75 @@ class View extends Template implements IdentityInterface
         PostRepositoryInterface $postRepository,
         PostTagLink $postTagLink,
         TagFactory $tagFactory,
+        CategoryFactory $categoryFactory,
         FeaturedImageUploader $imageUploader,
         CommentRepositoryInterface $commentRepository,
         Config $config,
         FormKey $formKey,
         DateTime $dateTime,
+        PostFilter $postFilter,
+        PostCollectionFactory $postCollectionFactory,
+        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         $this->postFactory = $postFactory;
         $this->postRepository = $postRepository;
         $this->postTagLink = $postTagLink;
         $this->tagFactory = $tagFactory;
+        $this->categoryFactory = $categoryFactory;
         $this->imageUploader = $imageUploader;
         $this->commentRepository = $commentRepository;
         $this->config = $config;
         $this->formKey = $formKey;
         $this->dateTime = $dateTime;
+        $this->postFilter = $postFilter;
+        $this->postCollectionFactory = $postCollectionFactory;
+        $this->storeManager = $storeManager;
         parent::__construct($context, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+        $this->addBreadcrumbs();
+        return $this;
+    }
+
+    private function addBreadcrumbs(): void
+    {
+        $breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
+        if (!$breadcrumbs) {
+            return;
+        }
+        $breadcrumbs->addCrumb(
+            'home',
+            [
+                'label' => __('Home'),
+                'title' => __('Go to Home Page'),
+                'link' => $this->getBaseUrl(),
+            ]
+        );
+        $breadcrumbs->addCrumb(
+            'blog',
+            [
+                'label' => __('Blog'),
+                'title' => __('Blog'),
+                'link' => $this->getListUrl(),
+            ]
+        );
+        $post = $this->getPost();
+        if ($post) {
+            $breadcrumbs->addCrumb(
+                'post',
+                [
+                    'label' => $post->getTitle(),
+                    'title' => $post->getTitle(),
+                ]
+            );
+        }
     }
 
     /**
@@ -132,21 +194,159 @@ class View extends Template implements IdentityInterface
      */
     public function getTagNames(): array
     {
+        $names = [];
+        foreach ($this->getTags() as $tag) {
+            $names[] = $tag['name'];
+        }
+        return $names;
+    }
+
+    /**
+     * Active tags with name + url for linking.
+     *
+     * @return array<int, array{name:string,url:string,url_key:string}>
+     */
+    public function getTags(): array
+    {
         $post = $this->getPost();
         if (!$post) {
             return [];
         }
-        $names = [];
+        $tags = [];
         foreach ($this->postTagLink->getTagIdsForPost((int) $post->getId()) as $tagId) {
-            if (!array_key_exists($tagId, $this->tagNameCache)) {
+            if (!array_key_exists($tagId, $this->tagMetaCache)) {
                 $tag = $this->tagFactory->create()->load($tagId);
-                $this->tagNameCache[$tagId] = $tag->getId() ? (string) $tag->getName() : '';
+                if ($tag->getId() && (int) $tag->getIsActive()) {
+                    $urlKey = (string) $tag->getUrlKey();
+                    $this->tagMetaCache[$tagId] = [
+                        'name' => (string) $tag->getName(),
+                        'url_key' => $urlKey,
+                        'url' => $urlKey !== ''
+                            ? $this->getUrl('', ['_direct' => 'blog/tag/' . $urlKey])
+                            : $this->getUrl('blog/index/index', ['tag_id' => $tagId]),
+                    ];
+                } else {
+                    $this->tagMetaCache[$tagId] = null;
+                }
             }
-            if ($this->tagNameCache[$tagId] !== '') {
-                $names[] = $this->tagNameCache[$tagId];
+            if ($this->tagMetaCache[$tagId] !== null) {
+                $tags[] = $this->tagMetaCache[$tagId];
             }
         }
-        return $names;
+        return $tags;
+    }
+
+    public function getCategoryName(): string
+    {
+        $post = $this->getPost();
+        if (!$post || !(int) $post->getCategoryId()) {
+            return '';
+        }
+        $category = $this->categoryFactory->create()->load((int) $post->getCategoryId());
+        if (!$category->getId() || !(int) $category->getIsActive()) {
+            return '';
+        }
+        return (string) $category->getName();
+    }
+
+    public function getCategoryUrl(): string
+    {
+        $post = $this->getPost();
+        if (!$post || !(int) $post->getCategoryId()) {
+            return '';
+        }
+        $category = $this->categoryFactory->create()->load((int) $post->getCategoryId());
+        if (!$category->getId() || !(int) $category->getIsActive()) {
+            return '';
+        }
+        $urlKey = (string) $category->getUrlKey();
+        if ($urlKey !== '') {
+            return $this->getUrl('', ['_direct' => 'blog/category/' . $urlKey]);
+        }
+        return $this->getUrl('blog/index/index', ['category_id' => (int) $category->getId()]);
+    }
+
+    /**
+     * Estimated reading time in minutes (min 1).
+     */
+    public function getReadingMinutes(): int
+    {
+        $post = $this->getPost();
+        if (!$post) {
+            return 1;
+        }
+        $text = trim(strip_tags((string) $post->getContent()));
+        $words = preg_split('/\s+/u', $text, -1, PREG_SPLIT_NO_EMPTY);
+        $count = is_array($words) ? count($words) : 0;
+        return max(1, (int) ceil($count / 200));
+    }
+
+    /**
+     * Share links (X/Twitter, Facebook, LinkedIn, mailto).
+     *
+     * @return array<string, string>
+     */
+    public function getShareLinks(): array
+    {
+        $url = rawurlencode($this->getCanonicalUrl());
+        $title = rawurlencode($this->getPageTitle());
+        return [
+            'twitter' => 'https://twitter.com/intent/tweet?url=' . $url . '&text=' . $title,
+            'facebook' => 'https://www.facebook.com/sharer/sharer.php?u=' . $url,
+            'linkedin' => 'https://www.linkedin.com/sharing/share-offsite/?url=' . $url,
+            'email' => 'mailto:?subject=' . $title . '&body=' . $url,
+        ];
+    }
+
+    /**
+     * Previous / next public posts by publish sort (newer = next).
+     *
+     * @return array{prev:?Post,next:?Post}
+     */
+    public function getNeighborPosts(): array
+    {
+        if ($this->neighbors !== null) {
+            return $this->neighbors;
+        }
+        $this->neighbors = ['prev' => null, 'next' => null];
+        $post = $this->getPost();
+        if (!$post) {
+            return $this->neighbors;
+        }
+
+        $collection = $this->postCollectionFactory->create();
+        $this->postFilter->applyActiveOnly($collection);
+        $this->postFilter->applyPublishedOnly($collection);
+        $this->postFilter->applyStoreId($collection, (int) $this->storeManager->getStore()->getId());
+        $this->postFilter->applyDefaultSort($collection);
+
+        $ids = [];
+        foreach ($collection as $item) {
+            $ids[] = (int) $item->getId();
+        }
+        $currentId = (int) $post->getId();
+        $index = array_search($currentId, $ids, true);
+        if ($index === false) {
+            return $this->neighbors;
+        }
+        // Default sort is newest first: index-1 is newer (next), index+1 is older (prev)
+        if (isset($ids[$index - 1])) {
+            $this->neighbors['next'] = $this->postFactory->create()->load($ids[$index - 1]);
+        }
+        if (isset($ids[$index + 1])) {
+            $this->neighbors['prev'] = $this->postFactory->create()->load($ids[$index + 1]);
+        }
+        return $this->neighbors;
+    }
+
+    public function getPreviousPost(): ?Post
+    {
+        return $this->getNeighborPosts()['prev'];
+    }
+
+    public function getNextPost(): ?Post
+    {
+        return $this->getNeighborPosts()['next'];
     }
 
     public function getListUrl(): string
@@ -259,11 +459,6 @@ class View extends Template implements IdentityInterface
         return $this->config->getRecaptchaSiteKey();
     }
 
-    /**
-     * Top-level approved comments (no parent).
-     *
-     * @return \ThirdParty\BlogArticle\Api\Data\CommentInterface[]
-     */
     public function getAuthorName(): string
     {
         $post = $this->getPost();

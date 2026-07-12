@@ -1,5 +1,34 @@
 # Release Notes
 
+## 2.9.0 - 2026-07-12
+
+### Added
+- CSV **export** CLI (writes under `var/export/` by default):
+  - `blogarticle:post:export [--file=…] [--status=all|enabled|disabled]`
+  - `blogarticle:comment:export [--file=…] [--status=all|approved|pending] [--post-id=N]`
+  - `blogarticle:category:export` / `blogarticle:tag:export`
+- Storefront UX polish on post detail:
+  - Magento **breadcrumbs** (Home → Blog → post)
+  - Clickable **category** and **tag** links (clean URLs)
+  - **Reading time** estimate
+  - **Share** links (X, Facebook, LinkedIn, email) + **Copy link**
+  - **Previous / next** post navigation
+- List page breadcrumbs (Home → Blog → filter heading when active)
+
+### Changed
+- Module / package version **2.9.0**
+- Post export columns are import-compatible (plus post_id / timestamps)
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.9.0.
+
+---
+
 ## 2.8.0 - 2026-07-12
 
 ### Added

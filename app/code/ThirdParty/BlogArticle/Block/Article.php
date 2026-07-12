@@ -112,6 +112,44 @@ class Article extends Template implements IdentityInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+        $breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
+        if ($breadcrumbs) {
+            $breadcrumbs->addCrumb(
+                'home',
+                [
+                    'label' => __('Home'),
+                    'title' => __('Go to Home Page'),
+                    'link' => $this->getBaseUrl(),
+                ]
+            );
+            $breadcrumbs->addCrumb(
+                'blog',
+                [
+                    'label' => __('Blog'),
+                    'title' => __('Blog'),
+                    'link' => $this->getUrl('blog/index/index'),
+                ]
+            );
+            $heading = $this->getFilterHeading();
+            if ($heading !== '') {
+                $breadcrumbs->addCrumb(
+                    'filter',
+                    [
+                        'label' => $heading,
+                        'title' => $heading,
+                    ]
+                );
+            }
+        }
+        return $this;
+    }
+
+    /**
      * @return Collection
      */
     public function getPosts()

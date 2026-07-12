@@ -65,11 +65,11 @@ class MediaGalleryImportDeleteCliFilesTest extends TestCase
         $this->assertStringContainsString('title,content', $sample);
     }
 
-    public function testModuleVersionIs280(): void
+    public function testModuleVersionIs290(): void
     {
         $module = file_get_contents($this->root() . '/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.8.0"', $module);
+        $this->assertStringContainsString('setup_version="2.9.0"', $module);
         $composer = file_get_contents(dirname(__DIR__) . '/composer.json');
-        $this->assertStringContainsString('"version": "2.8.0"', $composer);
+        $this->assertStringContainsString('"version": "2.9.0"', $composer);
     }
 }

@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **2.8.0**
+Version covered: **2.9.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -25,12 +25,13 @@ This module provides a **database-backed blog post list** with Admin management:
 | REST | `/rest/V1/blogarticle/posts*` | Public read + search |
 | GraphQL | `/graphql` (`blogPosts`, `blogPost`) | Public read + search |
 
-### What you can do in v2.8.0
+### What you can do in v2.9.0
 
 - Search and page through the storefront blog list; open clean post/category/tag URLs.
+- Post detail: breadcrumbs, reading time, share/copy link, prev/next, clickable tags/category.
 - Set an optional **author** on each post; shown on list, detail, and social meta.
-- Manage posts, categories, tags, and comments in Admin (**mass Enable/Disable**; WYSIWYG + Media Gallery for featured image).
-- CLI for posts, categories, and tags (including delete and CSV **import**).
+- Manage posts, categories, tags, and comments in Admin (mass status; WYSIWYG + Media Gallery).
+- CLI for posts/categories/tags/comments including CSV **import** and **export**.
 - Moderate comments; optional spam protection, email notify, reCAPTCHA, and one-level replies.
 - Integrate via REST or GraphQL (including `submitBlogComment` and admin post mutations).
 - Configure list page size, comments, and media limits per store.
@@ -45,6 +46,10 @@ php bin/magento blogarticle:post:set-status 1 enabled
 php bin/magento blogarticle:post:delete 1 --force
 php bin/magento blogarticle:post:import docs/samples/posts_import_sample.csv --dry-run
 php bin/magento blogarticle:post:import /path/to/posts.csv --update
+php bin/magento blogarticle:post:export --status=enabled
+php bin/magento blogarticle:comment:export --status=pending
+php bin/magento blogarticle:category:export
+php bin/magento blogarticle:tag:export
 php bin/magento blogarticle:category:list
 php bin/magento blogarticle:category:create --name="News"
 php bin/magento blogarticle:category:set-status 1 enabled
@@ -60,6 +65,8 @@ php bin/magento blogarticle:tag:delete 1 --force
 Required: `title`, `content`  
 Optional: `url_key`, `author`, `status`, `excerpt`, `category_id`, `tag_ids`, `store_id`, `published_at`, `meta_title`, `meta_description`, `featured_image`  
 `--update` overwrites rows whose `url_key` already exists.
+
+Export defaults to `var/export/blogarticle_*.csv`. Post export is import-compatible.
 
 ---
 
@@ -273,7 +280,7 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v2.8.0 |
+| Topic | Behavior in v2.9.0 |
 |---|---|
 | Multi-website / store view | Posts may target a store via `store_id` (0/NULL = all views) |
 | Translation of post content | Not supported; store raw title/content per row only |

@@ -8,7 +8,7 @@ Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style ar
 |---|---|
 | Package | `thirdparty/module-blog-article` |
 | Module | `ThirdParty_BlogArticle` |
-| Version | **2.8.0** |
+| Version | **2.9.0** |
 | License | [GPL-2.0](LICENSE) (`composer.json`: `GPL-2.0-only`) |
 
 ---
@@ -24,18 +24,17 @@ Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style ar
 
 ---
 
-## Feature scope (v2.8.0)
+## Feature scope (v2.9.0)
 
 ### Included
 
 - Posts: **author**, categories, tags, featured image, SEO meta, excerpt, scheduled publish, multi-store
-- Storefront: list (search + pagination), detail `/blog/<url_key>`, clean **category/tag URLs**, RSS, sitemap
+- Storefront: list/detail, clean category/tag URLs, breadcrumbs, share, prev/next, reading time, RSS, sitemap
 - **SEO**: Open Graph / Twitter cards + JSON-LD Article on post detail
 - **Comments**: moderation, spam protection, email notify, one-level replies, optional reCAPTCHA
-- Admin UI grids + **mass Enable/Disable/Delete** for posts, categories, and tags
-- Admin post **WYSIWYG** + **Media Gallery** featured-image picker
-- **CLI**: posts (`list|show|create|set-status|delete|import`), categories & tags (`list|create|set-status|delete`)
-- CSV bulk import sample under `docs/samples/`
+- Admin UI grids + mass Enable/Disable/Delete; WYSIWYG + Media Gallery
+- **CLI**: full post/category/tag ops + **CSV import/export** (posts, comments, categories, tags)
+- Sample CSV under `docs/samples/`
 - REST + GraphQL (read + write mutations for posts; public `submitBlogComment`)
 - ACL: posts, categories, tags, comments, config
 
@@ -101,7 +100,7 @@ Registered as `ThirdParty_BlogArticle` (`ThirdParty\BlogArticle`). On `setup:upg
 
 ```bash
 ./scripts/package_module.sh
-# → dist/thirdparty-blog-article-2.8.0.zip
+# → dist/thirdparty-blog-article-2.9.0.zip
 ```
 
 ### PDF conversion for Marketplace upload
