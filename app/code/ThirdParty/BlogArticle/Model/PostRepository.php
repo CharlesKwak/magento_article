@@ -5,6 +5,7 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
 use ThirdParty\BlogArticle\Api\Data\PostInterface;
 use ThirdParty\BlogArticle\Api\Data\PostInterfaceFactory;
 use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
@@ -20,6 +21,7 @@ class PostRepository implements PostRepositoryInterface
     private $categoryFactory;
     private $postTagLink;
     private $tagFactory;
+    private $storeManager;
 
     public function __construct(
         PostFactory $postFactory,
@@ -29,7 +31,8 @@ class PostRepository implements PostRepositoryInterface
         UrlKeyGenerator $urlKeyGenerator,
         CategoryFactory $categoryFactory,
         PostTagLink $postTagLink,
-        TagFactory $tagFactory
+        TagFactory $tagFactory,
+        StoreManagerInterface $storeManager
     ) {
         $this->postFactory = $postFactory;
         $this->collectionFactory = $collectionFactory;
@@ -39,6 +42,7 @@ class PostRepository implements PostRepositoryInterface
         $this->categoryFactory = $categoryFactory;
         $this->postTagLink = $postTagLink;
         $this->tagFactory = $tagFactory;
+        $this->storeManager = $storeManager;
     }
 
     public function getById($postId, $activeOnly = true)
@@ -73,6 +77,7 @@ class PostRepository implements PostRepositoryInterface
 
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
+        $this->postFilter->applyStoreId($collection, (int) $this->storeManager->getStore()->getId());
         $this->postFilter->applySearch($collection, $search !== null ? (string) $search : null);
         $this->postFilter->applyCategoryId($collection, $categoryId);
         $this->postFilter->applyTagId($collection, $tagId);
@@ -93,6 +98,7 @@ class PostRepository implements PostRepositoryInterface
         $tagId = $tagId !== null && $tagId !== '' ? (int) $tagId : null;
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
+        $this->postFilter->applyStoreId($collection, (int) $this->storeManager->getStore()->getId());
         $this->postFilter->applySearch($collection, $search !== null ? (string) $search : null);
         $this->postFilter->applyCategoryId($collection, $categoryId);
         $this->postFilter->applyTagId($collection, $tagId);
@@ -177,6 +183,10 @@ class PostRepository implements PostRepositoryInterface
             $publishedAt = trim((string) $post->getPublishedAt());
             $model->setPublishedAt($publishedAt !== '' ? $publishedAt : null);
         }
+        if ($post->getStoreId() !== null) {
+            $sid = (int) $post->getStoreId();
+            $model->setStoreId($sid > 0 ? $sid : null);
+        }
         $model->setIsActive((int) $isActive ? 1 : 0);
         $model->setCategoryId($categoryId);
 
@@ -218,6 +228,7 @@ class PostRepository implements PostRepositoryInterface
         $build = function (?int $categoryId) use ($postId, $limit) {
             $collection = $this->collectionFactory->create();
             $this->postFilter->applyActiveOnly($collection);
+            $this->postFilter->applyStoreId($collection, (int) $this->storeManager->getStore()->getId());
             $collection->addFieldToFilter('post_id', ['neq' => (int) $postId]);
             if ($categoryId) {
                 $collection->addFieldToFilter('category_id', $categoryId);
@@ -253,6 +264,7 @@ class PostRepository implements PostRepositoryInterface
         $data->setMetaDescription($post->getMetaDescription() ? (string) $post->getMetaDescription() : null);
         $data->setIsActive((int) $post->getIsActive());
         $data->setCategoryId($post->getCategoryId() ? (int) $post->getCategoryId() : null);
+        $data->setStoreId($post->getStoreId() ? (int) $post->getStoreId() : null);
         $data->setTagIds($this->postTagLink->getTagIdsForPost((int) $post->getId()));
         $data->setCreationTime((string) $post->getCreationTime());
         $data->setUpdateTime((string) $post->getUpdateTime());

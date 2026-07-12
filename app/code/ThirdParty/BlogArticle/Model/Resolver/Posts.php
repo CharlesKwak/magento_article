@@ -43,6 +43,7 @@ class Posts implements ResolverInterface
                 'meta_description' => $item->getMetaDescription(),
                 'is_active' => $item->getIsActive(),
                 'category_id' => $item->getCategoryId(),
+                'store_id' => $item->getStoreId(),
                 'tag_ids' => $item->getTagIds() ?: [],
                 'creation_time' => $item->getCreationTime(),
                 'update_time' => $item->getUpdateTime(),

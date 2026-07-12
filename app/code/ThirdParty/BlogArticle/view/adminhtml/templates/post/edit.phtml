@@ -63,6 +63,26 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
             </div>
 
             <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="store_id">
+                    <span><?= $block->escapeHtml(__('Store View')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <?php $selectedStore = (int) $post->getStoreId(); ?>
+                    <select class="admin__control-select" id="store_id" name="store_id" style="max-width:320px;">
+                        <?php foreach ($block->getStoreOptions() as $sid => $label): ?>
+                            <option value="<?= (int) $sid ?>"
+                                <?= $selectedStore === (int) $sid ? 'selected="selected"' : '' ?>>
+                                <?= $block->escapeHtml($label) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <p class="admin__field-note">
+                        <?= $block->escapeHtml(__('All Store Views shows the post on every storefront.')) ?>
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
                 <label class="admin__field-label" for="is_active">
                     <span><?= $block->escapeHtml(__('Status')) ?></span>
                 </label>

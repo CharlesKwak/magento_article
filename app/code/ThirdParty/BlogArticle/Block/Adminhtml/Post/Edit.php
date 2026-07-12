@@ -5,6 +5,7 @@ use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Data\Form\FormKey;
+use Magento\Store\Model\System\Store as SystemStore;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFactory;
 use ThirdParty\BlogArticle\Model\PostTagLink;
@@ -19,6 +20,7 @@ class Edit extends Template
     private $categoryCollectionFactory;
     private $tagCollectionFactory;
     private $postTagLink;
+    private $systemStore;
     private $post;
 
     public function __construct(
@@ -29,6 +31,7 @@ class Edit extends Template
         CategoryCollectionFactory $categoryCollectionFactory,
         TagCollectionFactory $tagCollectionFactory,
         PostTagLink $postTagLink,
+        SystemStore $systemStore,
         array $data = []
     ) {
         $this->postFactory = $postFactory;
@@ -37,6 +40,7 @@ class Edit extends Template
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->tagCollectionFactory = $tagCollectionFactory;
         $this->postTagLink = $postTagLink;
+        $this->systemStore = $systemStore;
         parent::__construct($context, $data);
     }
 
@@ -73,6 +77,26 @@ class Edit extends Template
         $collection->addFieldToFilter('is_active', 1);
         $collection->setOrder('name', 'ASC');
         return $collection;
+    }
+
+    /**
+     * Store view options: 0 = all stores.
+     *
+     * @return array [storeId => label]
+     */
+    public function getStoreOptions(): array
+    {
+        $options = [0 => (string) __('All Store Views')];
+        foreach ($this->systemStore->getStoreValuesForForm(false, false) as $group) {
+            if (!empty($group['value']) && is_array($group['value'])) {
+                foreach ($group['value'] as $store) {
+                    if (isset($store['value'], $store['label'])) {
+                        $options[(int) $store['value']] = (string) $store['label'];
+                    }
+                }
+            }
+        }
+        return $options;
     }
 
     /**

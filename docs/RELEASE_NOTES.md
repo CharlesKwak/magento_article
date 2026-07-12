@@ -1,5 +1,29 @@
 # Release Notes
 
+## 1.9.0 - 2026-07-12
+
+### Added
+- Multi-store field `store_id` (NULL/0 = all store views)
+- Admin Store View selector on post form
+- Storefront/API/RSS/sitemap filtered by current store
+- Magento **Sitemap** item provider for blog posts (`blog/{url_key}`)
+- Admin **UI Component** grid for Blog Posts (filters, paging, mass delete)
+- Mass delete action `blogarticle/post/massDelete`
+
+### Changed
+- Module / package version **1.9.0**
+- Sequence includes `Magento_Ui`, `Magento_Sitemap`
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+# regenerate sitemap from Marketing > SEO & Search > Site Map
+```
+
+---
+
 ## 1.8.0 - 2026-07-12
 
 ### Added

@@ -5,6 +5,7 @@ use Magento\Framework\App\Action\Forward;
 use Magento\Framework\App\ActionFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\RouterInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use ThirdParty\BlogArticle\Model\PostFactory;
 
 /**
@@ -30,13 +31,16 @@ class Router implements RouterInterface
      * @var PostFactory
      */
     private $postFactory;
+    private $storeManager;
 
     public function __construct(
         ActionFactory $actionFactory,
-        PostFactory $postFactory
+        PostFactory $postFactory,
+        StoreManagerInterface $storeManager
     ) {
         $this->actionFactory = $actionFactory;
         $this->postFactory = $postFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -66,6 +70,11 @@ class Router implements RouterInterface
         // Ignore query-like or multi-segment already handled above
         $post = $this->postFactory->create()->load($urlKey, 'url_key');
         if (!$post->getId() || !(int) $post->getIsActive()) {
+            return null;
+        }
+        $postStore = (int) $post->getStoreId();
+        $currentStore = (int) $this->storeManager->getStore()->getId();
+        if ($postStore > 0 && $postStore !== $currentStore) {
             return null;
         }
 

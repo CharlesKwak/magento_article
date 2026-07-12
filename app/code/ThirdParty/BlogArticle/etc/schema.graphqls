@@ -29,6 +29,7 @@ type BlogPost {
     meta_description: String
     is_active: Int
     category_id: Int
+    store_id: Int
     tag_ids: [Int]
     creation_time: String
     update_time: String

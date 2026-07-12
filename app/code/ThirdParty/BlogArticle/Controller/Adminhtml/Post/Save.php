@@ -71,6 +71,9 @@ class Save extends Action
         $metaDescription = isset($data['meta_description']) ? trim((string) $data['meta_description']) : '';
         $excerpt = isset($data['excerpt']) ? trim((string) $data['excerpt']) : '';
         $publishedAt = isset($data['published_at']) ? trim((string) $data['published_at']) : '';
+        $storeId = isset($data['store_id']) && $data['store_id'] !== ''
+            ? (int) $data['store_id']
+            : null;
 
         if ($title === '' || $content === '') {
             $this->messageManager->addErrorMessage(__('Title and content are required.'));
@@ -105,6 +108,7 @@ class Save extends Action
         $post->setPublishedAt($publishedAt !== '' ? $publishedAt : null);
         $post->setIsActive($isActive);
         $post->setCategoryId($categoryId);
+        $post->setStoreId($storeId && $storeId > 0 ? $storeId : null);
 
         try {
             $post->save();

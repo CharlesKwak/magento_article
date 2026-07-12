@@ -5,6 +5,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use ThirdParty\BlogArticle\Model\PostFactory;
 
 class View extends Action
@@ -23,17 +24,20 @@ class View extends Action
      * @var PostFactory
      */
     private $postFactory;
+    private $storeManager;
 
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
-        PostFactory $postFactory
+        PostFactory $postFactory,
+        StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->postFactory = $postFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -52,6 +56,12 @@ class View extends Action
         }
 
         if (!$post->getId() || !(int) $post->getIsActive()) {
+            $resultForward = $this->resultForwardFactory->create();
+            return $resultForward->forward('noroute');
+        }
+        $postStore = (int) $post->getStoreId();
+        $currentStore = (int) $this->storeManager->getStore()->getId();
+        if ($postStore > 0 && $postStore !== $currentStore) {
             $resultForward = $this->resultForwardFactory->create();
             return $resultForward->forward('noroute');
         }

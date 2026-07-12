@@ -90,4 +90,22 @@ class PostFilter
             )
         );
     }
+
+    /**
+     * Posts for all stores (NULL/0) or the given store view.
+     *
+     * @param Collection $collection
+     * @param int|null $storeId
+     * @return void
+     */
+    public function applyStoreId(Collection $collection, ?int $storeId): void
+    {
+        if ($storeId === null || $storeId <= 0) {
+            return;
+        }
+        $collection->getSelect()->where(
+            '(main_table.store_id IS NULL OR main_table.store_id = 0 OR main_table.store_id = ?)',
+            $storeId
+        );
+    }
 }

@@ -108,6 +108,18 @@ class Post extends DataObject implements PostInterface
         return $this->setData(self::CATEGORY_ID, $categoryId);
     }
 
+    public function getStoreId()
+    {
+        return $this->getData(self::STORE_ID) !== null && $this->getData(self::STORE_ID) !== ''
+            ? (int) $this->getData(self::STORE_ID)
+            : null;
+    }
+
+    public function setStoreId($storeId)
+    {
+        return $this->setData(self::STORE_ID, $storeId);
+    }
+
     public function getTagIds()
     {
         $ids = $this->getData(self::TAG_IDS);

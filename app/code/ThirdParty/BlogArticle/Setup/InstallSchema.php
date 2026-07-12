@@ -130,6 +130,12 @@ class InstallSchema implements InstallSchemaInterface
                     ['unsigned' => true, 'nullable' => true],
                     'Category ID'
                 )->addColumn(
+                    'store_id',
+                    Table::TYPE_SMALLINT,
+                    null,
+                    ['unsigned' => true, 'nullable' => true],
+                    'Store ID (NULL = all stores)'
+                )->addColumn(
                     'creation_time',
                     Table::TYPE_TIMESTAMP,
                     null,
@@ -158,6 +164,9 @@ class InstallSchema implements InstallSchemaInterface
                 )->addIndex(
                     $installer->getIdxName($postTableName, ['category_id']),
                     ['category_id']
+                )->addIndex(
+                    $installer->getIdxName($postTableName, ['store_id']),
+                    ['store_id']
                 )->setComment('BlogArticle Posts');
             $connection->createTable($postTable);
         }

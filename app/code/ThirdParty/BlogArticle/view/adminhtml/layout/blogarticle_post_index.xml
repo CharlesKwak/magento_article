@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="ThirdParty\\BlogArticle\\Block\\Adminhtml\\Post" name="blogarticle.post.list" template="ThirdParty_BlogArticle::post/list.phtml" />
+            <uiComponent name="blogarticle_post_listing"/>
         </referenceContainer>
     </body>
 </page>

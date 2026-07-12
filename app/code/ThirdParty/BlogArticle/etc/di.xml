@@ -13,4 +13,32 @@
                 type="ThirdParty\BlogArticle\Model\TagRepository"/>
     <preference for="ThirdParty\BlogArticle\Api\Data\TagInterface"
                 type="ThirdParty\BlogArticle\Model\Data\Tag"/>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="blogarticle_post_listing_data_source" xsi:type="string">
+                    ThirdParty\BlogArticle\Model\ResourceModel\Post\Grid\Collection
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="ThirdParty\BlogArticle\Model\ResourceModel\Post\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">thirdparty_blogarticle_post</argument>
+            <argument name="resourceModel" xsi:type="string">ThirdParty\BlogArticle\Model\ResourceModel\Post</argument>
+            <argument name="identifierName" xsi:type="string">post_id</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Sitemap\Model\ItemProvider\Composite">
+        <arguments>
+            <argument name="itemProviders" xsi:type="array">
+                <item name="blogarticle_posts" xsi:type="object">
+                    ThirdParty\BlogArticle\Model\Sitemap\ItemProvider\Posts
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

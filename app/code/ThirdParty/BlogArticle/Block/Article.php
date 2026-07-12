@@ -3,6 +3,7 @@ namespace ThirdParty\BlogArticle\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\StoreManagerInterface;
 use ThirdParty\BlogArticle\Model\CategoryFactory;
 use ThirdParty\BlogArticle\Model\Config;
 use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
@@ -63,6 +64,11 @@ class Article extends Template
     private $imageUploader;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @var Collection|null
      */
     private $posts;
@@ -88,6 +94,7 @@ class Article extends Template
         TagFactory $tagFactory,
         PostTagLink $postTagLink,
         FeaturedImageUploader $imageUploader,
+        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         $this->collectionFactory = $collectionFactory;
@@ -99,6 +106,7 @@ class Article extends Template
         $this->tagFactory = $tagFactory;
         $this->postTagLink = $postTagLink;
         $this->imageUploader = $imageUploader;
+        $this->storeManager = $storeManager;
         parent::__construct($context, $data);
     }
 
@@ -110,6 +118,7 @@ class Article extends Template
         if ($this->posts === null) {
             $collection = $this->collectionFactory->create();
             $this->postFilter->applyActiveOnly($collection);
+            $this->postFilter->applyStoreId($collection, (int) $this->storeManager->getStore()->getId());
             $this->postFilter->applySearch($collection, $this->getSearchQuery());
             $this->postFilter->applyCategoryId($collection, $this->getCategoryIdFilter());
             $this->postFilter->applyTagId($collection, $this->getTagIdFilter());

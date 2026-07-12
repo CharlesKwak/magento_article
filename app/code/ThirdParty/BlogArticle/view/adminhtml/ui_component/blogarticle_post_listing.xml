@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">blogarticle_post_listing.blogarticle_post_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="*/*/new"/>
+                <class>primary</class>
+                <label translate="true">Add New Post</label>
+            </button>
+        </buttons>
+        <spinner>blogarticle_post_columns</spinner>
+        <deps>
+            <dep>blogarticle_post_listing.blogarticle_post_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="blogarticle_post_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">post_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>ThirdParty_BlogArticle::posts</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"
+                      name="blogarticle_post_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>post_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filterSearch name="fulltext"/>
+        <filters name="listing_filters"/>
+        <massaction name="listing_massaction">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure you want to delete selected posts?</message>
+                        <title translate="true">Delete items</title>
+                    </confirm>
+                    <url path="blogarticle/post/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+        </massaction>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="blogarticle_post_columns">
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>post_id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="post_id">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="title">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Title</label>
+            </settings>
+        </column>
+        <column name="url_key">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">URL Key</label>
+            </settings>
+        </column>
+        <column name="is_active" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="ThirdParty\BlogArticle\Model\Source\IsActive"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Status</label>
+            </settings>
+        </column>
+        <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
+            <settings>
+                <label translate="true">Store View</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="creation_time" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Created</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="ThirdParty\BlogArticle\Ui\Component\Listing\Column\PostActions">
+            <settings>
+                <indexField>post_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

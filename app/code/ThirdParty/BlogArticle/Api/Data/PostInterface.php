@@ -16,6 +16,7 @@ interface PostInterface
     public const META_DESCRIPTION = 'meta_description';
     public const IS_ACTIVE = 'is_active';
     public const CATEGORY_ID = 'category_id';
+    public const STORE_ID = 'store_id';
     public const TAG_IDS = 'tag_ids';
     public const CREATION_TIME = 'creation_time';
     public const UPDATE_TIME = 'update_time';
@@ -61,6 +62,10 @@ interface PostInterface
     public function getCategoryId();
     /** @param int|null $categoryId @return $this */
     public function setCategoryId($categoryId);
+    /** @return int|null */
+    public function getStoreId();
+    /** @param int|null $storeId @return $this */
+    public function setStoreId($storeId);
     /** @return int[]|null */
     public function getTagIds();
     /** @param int[] $tagIds @return $this */
