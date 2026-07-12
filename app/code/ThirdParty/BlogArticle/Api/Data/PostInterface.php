@@ -8,6 +8,7 @@ interface PostInterface
 {
     public const POST_ID = 'post_id';
     public const TITLE = 'title';
+    public const AUTHOR = 'author';
     public const URL_KEY = 'url_key';
     public const CONTENT = 'content';
     public const EXCERPT = 'excerpt';
@@ -30,6 +31,10 @@ interface PostInterface
     public function getTitle();
     /** @param string $title @return $this */
     public function setTitle($title);
+    /** @return string|null */
+    public function getAuthor();
+    /** @param string|null $author @return $this */
+    public function setAuthor($author);
     /** @return string|null */
     public function getUrlKey();
     /** @param string $urlKey @return $this */

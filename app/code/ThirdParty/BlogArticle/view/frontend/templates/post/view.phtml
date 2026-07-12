@@ -19,13 +19,17 @@ $tagNames = $block->getTagNames();
     <?php else: ?>
         <article class="blog-post">
             <h1><?= $block->escapeHtml($post->getTitle()) ?></h1>
-            <?php if ($post->getCreationTime()): ?>
-                <p class="blog-meta">
+            <p class="blog-meta">
+                <?php if ($block->getAuthorName() !== ''): ?>
+                    <span class="blog-author"><?= $block->escapeHtml(__('By %1', $block->getAuthorName())) ?></span>
+                    <?php if ($post->getCreationTime()): ?>&middot;<?php endif; ?>
+                <?php endif; ?>
+                <?php if ($post->getCreationTime()): ?>
                     <time datetime="<?= $block->escapeHtmlAttr((string) $post->getCreationTime()) ?>">
                         <?= $block->escapeHtml((string) $post->getCreationTime()) ?>
                     </time>
-                </p>
-            <?php endif; ?>
+                <?php endif; ?>
+            </p>
             <?php if ($tagNames): ?>
                 <p class="blog-post-tags">
                     <?php foreach ($tagNames as $tagName): ?>

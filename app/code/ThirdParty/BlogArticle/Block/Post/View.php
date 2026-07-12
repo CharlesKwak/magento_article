@@ -264,6 +264,110 @@ class View extends Template implements IdentityInterface
      *
      * @return \ThirdParty\BlogArticle\Api\Data\CommentInterface[]
      */
+    public function getAuthorName(): string
+    {
+        $post = $this->getPost();
+        if (!$post) {
+            return '';
+        }
+        return trim((string) $post->getAuthor());
+    }
+
+    /**
+     * JSON-LD Article structured data for SEO.
+     */
+    public function getJsonLd(): string
+    {
+        $post = $this->getPost();
+        if (!$post) {
+            return '';
+        }
+        $description = trim((string) $post->getMetaDescription());
+        if ($description === '') {
+            $description = trim((string) $post->getExcerpt());
+        }
+        if ($description === '') {
+            $description = trim(preg_replace('/\s+/', ' ', strip_tags((string) $post->getContent())) ?? '');
+            if (function_exists('mb_substr')) {
+                $description = mb_substr($description, 0, 300);
+            } else {
+                $description = substr($description, 0, 300);
+            }
+        }
+        $data = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Article',
+            'headline' => (string) $post->getTitle(),
+            'description' => $description,
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => $this->getCanonicalUrl(),
+            ],
+            'datePublished' => $post->getPublishedAt()
+                ? (string) $post->getPublishedAt()
+                : (string) $post->getCreationTime(),
+            'dateModified' => (string) $post->getUpdateTime(),
+        ];
+        $author = $this->getAuthorName();
+        if ($author !== '') {
+            $data['author'] = [
+                '@type' => 'Person',
+                'name' => $author,
+            ];
+        }
+        $image = $this->getFeaturedImageUrl();
+        if ($image !== '') {
+            $data['image'] = [$image];
+        }
+        return (string) json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * Open Graph / Twitter meta pairs for the post head block.
+     *
+     * @return array<int, array{property?:string,name?:string,content:string}>
+     */
+    public function getSocialMetaTags(): array
+    {
+        $post = $this->getPost();
+        if (!$post) {
+            return [];
+        }
+        $title = $this->getPageTitle();
+        $description = $this->getMetaDescription();
+        if ($description === '') {
+            $description = trim((string) $post->getExcerpt());
+        }
+        if ($description === '') {
+            $description = trim(preg_replace('/\s+/', ' ', strip_tags((string) $post->getContent())) ?? '');
+            if (function_exists('mb_substr')) {
+                $description = mb_substr($description, 0, 200);
+            } else {
+                $description = substr($description, 0, 200);
+            }
+        }
+        $url = $this->getCanonicalUrl();
+        $image = $this->getFeaturedImageUrl();
+        $tags = [
+            ['property' => 'og:type', 'content' => 'article'],
+            ['property' => 'og:title', 'content' => $title],
+            ['property' => 'og:description', 'content' => $description],
+            ['property' => 'og:url', 'content' => $url],
+            ['name' => 'twitter:card', 'content' => $image !== '' ? 'summary_large_image' : 'summary'],
+            ['name' => 'twitter:title', 'content' => $title],
+            ['name' => 'twitter:description', 'content' => $description],
+        ];
+        if ($image !== '') {
+            $tags[] = ['property' => 'og:image', 'content' => $image];
+            $tags[] = ['name' => 'twitter:image', 'content' => $image];
+        }
+        $author = $this->getAuthorName();
+        if ($author !== '') {
+            $tags[] = ['property' => 'article:author', 'content' => $author];
+        }
+        return $tags;
+    }
+
     public function getRootComments(): array
     {
         $roots = [];

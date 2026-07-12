@@ -57,6 +57,7 @@ class Save extends Action
         }
 
         $title = isset($data['title']) ? trim((string) $data['title']) : '';
+        $author = isset($data['author']) ? trim((string) $data['author']) : '';
         $content = isset($data['content']) ? trim((string) $data['content']) : '';
         $urlKeyInput = isset($data['url_key']) ? trim((string) $data['url_key']) : '';
         $isActive = !empty($data['is_active']) ? 1 : 0;
@@ -99,6 +100,7 @@ class Save extends Action
         );
 
         $post->setTitle($title);
+        $post->setAuthor($author !== '' ? $author : null);
         $post->setContent($content);
         $post->setUrlKey($urlKey);
         $post->setExcerpt($excerpt !== '' ? $excerpt : null);

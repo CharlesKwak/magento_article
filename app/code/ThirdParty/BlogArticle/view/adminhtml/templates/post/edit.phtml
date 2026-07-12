@@ -45,6 +45,24 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
             </div>
 
             <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="author">
+                    <span><?= $block->escapeHtml(__('Author')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <input class="admin__control-text"
+                           type="text"
+                           id="author"
+                           name="author"
+                           maxlength="255"
+                           style="width:100%; max-width:640px;"
+                           value="<?= $block->escapeHtmlAttr((string) $post->getAuthor()) ?>"/>
+                    <p class="admin__field-note">
+                        <?= $block->escapeHtml(__('Optional display name shown on the storefront and in Open Graph / JSON-LD.')) ?>
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
                 <label class="admin__field-label" for="url_key">
                     <span><?= $block->escapeHtml(__('URL Key')) ?></span>
                 </label>

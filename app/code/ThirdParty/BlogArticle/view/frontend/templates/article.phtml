@@ -6,6 +6,11 @@ $lastPage = $block->getLastPageNumber();
 $searchQuery = $block->getSearchQuery();
 ?>
 <div class="blog-post-list">
+    <?php if ($block->getFilterHeading() !== ''): ?>
+        <h1 class="blog-filter-heading" style="margin-bottom:0.75rem;">
+            <?= $block->escapeHtml($block->getFilterHeading()) ?>
+        </h1>
+    <?php endif; ?>
     <p class="blog-rss" style="margin-bottom:0.75rem;">
         <a href="<?= $block->escapeUrl($block->getRssUrl()) ?>" rel="alternate" type="application/rss+xml">
             <?= $block->escapeHtml(__('RSS feed')) ?>
@@ -106,6 +111,10 @@ $searchQuery = $block->getSearchQuery();
                     </a>
                 </h2>
                 <p class="blog-meta">
+                    <?php if ($post->getAuthor()): ?>
+                        <span class="blog-author"><?= $block->escapeHtml((string) $post->getAuthor()) ?></span>
+                        &middot;
+                    <?php endif; ?>
                     <?php if ($block->getCategoryName($post) !== ''): ?>
                         <span class="blog-category"><?= $block->escapeHtml($block->getCategoryName($post)) ?></span>
                         &middot;

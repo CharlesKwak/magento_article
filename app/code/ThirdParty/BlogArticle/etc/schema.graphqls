@@ -32,6 +32,7 @@ type BlogComment {
 type BlogPost {
     post_id: Int
     title: String
+    author: String
     url_key: String
     content: String
     excerpt: String
@@ -61,6 +62,7 @@ type BlogPostList {
 
 input BlogPostInput {
     title: String
+    author: String
     url_key: String
     content: String
     excerpt: String

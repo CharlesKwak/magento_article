@@ -77,6 +77,12 @@
                 <label translate="true">Title</label>
             </settings>
         </column>
+        <column name="author">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Author</label>
+            </settings>
+        </column>
         <column name="url_key">
             <settings>
                 <filter>text</filter>

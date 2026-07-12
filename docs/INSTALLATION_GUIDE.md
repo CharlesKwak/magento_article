@@ -4,7 +4,7 @@ This guide explains how to install and verify the **ThirdParty_BlogArticle** mod
 
 Module package name: `thirdparty/module-blog-article`  
 Module code name: `ThirdParty_BlogArticle`  
-Current version: **2.3.0**
+Current version: **2.4.0**
 
 ---
 
@@ -18,7 +18,7 @@ After a successful install, the module:
 4. Exposes a **storefront list page** at `/blog/index/index` (frontName: `blog`).
 5. Exposes an **Admin list + CRUD** under **Content → Blog Posts** (Add / Edit / Delete).
 
-### Capability matrix (v2.3.0)
+### Capability matrix (v2.4.0)
 
 | Capability | Status |
 |---|---|
@@ -30,6 +30,8 @@ After a successful install, the module:
 | URL key + publish status + schedule | **Supported** |
 | Categories / tags / multi-store | **Supported** |
 | Comments (moderation, replies, spam, email, reCAPTCHA) | **Supported** |
+| Post author + OG/JSON-LD SEO | **Supported** |
+| Clean `/blog/category|tag/{url_key}` URLs | **Supported** |
 | REST API (read + write surfaces) | **Supported** |
 | GraphQL (read + mutations + comments) | **Supported** |
 | Configurable page size / comments / media | **Supported** (Admin config) |

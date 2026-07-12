@@ -1,0 +1,25 @@
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Post\View $block */
+if (!$block->getPost()) {
+    return;
+}
+foreach ($block->getSocialMetaTags() as $tag):
+    $content = $block->escapeHtmlAttr((string) ($tag['content'] ?? ''));
+    if (isset($tag['property'])):
+        ?>
+<meta property="<?= $block->escapeHtmlAttr((string) $tag['property']) ?>" content="<?= /* @noEscape */ $content ?>"/>
+        <?php
+    elseif (isset($tag['name'])):
+        ?>
+<meta name="<?= $block->escapeHtmlAttr((string) $tag['name']) ?>" content="<?= /* @noEscape */ $content ?>"/>
+        <?php
+    endif;
+endforeach;
+$jsonLd = $block->getJsonLd();
+if ($jsonLd !== ''):
+    ?>
+<script type="application/ld+json">
+<?= /* @noEscape */ $jsonLd ?>
+</script>
+    <?php
+endif;

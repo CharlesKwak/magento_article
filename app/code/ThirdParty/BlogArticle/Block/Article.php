@@ -329,12 +329,56 @@ class Article extends Template implements IdentityInterface
      */
     public function getCategoryFilterUrl(string $urlKey): string
     {
-        return $this->getUrl('blog/index/index', ['cat' => $urlKey]);
+        $urlKey = trim($urlKey);
+        if ($urlKey !== '') {
+            return $this->getUrl('', ['_direct' => 'blog/category/' . $urlKey]);
+        }
+        return $this->getUrl('blog/index/index');
     }
 
     public function getTagFilterUrl(string $urlKey): string
     {
-        return $this->getUrl('blog/index/index', ['tag' => $urlKey]);
+        $urlKey = trim($urlKey);
+        if ($urlKey !== '') {
+            return $this->getUrl('', ['_direct' => 'blog/tag/' . $urlKey]);
+        }
+        return $this->getUrl('blog/index/index');
+    }
+
+    /**
+     * Heading when a category or tag filter is active.
+     */
+    public function getFilterHeading(): string
+    {
+        $catKey = $this->getCategoryKeyFilter();
+        if ($catKey !== '') {
+            $category = $this->categoryFactory->create()->load($catKey, 'url_key');
+            if ($category->getId()) {
+                return (string) __('Category: %1', $category->getName());
+            }
+        }
+        $categoryId = $this->getCategoryIdFilter();
+        if ($categoryId) {
+            $category = $this->categoryFactory->create()->load($categoryId);
+            if ($category->getId()) {
+                return (string) __('Category: %1', $category->getName());
+            }
+        }
+        $tagKey = $this->getTagKeyFilter();
+        if ($tagKey !== '') {
+            $tag = $this->tagFactory->create()->load($tagKey, 'url_key');
+            if ($tag->getId()) {
+                return (string) __('Tag: %1', $tag->getName());
+            }
+        }
+        $tagId = $this->getTagIdFilter();
+        if ($tagId) {
+            $tag = $this->tagFactory->create()->load($tagId);
+            if ($tag->getId()) {
+                return (string) __('Tag: %1', $tag->getName());
+            }
+        }
+        return '';
     }
 
     /**

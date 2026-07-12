@@ -24,6 +24,6 @@ class CommentsAndMutationsFilesTest extends TestCase
     public function testModuleVersionIs210(): void
     {
         $c = file_get_contents(dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.3.0"', $c);
+        $this->assertStringContainsString('setup_version="2.4.0"', $c);
     }
 }

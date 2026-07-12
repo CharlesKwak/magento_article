@@ -35,6 +35,7 @@ class Posts implements ResolverInterface
             $mapped[] = [
                 'post_id' => $item->getPostId(),
                 'title' => $item->getTitle(),
+                'author' => $item->getAuthor(),
                 'url_key' => $item->getUrlKey(),
                 'content' => $item->getContent(),
                 'excerpt' => $item->getExcerpt(),

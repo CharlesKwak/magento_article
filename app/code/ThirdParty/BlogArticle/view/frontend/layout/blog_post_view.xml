@@ -3,6 +3,11 @@
       layout="1column"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceBlock name="head.additional">
+            <block class="ThirdParty\BlogArticle\Block\Post\View"
+                   name="blog.post.seo"
+                   template="ThirdParty_BlogArticle::post/seo.phtml"/>
+        </referenceBlock>
         <referenceContainer name="content">
             <block class="ThirdParty\BlogArticle\Block\Post\View"
                    name="blog.post.view"

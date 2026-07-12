@@ -26,6 +26,16 @@ class Post extends DataObject implements PostInterface
         return $this->setData(self::TITLE, $title);
     }
 
+    public function getAuthor()
+    {
+        return $this->getData(self::AUTHOR);
+    }
+
+    public function setAuthor($author)
+    {
+        return $this->setData(self::AUTHOR, $author);
+    }
+
     public function getUrlKey()
     {
         return $this->getData(self::URL_KEY);

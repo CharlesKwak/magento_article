@@ -1,5 +1,30 @@
 # Release Notes
 
+## 2.4.0 - 2026-07-12
+
+### Added
+- **Author** field on posts (Admin, storefront list/detail, REST data model, GraphQL `author`)
+- **Clean category/tag URLs**:
+  - `/blog/category/{url_key}`
+  - `/blog/tag/{url_key}`
+  - Legacy `?cat=` / `?tag=` query filters still work
+- **SEO**: Open Graph + Twitter Card meta tags and **JSON-LD Article** on post detail
+- List page heading and document title when a category/tag filter is active
+- Schema patch `AddAuthorColumn`
+
+### Changed
+- Module / package version **2.4.0**
+- Category/tag nav links use clean URLs
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+
+---
+
 ## 2.3.0 - 2026-07-12
 
 ### Added

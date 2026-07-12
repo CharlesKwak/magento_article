@@ -169,6 +169,9 @@ class PostRepository implements PostRepositoryInterface
         $model->setTitle($title);
         $model->setContent($content);
         $model->setUrlKey($urlKey);
+        if ($post->getAuthor() !== null) {
+            $model->setAuthor(trim((string) $post->getAuthor()) ?: null);
+        }
         if ($post->getFeaturedImage() !== null) {
             $model->setFeaturedImage(trim((string) $post->getFeaturedImage()) ?: null);
         }
@@ -277,6 +280,7 @@ class PostRepository implements PostRepositoryInterface
         $data = $this->dataFactory->create();
         $data->setPostId((int) $post->getId());
         $data->setTitle((string) $post->getTitle());
+        $data->setAuthor($post->getAuthor() ? (string) $post->getAuthor() : null);
         $data->setUrlKey((string) $post->getUrlKey());
         $data->setContent((string) $post->getContent());
         $data->setExcerpt($post->getExcerpt() ? (string) $post->getExcerpt() : null);

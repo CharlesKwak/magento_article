@@ -82,6 +82,12 @@ class InstallSchema implements InstallSchemaInterface
                     ['nullable' => false],
                     'Title'
                 )->addColumn(
+                    'author',
+                    Table::TYPE_TEXT,
+                    255,
+                    ['nullable' => true],
+                    'Post author display name'
+                )->addColumn(
                     'url_key',
                     Table::TYPE_TEXT,
                     255,
