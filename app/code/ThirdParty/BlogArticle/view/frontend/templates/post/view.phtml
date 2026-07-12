@@ -61,13 +61,21 @@ $tagNames = $block->getTagNames();
         <?php endif; ?>
 
         <?php if ($block->isCommentsEnabled()): ?>
-            <?php $comments = $block->getComments(); ?>
-            <section class="blog-comments" style="margin-top:2rem;">
+            <?php
+            $rootComments = $block->getRootComments();
+            $recaptchaEnabled = $block->isRecaptchaEnabled();
+            ?>
+            <section class="blog-comments" id="comments" style="margin-top:2rem;">
                 <h2><?= $block->escapeHtml(__('Comments')) ?></h2>
-                <?php if ($comments): ?>
+                <?php if ($rootComments): ?>
                     <ul class="blog-comment-list" style="list-style:none;padding:0;">
-                        <?php foreach ($comments as $comment): ?>
-                            <li class="blog-comment" style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid #eee;">
+                        <?php foreach ($rootComments as $comment): ?>
+                            <?php
+                            $commentId = (int) $comment->getCommentId();
+                            $replies = $block->getReplyComments($commentId);
+                            ?>
+                            <li class="blog-comment" id="comment-<?= $commentId ?>"
+                                style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid #eee;">
                                 <strong><?= $block->escapeHtml($comment->getAuthorName()) ?></strong>
                                 <?php if ($comment->getCreationTime()): ?>
                                     <span class="blog-comment-date">
@@ -77,6 +85,33 @@ $tagNames = $block->getTagNames();
                                 <div class="blog-comment-body" style="margin-top:0.35rem;">
                                     <?= $block->escapeHtml($comment->getContent()) ?>
                                 </div>
+                                <p class="blog-comment-actions" style="margin:0.5rem 0 0;">
+                                    <a href="#blog-comment-form"
+                                       class="blog-comment-reply"
+                                       data-parent-id="<?= $commentId ?>"
+                                       data-author="<?= $block->escapeHtmlAttr((string) $comment->getAuthorName()) ?>">
+                                        <?= $block->escapeHtml(__('Reply')) ?>
+                                    </a>
+                                </p>
+                                <?php if ($replies): ?>
+                                    <ul class="blog-comment-replies" style="list-style:none;padding:0.75rem 0 0 1.25rem;margin:0;">
+                                        <?php foreach ($replies as $reply): ?>
+                                            <li class="blog-comment blog-comment--reply"
+                                                id="comment-<?= (int) $reply->getCommentId() ?>"
+                                                style="margin-bottom:0.75rem;padding:0.5rem 0.75rem;background:#f9f9f9;border-radius:4px;">
+                                                <strong><?= $block->escapeHtml($reply->getAuthorName()) ?></strong>
+                                                <?php if ($reply->getCreationTime()): ?>
+                                                    <span class="blog-comment-date">
+                                                        · <?= $block->escapeHtml((string) $reply->getCreationTime()) ?>
+                                                    </span>
+                                                <?php endif; ?>
+                                                <div class="blog-comment-body" style="margin-top:0.35rem;">
+                                                    <?= $block->escapeHtml($reply->getContent()) ?>
+                                                </div>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php endif; ?>
                             </li>
                         <?php endforeach; ?>
                     </ul>
@@ -84,12 +119,22 @@ $tagNames = $block->getTagNames();
                     <p><?= $block->escapeHtml(__('No comments yet. Be the first to comment.')) ?></p>
                 <?php endif; ?>
 
-                <form class="blog-comment-form" method="post"
+                <?php if ($recaptchaEnabled): ?>
+                    <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"></script>
+                <?php endif; ?>
+
+                <form class="blog-comment-form" id="blog-comment-form" method="post"
                       action="<?= $block->escapeUrl($block->getCommentFormAction()) ?>"
                       style="margin-top:1.25rem;max-width:480px;">
                     <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKeyValue()) ?>"/>
                     <input type="hidden" name="post_id" value="<?= (int) $post->getId() ?>"/>
                     <input type="hidden" name="url_key" value="<?= $block->escapeHtmlAttr((string) $post->getUrlKey()) ?>"/>
+                    <input type="hidden" name="parent_id" id="blog_comment_parent_id" value=""/>
+                    <p id="blog-comment-reply-hint" style="display:none;margin-bottom:0.75rem;font-size:0.9em;color:#666;">
+                        <?= $block->escapeHtml(__('Replying to')) ?>
+                        <strong id="blog-comment-reply-author"></strong>
+                        · <a href="#blog-comment-form" id="blog-comment-reply-cancel"><?= $block->escapeHtml(__('Cancel reply')) ?></a>
+                    </p>
                     <?php if ($block->isSpamProtectionEnabled()): ?>
                         <input type="hidden"
                                name="<?= $block->escapeHtmlAttr($block->getCommentTimestampField()) ?>"
@@ -117,10 +162,45 @@ $tagNames = $block->getTagNames();
                         <label for="comment_content"><?= $block->escapeHtml(__('Comment')) ?> *</label><br/>
                         <textarea id="comment_content" name="content" required="required" rows="4" maxlength="5000" style="width:100%;"></textarea>
                     </div>
+                    <?php if ($recaptchaEnabled): ?>
+                        <div class="g-recaptcha"
+                             data-sitekey="<?= $block->escapeHtmlAttr($block->getRecaptchaSiteKey()) ?>"
+                             style="margin-bottom:0.75rem;"></div>
+                    <?php endif; ?>
                     <button type="submit" class="action primary">
                         <span><?= $block->escapeHtml(__('Submit comment')) ?></span>
                     </button>
                 </form>
+                <script>
+                (function () {
+                    var parentInput = document.getElementById('blog_comment_parent_id');
+                    var hint = document.getElementById('blog-comment-reply-hint');
+                    var authorEl = document.getElementById('blog-comment-reply-author');
+                    var cancel = document.getElementById('blog-comment-reply-cancel');
+                    function clearReply() {
+                        if (parentInput) { parentInput.value = ''; }
+                        if (hint) { hint.style.display = 'none'; }
+                        if (authorEl) { authorEl.textContent = ''; }
+                    }
+                    document.querySelectorAll('.blog-comment-reply').forEach(function (link) {
+                        link.addEventListener('click', function () {
+                            var pid = link.getAttribute('data-parent-id') || '';
+                            var name = link.getAttribute('data-author') || '';
+                            if (parentInput) { parentInput.value = pid; }
+                            if (authorEl) { authorEl.textContent = name; }
+                            if (hint) { hint.style.display = 'block'; }
+                            var content = document.getElementById('comment_content');
+                            if (content) { content.focus(); }
+                        });
+                    });
+                    if (cancel) {
+                        cancel.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            clearReply();
+                        });
+                    }
+                })();
+                </script>
             </section>
         <?php endif; ?>
     <?php endif; ?>

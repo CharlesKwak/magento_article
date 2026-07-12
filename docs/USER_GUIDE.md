@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **2.2.0**
+Version covered: **2.3.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -23,18 +23,13 @@ This module provides a **database-backed blog post list** with Admin management:
 | REST | `/rest/V1/blogarticle/posts*` | Public read + search |
 | GraphQL | `/graphql` (`blogPosts`, `blogPost`) | Public read + search |
 
-### What you can do in v2.2.0
+### What you can do in v2.3.0
 
-- Search and page through the storefront blog list.
-- Filter Admin posts by keyword and status.
-- Integrate via REST or GraphQL.
-- Configure list page size per store.
-
-### Not available yet
-
-- Categories, tags, authors, scheduled publish.
-- Write REST/GraphQL mutations / Magento CLI for posts.
-- Per-store-view content.
+- Search and page through the storefront blog list; open clean URLs.
+- Manage posts, categories, tags, and comments in Admin.
+- Moderate comments; optional spam protection, email notify, reCAPTCHA, and one-level replies.
+- Integrate via REST or GraphQL (including `submitBlogComment` and admin post mutations).
+- Configure list page size, comments, and media limits per store.
 
 ---
 
@@ -248,9 +243,9 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v2.2.0 |
+| Topic | Behavior in v2.3.0 |
 |---|---|
-| Multi-website / store view | No `store_id` column; **all posts show on all store views** that can reach the route |
+| Multi-website / store view | Posts may target a store via `store_id` (0/NULL = all views) |
 | Translation of post content | Not supported; store raw title/content per row only |
 | Magento i18n for UI strings | Admin labels use `__()`; no extensive phrase package |
 
@@ -268,7 +263,7 @@ A: **Content → Blog Posts → Add New Post**.
 A: Edit the post and set **Status** to **Disabled**.
 
 **Q: Can customers comment on articles?**  
-A: No.
+A: Yes, when **Enable Comments** is on. Comments may require Admin approval. Replies are one level deep.
 
 **Q: Does the module index posts in Elasticsearch?**  
 A: No. Listing is a direct DB collection load.
@@ -295,12 +290,34 @@ A: Root `LICENSE` is GPL-2.0; `composer.json` uses `GPL-2.0-only`.
 
 ## Comments
 
-- Storefront: comment form on post detail (when enabled).
-- Admin: **Content → Blog Comments** to approve or delete.
+- Storefront: comment form on post detail (when enabled). Use **Reply** under a comment for a nested reply.
+- Admin: **Content → Blog Comments** to approve or delete (Parent ID column shows reply linkage).
 - Config: **Stores → Configuration → Third Party → Blog Article → Comments**.
-
 
 ### Comment spam & email
 
 - Storefront forms include a honeypot and minimum wait time when spam protection is enabled.
 - New comments can email a store owner (configure notification address under Blog Article → Comments).
+
+### reCAPTCHA (optional)
+
+1. Create keys at [Google reCAPTCHA admin](https://www.google.com/recaptcha/admin) (v2 “I’m not a robot” or v3).
+2. Enable **Google reCAPTCHA**, set site key and secret key.
+3. For v3, set **Minimum Score** (default 0.5).
+4. GraphQL clients must pass `recaptcha_token` when reCAPTCHA is enabled.
+
+```graphql
+mutation {
+  submitBlogComment(
+    post_id: 1
+    author_name: "Ada"
+    content: "Great post"
+    parent_id: 5
+    recaptcha_token: "..."
+  ) {
+    comment_id
+    parent_id
+    is_approved
+  }
+}
+```

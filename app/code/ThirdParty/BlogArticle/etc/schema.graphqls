@@ -21,6 +21,7 @@ type BlogTag {
 type BlogComment {
     comment_id: Int
     post_id: Int
+    parent_id: Int
     author_name: String
     author_email: String
     content: String
@@ -117,7 +118,9 @@ type Mutation {
         author_name: String!
         author_email: String
         content: String!
+        parent_id: Int
+        recaptcha_token: String
     ): BlogComment
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\SubmitBlogComment")
-    @doc(description: "Submit a storefront comment (public when comments enabled)")
+    @doc(description: "Submit a storefront comment (public when comments enabled). Optional parent_id for one-level replies; recaptcha_token required when reCAPTCHA is enabled.")
 }

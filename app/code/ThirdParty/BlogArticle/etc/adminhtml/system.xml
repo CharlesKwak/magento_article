@@ -60,6 +60,37 @@
                         <field id="notify_enabled">1</field>
                     </depends>
                 </field>
+                <field id="recaptcha_enabled" translate="label comment" type="select" sortOrder="70"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Google reCAPTCHA</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Optional. Requires site key and secret from Google reCAPTCHA admin. Supports v2 checkbox and v3 (score).</comment>
+                </field>
+                <field id="recaptcha_site_key" translate="label" type="text" sortOrder="80"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>reCAPTCHA Site Key</label>
+                    <depends>
+                        <field id="recaptcha_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="recaptcha_secret_key" translate="label comment" type="obscure" sortOrder="90"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>reCAPTCHA Secret Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment>Masked and encrypted at rest. Required when reCAPTCHA is enabled.</comment>
+                    <depends>
+                        <field id="recaptcha_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="recaptcha_min_score" translate="label comment" type="text" sortOrder="100"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>reCAPTCHA v3 Minimum Score</label>
+                    <comment>0.0–1.0. Used only when Google returns a score (v3). Default: 0.5.</comment>
+                    <validate>validate-number validate-number-range number-range-0-1</validate>
+                    <depends>
+                        <field id="recaptcha_enabled">1</field>
+                    </depends>
+                </field>
             </group>
             <group id="media" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Media</label>

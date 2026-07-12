@@ -5,6 +5,7 @@ interface CommentInterface
 {
     public const COMMENT_ID = 'comment_id';
     public const POST_ID = 'post_id';
+    public const PARENT_ID = 'parent_id';
     public const AUTHOR_NAME = 'author_name';
     public const AUTHOR_EMAIL = 'author_email';
     public const CONTENT = 'content';
@@ -19,6 +20,10 @@ interface CommentInterface
     public function getPostId();
     /** @param int $postId @return $this */
     public function setPostId($postId);
+    /** @return int|null */
+    public function getParentId();
+    /** @param int|null $parentId @return $this */
+    public function setParentId($parentId);
     /** @return string|null */
     public function getAuthorName();
     /** @param string $authorName @return $this */

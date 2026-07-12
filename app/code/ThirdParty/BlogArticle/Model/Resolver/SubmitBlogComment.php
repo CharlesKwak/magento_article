@@ -9,21 +9,25 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use ThirdParty\BlogArticle\Api\CommentRepositoryInterface;
 use ThirdParty\BlogArticle\Api\Data\CommentInterfaceFactory;
 use ThirdParty\BlogArticle\Model\CommentSpamGuard;
+use ThirdParty\BlogArticle\Model\RecaptchaValidator;
 
 class SubmitBlogComment implements ResolverInterface
 {
     private $commentRepository;
     private $commentFactory;
     private $spamGuard;
+    private $recaptchaValidator;
 
     public function __construct(
         CommentRepositoryInterface $commentRepository,
         CommentInterfaceFactory $commentFactory,
-        CommentSpamGuard $spamGuard
+        CommentSpamGuard $spamGuard,
+        RecaptchaValidator $recaptchaValidator
     ) {
         $this->commentRepository = $commentRepository;
         $this->commentFactory = $commentFactory;
         $this->spamGuard = $spamGuard;
+        $this->recaptchaValidator = $recaptchaValidator;
     }
 
     public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
@@ -32,6 +36,8 @@ class SubmitBlogComment implements ResolverInterface
         $author = isset($args['author_name']) ? trim((string) $args['author_name']) : '';
         $content = isset($args['content']) ? trim((string) $args['content']) : '';
         $email = isset($args['author_email']) ? trim((string) $args['author_email']) : '';
+        $parentId = isset($args['parent_id']) ? (int) $args['parent_id'] : 0;
+        $token = isset($args['recaptcha_token']) ? (string) $args['recaptcha_token'] : '';
 
         if ($postId <= 0 || $author === '' || $content === '') {
             throw new GraphQlInputException(__('post_id, author_name and content are required.'));
@@ -44,9 +50,13 @@ class SubmitBlogComment implements ResolverInterface
                 CommentSpamGuard::HONEYPOT_FIELD => '',
                 CommentSpamGuard::TIMESTAMP_FIELD => time() - 10,
             ]);
+            $this->recaptchaValidator->assertValid($token !== '' ? $token : null);
 
             $comment = $this->commentFactory->create();
             $comment->setPostId($postId);
+            if ($parentId > 0) {
+                $comment->setParentId($parentId);
+            }
             $comment->setAuthorName($author);
             $comment->setAuthorEmail($email !== '' ? $email : null);
             $comment->setContent($content);
@@ -58,6 +68,7 @@ class SubmitBlogComment implements ResolverInterface
         return [
             'comment_id' => $saved->getCommentId(),
             'post_id' => $saved->getPostId(),
+            'parent_id' => $saved->getParentId(),
             'author_name' => $saved->getAuthorName(),
             'author_email' => $saved->getAuthorEmail(),
             'content' => $saved->getContent(),

@@ -9,6 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use ThirdParty\BlogArticle\Api\CommentRepositoryInterface;
 use ThirdParty\BlogArticle\Api\Data\CommentInterfaceFactory;
 use ThirdParty\BlogArticle\Model\CommentSpamGuard;
+use ThirdParty\BlogArticle\Model\RecaptchaValidator;
 
 class Post extends Action implements HttpPostActionInterface
 {
@@ -16,19 +17,22 @@ class Post extends Action implements HttpPostActionInterface
     private $commentRepository;
     private $commentFactory;
     private $spamGuard;
+    private $recaptchaValidator;
 
     public function __construct(
         Context $context,
         FormKeyValidator $formKeyValidator,
         CommentRepositoryInterface $commentRepository,
         CommentInterfaceFactory $commentFactory,
-        CommentSpamGuard $spamGuard
+        CommentSpamGuard $spamGuard,
+        RecaptchaValidator $recaptchaValidator
     ) {
         parent::__construct($context);
         $this->formKeyValidator = $formKeyValidator;
         $this->commentRepository = $commentRepository;
         $this->commentFactory = $commentFactory;
         $this->spamGuard = $spamGuard;
+        $this->recaptchaValidator = $recaptchaValidator;
     }
 
     public function execute()
@@ -48,10 +52,17 @@ class Post extends Action implements HttpPostActionInterface
         try {
             $params = $this->getRequest()->getParams();
             $this->spamGuard->assertNotSpam($params);
+            $this->recaptchaValidator->assertValid(
+                $this->getRequest()->getParam('g-recaptcha-response')
+            );
 
             /** @var \ThirdParty\BlogArticle\Api\Data\CommentInterface $comment */
             $comment = $this->commentFactory->create();
             $comment->setPostId($postId);
+            $parentId = (int) $this->getRequest()->getParam('parent_id', 0);
+            if ($parentId > 0) {
+                $comment->setParentId($parentId);
+            }
             $comment->setAuthorName((string) $this->getRequest()->getParam('author_name', ''));
             $comment->setAuthorEmail((string) $this->getRequest()->getParam('author_email', ''));
             $comment->setContent((string) $this->getRequest()->getParam('content', ''));
@@ -67,6 +78,6 @@ class Post extends Action implements HttpPostActionInterface
             $this->messageManager->addErrorMessage(__('Unable to submit comment.'));
         }
 
-        return $resultRedirect->setUrl($backUrl);
+        return $resultRedirect->setUrl($backUrl . '#comments');
     }
 }

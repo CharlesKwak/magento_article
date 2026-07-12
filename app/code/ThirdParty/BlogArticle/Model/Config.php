@@ -2,6 +2,7 @@
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\ScopeInterface;
 
 class Config
@@ -13,13 +14,21 @@ class Config
     public const XML_PATH_COMMENTS_MIN_SECONDS = 'blogarticle/comments/min_submit_seconds';
     public const XML_PATH_COMMENTS_NOTIFY = 'blogarticle/comments/notify_enabled';
     public const XML_PATH_COMMENTS_NOTIFY_EMAIL = 'blogarticle/comments/notify_email';
+    public const XML_PATH_RECAPTCHA_ENABLED = 'blogarticle/comments/recaptcha_enabled';
+    public const XML_PATH_RECAPTCHA_SITE_KEY = 'blogarticle/comments/recaptcha_site_key';
+    public const XML_PATH_RECAPTCHA_SECRET_KEY = 'blogarticle/comments/recaptcha_secret_key';
+    public const XML_PATH_RECAPTCHA_MIN_SCORE = 'blogarticle/comments/recaptcha_min_score';
     public const XML_PATH_UPLOAD_MAX_KB = 'blogarticle/media/max_upload_kb';
 
     private $scopeConfig;
+    private $encryptor;
 
-    public function __construct(ScopeConfigInterface $scopeConfig)
-    {
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+        EncryptorInterface $encryptor
+    ) {
         $this->scopeConfig = $scopeConfig;
+        $this->encryptor = $encryptor;
     }
 
     public function getPageSize(?int $storeId = null): int
@@ -91,7 +100,6 @@ class Config
         if ($email !== '') {
             return $email;
         }
-        // Fall back to general contact email
         return trim((string) $this->scopeConfig->getValue(
             'trans_email/ident_general/email',
             ScopeInterface::SCOPE_STORE,
@@ -99,9 +107,59 @@ class Config
         ));
     }
 
-    /**
-     * Max featured image upload size in kilobytes.
-     */
+    public function isRecaptchaEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_RECAPTCHA_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    public function getRecaptchaSiteKey(?int $storeId = null): string
+    {
+        return trim((string) $this->scopeConfig->getValue(
+            self::XML_PATH_RECAPTCHA_SITE_KEY,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        ));
+    }
+
+    public function getRecaptchaSecretKey(?int $storeId = null): string
+    {
+        $value = trim((string) $this->scopeConfig->getValue(
+            self::XML_PATH_RECAPTCHA_SECRET_KEY,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        ));
+        if ($value === '') {
+            return '';
+        }
+        // Encrypted backend stores ciphertext; decrypt when possible
+        try {
+            $decrypted = $this->encryptor->decrypt($value);
+            if (is_string($decrypted) && $decrypted !== '') {
+                return trim($decrypted);
+            }
+        } catch (\Exception $e) {
+            // fall through to raw value
+        }
+        return $value;
+    }
+
+    public function getRecaptchaMinScore(?int $storeId = null): float
+    {
+        $score = (float) $this->scopeConfig->getValue(
+            self::XML_PATH_RECAPTCHA_MIN_SCORE,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        if ($score <= 0 || $score > 1) {
+            return 0.5;
+        }
+        return $score;
+    }
+
     public function getMaxUploadKb(?int $storeId = null): int
     {
         $kb = (int) $this->scopeConfig->getValue(

@@ -78,8 +78,24 @@ class CommentRepository implements CommentRepositoryInterface
             throw new LocalizedException(__('Comment is too long.'));
         }
 
+        $parentId = $comment->getParentId() ? (int) $comment->getParentId() : null;
+        if ($parentId) {
+            $parent = $this->commentFactory->create()->load($parentId);
+            if (!$parent->getId()
+                || (int) $parent->getPostId() !== $postId
+                || !(int) $parent->getIsApproved()
+            ) {
+                throw new LocalizedException(__('Invalid parent comment.'));
+            }
+            // Only one level of nesting: replies to replies attach to root parent
+            if ($parent->getParentId()) {
+                $parentId = (int) $parent->getParentId();
+            }
+        }
+
         $model = $this->commentFactory->create();
         $model->setPostId($postId);
+        $model->setParentId($parentId);
         $model->setAuthorName($author);
         $model->setAuthorEmail($comment->getAuthorEmail() ? trim((string) $comment->getAuthorEmail()) : null);
         $model->setContent($content);
@@ -108,6 +124,9 @@ class CommentRepository implements CommentRepositoryInterface
         if ($comment->getPostId()) {
             $model->setPostId((int) $comment->getPostId());
         }
+        if ($comment->getParentId() !== null) {
+            $model->setParentId($comment->getParentId() ?: null);
+        }
         if ($comment->getAuthorName() !== null) {
             $model->setAuthorName(trim((string) $comment->getAuthorName()));
         }
@@ -135,6 +154,13 @@ class CommentRepository implements CommentRepositoryInterface
             throw new NoSuchEntityException(__('Comment with ID "%1" does not exist.', $commentId));
         }
         try {
+            // Orphan replies: clear parent_id of children
+            $children = $this->collectionFactory->create();
+            $children->addFieldToFilter('parent_id', (int) $commentId);
+            foreach ($children as $child) {
+                $child->setParentId(null);
+                $child->save();
+            }
             $model->delete();
         } catch (\Exception $e) {
             throw new CouldNotDeleteException(__('Could not delete comment: %1', $e->getMessage()), $e);
@@ -159,6 +185,7 @@ class CommentRepository implements CommentRepositoryInterface
         $data = $this->dataFactory->create();
         $data->setCommentId((int) $comment->getId());
         $data->setPostId((int) $comment->getPostId());
+        $data->setParentId($comment->getParentId() ? (int) $comment->getParentId() : null);
         $data->setAuthorName((string) $comment->getAuthorName());
         $data->setAuthorEmail($comment->getAuthorEmail() ? (string) $comment->getAuthorEmail() : null);
         $data->setContent((string) $comment->getContent());

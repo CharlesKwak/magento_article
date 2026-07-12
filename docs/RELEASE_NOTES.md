@@ -1,5 +1,32 @@
 # Release Notes
 
+## 2.3.0 - 2026-07-12
+
+### Added
+- **Threaded comments** (one nesting level): `parent_id` on `thirdparty_blogarticle_comment`
+  - Storefront: Reply action nests under parent; deeper replies attach to the root parent
+  - Admin comment grid: **Parent ID** column
+  - GraphQL / REST data models expose `parent_id`
+- **Optional Google reCAPTCHA** for storefront and GraphQL comment submit
+  - Config: enable, site key, secret key (encrypted), v3 min score
+  - Storefront v2 checkbox widget when enabled
+  - GraphQL: `recaptcha_token` argument on `submitBlogComment`
+- Schema patch `AddCommentParentId` for upgrades from 2.2.x
+
+### Changed
+- Module / package version **2.3.0**
+- Fresh installs create comment table with `parent_id` from the start
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+Configure reCAPTCHA under **Stores → Configuration → Third Party → Blog Article → Comments** (off by default).
+
+---
+
 ## 2.2.0 - 2026-07-12
 
 ### Added

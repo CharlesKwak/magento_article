@@ -35,6 +35,12 @@ class AddCommentSupport implements SchemaPatchInterface
                     ['unsigned' => true, 'nullable' => false],
                     'Post ID'
                 )->addColumn(
+                    'parent_id',
+                    Table::TYPE_INTEGER,
+                    null,
+                    ['unsigned' => true, 'nullable' => true],
+                    'Parent comment ID for replies'
+                )->addColumn(
                     'author_name',
                     Table::TYPE_TEXT,
                     255,
@@ -67,6 +73,9 @@ class AddCommentSupport implements SchemaPatchInterface
                 )->addIndex(
                     $this->moduleDataSetup->getIdxName($tableName, ['post_id']),
                     ['post_id']
+                )->addIndex(
+                    $this->moduleDataSetup->getIdxName($tableName, ['parent_id']),
+                    ['parent_id']
                 )->addIndex(
                     $this->moduleDataSetup->getIdxName($tableName, ['is_approved']),
                     ['is_approved']

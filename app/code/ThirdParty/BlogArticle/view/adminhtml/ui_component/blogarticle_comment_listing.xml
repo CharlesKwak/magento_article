@@ -75,6 +75,12 @@
                 <label translate="true">Post ID</label>
             </settings>
         </column>
+        <column name="parent_id">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Parent ID</label>
+            </settings>
+        </column>
         <column name="author_name">
             <settings>
                 <filter>text</filter>

@@ -249,6 +249,51 @@ class View extends Template implements IdentityInterface
         return $this->config->isCommentSpamProtectionEnabled();
     }
 
+    public function isRecaptchaEnabled(): bool
+    {
+        return $this->config->isRecaptchaEnabled() && $this->config->getRecaptchaSiteKey() !== '';
+    }
+
+    public function getRecaptchaSiteKey(): string
+    {
+        return $this->config->getRecaptchaSiteKey();
+    }
+
+    /**
+     * Top-level approved comments (no parent).
+     *
+     * @return \ThirdParty\BlogArticle\Api\Data\CommentInterface[]
+     */
+    public function getRootComments(): array
+    {
+        $roots = [];
+        foreach ($this->getComments() as $comment) {
+            if (!$comment->getParentId()) {
+                $roots[] = $comment;
+            }
+        }
+        return $roots;
+    }
+
+    /**
+     * Direct replies to a parent comment (single nesting level).
+     *
+     * @return \ThirdParty\BlogArticle\Api\Data\CommentInterface[]
+     */
+    public function getReplyComments(int $parentId): array
+    {
+        if ($parentId <= 0) {
+            return [];
+        }
+        $replies = [];
+        foreach ($this->getComments() as $comment) {
+            if ((int) $comment->getParentId() === $parentId) {
+                $replies[] = $comment;
+            }
+        }
+        return $replies;
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -13,6 +13,10 @@
                 <min_submit_seconds>3</min_submit_seconds>
                 <notify_enabled>1</notify_enabled>
                 <notify_email></notify_email>
+                <recaptcha_enabled>0</recaptcha_enabled>
+                <recaptcha_site_key></recaptcha_site_key>
+                <recaptcha_secret_key></recaptcha_secret_key>
+                <recaptcha_min_score>0.5</recaptcha_min_score>
             </comments>
             <media>
                 <max_upload_kb>2048</max_upload_kb>

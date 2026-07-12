@@ -26,6 +26,18 @@ class Comment extends DataObject implements CommentInterface
         return $this->setData(self::POST_ID, $postId);
     }
 
+    public function getParentId()
+    {
+        return $this->getData(self::PARENT_ID) !== null && $this->getData(self::PARENT_ID) !== ''
+            ? (int) $this->getData(self::PARENT_ID)
+            : null;
+    }
+
+    public function setParentId($parentId)
+    {
+        return $this->setData(self::PARENT_ID, $parentId);
+    }
+
     public function getAuthorName()
     {
         return $this->getData(self::AUTHOR_NAME);

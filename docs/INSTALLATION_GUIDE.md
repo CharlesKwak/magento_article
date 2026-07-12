@@ -4,7 +4,7 @@ This guide explains how to install and verify the **ThirdParty_BlogArticle** mod
 
 Module package name: `thirdparty/module-blog-article`  
 Module code name: `ThirdParty_BlogArticle`  
-Current version: **2.2.0**
+Current version: **2.3.0**
 
 ---
 
@@ -18,20 +18,21 @@ After a successful install, the module:
 4. Exposes a **storefront list page** at `/blog/index/index` (frontName: `blog`).
 5. Exposes an **Admin list + CRUD** under **Content → Blog Posts** (Add / Edit / Delete).
 
-### Capability matrix (v2.2.0)
+### Capability matrix (v2.3.0)
 
 | Capability | Status |
 |---|---|
 | List posts on storefront | Supported (enabled, **paginated**, **searchable**) |
-| List posts in Admin | Supported (**search** + status filter) |
+| List posts in Admin | Supported (**search** + status filter + UI grids) |
 | Create / edit / delete posts in Admin UI | **Supported** |
 | Sample (seed) posts on install | **Supported** (empty table only) |
 | Single-post detail page | **Supported** (`/blog/{url_key}`) |
-| URL key + publish status | **Supported** |
-| REST API (read + search) | **Supported** |
-| GraphQL (read + search) | **Supported** (`blogPosts`, `blogPost`) |
-| Configurable page size | **Supported** (Admin config) |
-| Categories / tags / write APIs | **Not available** |
+| URL key + publish status + schedule | **Supported** |
+| Categories / tags / multi-store | **Supported** |
+| Comments (moderation, replies, spam, email, reCAPTCHA) | **Supported** |
+| REST API (read + write surfaces) | **Supported** |
+| GraphQL (read + mutations + comments) | **Supported** |
+| Configurable page size / comments / media | **Supported** (Admin config) |
 
 For dependency and runtime inventory (PHP, MySQL, Magento, SBOM-style notes), see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
 

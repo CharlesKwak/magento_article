@@ -34,6 +34,7 @@ class PostComments implements ResolverInterface
             $items[] = [
                 'comment_id' => $comment->getCommentId(),
                 'post_id' => $comment->getPostId(),
+                'parent_id' => $comment->getParentId(),
                 'author_name' => $comment->getAuthorName(),
                 'author_email' => $comment->getAuthorEmail(),
                 'content' => $comment->getContent(),
