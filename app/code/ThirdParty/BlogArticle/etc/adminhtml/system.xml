@@ -31,6 +31,44 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>If No, comments require Admin approval under Content &gt; Blog Comments.</comment>
                 </field>
+                <field id="spam_protection" translate="label comment" type="select" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Spam Protection</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Honeypot field, minimum form fill time, basic link-flood checks.</comment>
+                </field>
+                <field id="min_submit_seconds" translate="label comment" type="text" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Minimum Seconds Before Submit</label>
+                    <comment>Reject comments submitted faster than this (0–120). Default: 3.</comment>
+                    <validate>validate-digits</validate>
+                    <depends>
+                        <field id="spam_protection">1</field>
+                    </depends>
+                </field>
+                <field id="notify_enabled" translate="label" type="select" sortOrder="50"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email Notify on New Comment</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="notify_email" translate="label comment" type="text" sortOrder="60"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Notification Email</label>
+                    <comment>Leave empty to use General Contact email (Stores &gt; Configuration &gt; General &gt; Store Email Addresses).</comment>
+                    <validate>validate-email</validate>
+                    <depends>
+                        <field id="notify_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="media" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Media</label>
+                <field id="max_upload_kb" translate="label comment" type="text" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Max Featured Image Size (KB)</label>
+                    <comment>Maximum upload size for featured images (100–10240). Default: 2048.</comment>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                </field>
             </group>
         </section>
     </system>

@@ -8,23 +8,27 @@ use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Exception\LocalizedException;
 use ThirdParty\BlogArticle\Api\CommentRepositoryInterface;
 use ThirdParty\BlogArticle\Api\Data\CommentInterfaceFactory;
+use ThirdParty\BlogArticle\Model\CommentSpamGuard;
 
 class Post extends Action implements HttpPostActionInterface
 {
     private $formKeyValidator;
     private $commentRepository;
     private $commentFactory;
+    private $spamGuard;
 
     public function __construct(
         Context $context,
         FormKeyValidator $formKeyValidator,
         CommentRepositoryInterface $commentRepository,
-        CommentInterfaceFactory $commentFactory
+        CommentInterfaceFactory $commentFactory,
+        CommentSpamGuard $spamGuard
     ) {
         parent::__construct($context);
         $this->formKeyValidator = $formKeyValidator;
         $this->commentRepository = $commentRepository;
         $this->commentFactory = $commentFactory;
+        $this->spamGuard = $spamGuard;
     }
 
     public function execute()
@@ -42,6 +46,9 @@ class Post extends Action implements HttpPostActionInterface
         }
 
         try {
+            $params = $this->getRequest()->getParams();
+            $this->spamGuard->assertNotSpam($params);
+
             /** @var \ThirdParty\BlogArticle\Api\Data\CommentInterface $comment */
             $comment = $this->commentFactory->create();
             $comment->setPostId($postId);

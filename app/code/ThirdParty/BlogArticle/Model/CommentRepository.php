@@ -18,19 +18,22 @@ class CommentRepository implements CommentRepositoryInterface
     private $dataFactory;
     private $postRepository;
     private $config;
+    private $notifier;
 
     public function __construct(
         CommentFactory $commentFactory,
         CollectionFactory $collectionFactory,
         CommentInterfaceFactory $dataFactory,
         PostRepositoryInterface $postRepository,
-        Config $config
+        Config $config,
+        CommentNotifier $notifier
     ) {
         $this->commentFactory = $commentFactory;
         $this->collectionFactory = $collectionFactory;
         $this->dataFactory = $dataFactory;
         $this->postRepository = $postRepository;
         $this->config = $config;
+        $this->notifier = $notifier;
     }
 
     public function getById($commentId)
@@ -64,13 +67,15 @@ class CommentRepository implements CommentRepositoryInterface
         if ($postId <= 0) {
             throw new LocalizedException(__('post_id is required.'));
         }
-        // Ensures post is publicly visible
         $this->postRepository->getById($postId, true);
 
         $author = trim((string) $comment->getAuthorName());
         $content = trim((string) $comment->getContent());
         if ($author === '' || $content === '') {
             throw new LocalizedException(__('Author name and content are required.'));
+        }
+        if (mb_strlen($content) > 5000) {
+            throw new LocalizedException(__('Comment is too long.'));
         }
 
         $model = $this->commentFactory->create();
@@ -85,7 +90,10 @@ class CommentRepository implements CommentRepositoryInterface
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Could not save comment: %1', $e->getMessage()), $e);
         }
-        return $this->toDataModel($model);
+
+        $data = $this->toDataModel($model);
+        $this->notifier->notify($data);
+        return $data;
     }
 
     public function save(CommentInterface $comment)

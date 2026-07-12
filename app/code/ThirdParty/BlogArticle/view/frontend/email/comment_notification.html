@@ -1,0 +1,24 @@
+<!--@subject New blog comment on {{var store_name}} @-->
+<!--@vars {
+"var post_title":"Post title",
+"var post_id":"Post ID",
+"var author_name":"Author name",
+"var author_email":"Author email",
+"var comment_content":"Comment body",
+"var is_approved":"Approved status",
+"var store_name":"Store name"
+} @-->
+
+<p>{{trans "A new comment was submitted on %store_name." store_name=$store_name}}</p>
+
+<ul>
+    <li><strong>{{trans "Post:"}}</strong> {{var post_title}} (#{{var post_id}})</li>
+    <li><strong>{{trans "Author:"}}</strong> {{var author_name}}</li>
+    <li><strong>{{trans "Email:"}}</strong> {{var author_email}}</li>
+    <li><strong>{{trans "Approved:"}}</strong> {{var is_approved}}</li>
+</ul>
+
+<p><strong>{{trans "Comment:"}}</strong></p>
+<p>{{var comment_content}}</p>
+
+<p>{{trans "Review comments in Admin under Content > Blog Comments."}}</p>

@@ -1,5 +1,27 @@
 # Release Notes
 
+## 2.2.0 - 2026-07-12
+
+### Added
+- Comment **spam protection**: honeypot, minimum submit delay, multi-link filter
+- **Email notification** when a new comment is submitted (configurable recipient)
+- Email template `blogarticle_comment_notification`
+- Config: spam on/off, min seconds, notify on/off, notify email, max image upload KB
+- Featured image upload: size limit + file dispersion under `media/blogarticle/`
+
+### Changed
+- Module / package version **2.2.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+Ensure store email transport works for notifications. No new DB tables.
+
+---
+
 ## 2.1.0 - 2026-07-12
 
 ### Added

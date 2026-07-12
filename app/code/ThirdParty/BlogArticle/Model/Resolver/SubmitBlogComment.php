@@ -8,18 +8,22 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use ThirdParty\BlogArticle\Api\CommentRepositoryInterface;
 use ThirdParty\BlogArticle\Api\Data\CommentInterfaceFactory;
+use ThirdParty\BlogArticle\Model\CommentSpamGuard;
 
 class SubmitBlogComment implements ResolverInterface
 {
     private $commentRepository;
     private $commentFactory;
+    private $spamGuard;
 
     public function __construct(
         CommentRepositoryInterface $commentRepository,
-        CommentInterfaceFactory $commentFactory
+        CommentInterfaceFactory $commentFactory,
+        CommentSpamGuard $spamGuard
     ) {
         $this->commentRepository = $commentRepository;
         $this->commentFactory = $commentFactory;
+        $this->spamGuard = $spamGuard;
     }
 
     public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
@@ -34,6 +38,13 @@ class SubmitBlogComment implements ResolverInterface
         }
 
         try {
+            // GraphQL has no honeypot; still apply link-flood / content checks via params map
+            $this->spamGuard->assertNotSpam([
+                'content' => $content,
+                CommentSpamGuard::HONEYPOT_FIELD => '',
+                CommentSpamGuard::TIMESTAMP_FIELD => time() - 10,
+            ]);
+
             $comment = $this->commentFactory->create();
             $comment->setPostId($postId);
             $comment->setAuthorName($author);

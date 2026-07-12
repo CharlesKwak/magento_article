@@ -9,7 +9,14 @@
             <comments>
                 <enabled>1</enabled>
                 <auto_approve>0</auto_approve>
+                <spam_protection>1</spam_protection>
+                <min_submit_seconds>3</min_submit_seconds>
+                <notify_enabled>1</notify_enabled>
+                <notify_email></notify_email>
             </comments>
+            <media>
+                <max_upload_kb>2048</max_upload_kb>
+            </media>
         </blogarticle>
     </default>
 </config>

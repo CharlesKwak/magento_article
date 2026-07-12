@@ -90,6 +90,21 @@ $tagNames = $block->getTagNames();
                     <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKeyValue()) ?>"/>
                     <input type="hidden" name="post_id" value="<?= (int) $post->getId() ?>"/>
                     <input type="hidden" name="url_key" value="<?= $block->escapeHtmlAttr((string) $post->getUrlKey()) ?>"/>
+                    <?php if ($block->isSpamProtectionEnabled()): ?>
+                        <input type="hidden"
+                               name="<?= $block->escapeHtmlAttr($block->getCommentTimestampField()) ?>"
+                               value="<?= (int) $block->getCommentFormTimestamp() ?>"/>
+                        <?php /* Honeypot: leave empty — hidden from users */ ?>
+                        <div style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+                            <label for="website_url"><?= $block->escapeHtml(__('Website')) ?></label>
+                            <input type="text"
+                                   id="website_url"
+                                   name="<?= $block->escapeHtmlAttr($block->getCommentHoneypotField()) ?>"
+                                   value=""
+                                   tabindex="-1"
+                                   autocomplete="off"/>
+                        </div>
+                    <?php endif; ?>
                     <div style="margin-bottom:0.75rem;">
                         <label for="author_name"><?= $block->escapeHtml(__('Name')) ?> *</label><br/>
                         <input type="text" id="author_name" name="author_name" required="required" maxlength="255" style="width:100%;"/>
@@ -100,7 +115,7 @@ $tagNames = $block->getTagNames();
                     </div>
                     <div style="margin-bottom:0.75rem;">
                         <label for="comment_content"><?= $block->escapeHtml(__('Comment')) ?> *</label><br/>
-                        <textarea id="comment_content" name="content" required="required" rows="4" style="width:100%;"></textarea>
+                        <textarea id="comment_content" name="content" required="required" rows="4" maxlength="5000" style="width:100%;"></textarea>
                     </div>
                     <button type="submit" class="action primary">
                         <span><?= $block->escapeHtml(__('Submit comment')) ?></span>

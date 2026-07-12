@@ -18,15 +18,18 @@ class FeaturedImageUploader
     private $uploaderFactory;
     private $filesystem;
     private $storeManager;
+    private $config;
 
     public function __construct(
         UploaderFactory $uploaderFactory,
         Filesystem $filesystem,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        Config $config
     ) {
         $this->uploaderFactory = $uploaderFactory;
         $this->filesystem = $filesystem;
         $this->storeManager = $storeManager;
+        $this->config = $config;
     }
 
     /**
@@ -40,11 +43,18 @@ class FeaturedImageUploader
             return null;
         }
 
+        $maxBytes = $this->config->getMaxUploadKb() * 1024;
+        if (!empty($_FILES[$fileId]['size']) && (int) $_FILES[$fileId]['size'] > $maxBytes) {
+            throw new LocalizedException(
+                __('Image is too large. Maximum size is %1 KB.', $this->config->getMaxUploadKb())
+            );
+        }
+
         try {
             $uploader = $this->uploaderFactory->create(['fileId' => $fileId]);
             $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png', 'webp']);
             $uploader->setAllowRenameFiles(true);
-            $uploader->setFilesDispersion(false);
+            $uploader->setFilesDispersion(true);
             $uploader->setAllowCreateFolders(true);
 
             $mediaDir = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);

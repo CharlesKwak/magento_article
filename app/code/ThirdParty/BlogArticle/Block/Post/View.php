@@ -5,8 +5,10 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use ThirdParty\BlogArticle\Api\CommentRepositoryInterface;
 use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
+use ThirdParty\BlogArticle\Model\CommentSpamGuard;
 use ThirdParty\BlogArticle\Model\Config;
 use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
 use ThirdParty\BlogArticle\Model\Post;
@@ -24,6 +26,7 @@ class View extends Template implements IdentityInterface
     private $commentRepository;
     private $config;
     private $formKey;
+    private $dateTime;
     private $post;
     private $related;
     private $tagNameCache = [];
@@ -38,6 +41,7 @@ class View extends Template implements IdentityInterface
         CommentRepositoryInterface $commentRepository,
         Config $config,
         FormKey $formKey,
+        DateTime $dateTime,
         array $data = []
     ) {
         $this->postFactory = $postFactory;
@@ -48,6 +52,7 @@ class View extends Template implements IdentityInterface
         $this->commentRepository = $commentRepository;
         $this->config = $config;
         $this->formKey = $formKey;
+        $this->dateTime = $dateTime;
         parent::__construct($context, $data);
     }
 
@@ -222,6 +227,26 @@ class View extends Template implements IdentityInterface
     public function getFormKeyValue(): string
     {
         return $this->formKey->getFormKey();
+    }
+
+    public function getCommentFormTimestamp(): int
+    {
+        return (int) $this->dateTime->gmtTimestamp();
+    }
+
+    public function getCommentHoneypotField(): string
+    {
+        return CommentSpamGuard::HONEYPOT_FIELD;
+    }
+
+    public function getCommentTimestampField(): string
+    {
+        return CommentSpamGuard::TIMESTAMP_FIELD;
+    }
+
+    public function isSpamProtectionEnabled(): bool
+    {
+        return $this->config->isCommentSpamProtectionEnabled();
     }
 
     /**
