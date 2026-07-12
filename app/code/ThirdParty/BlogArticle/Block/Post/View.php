@@ -1,6 +1,7 @@
 <?php
 namespace ThirdParty\BlogArticle\Block\Post;
 
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
@@ -10,7 +11,7 @@ use ThirdParty\BlogArticle\Model\PostFactory;
 use ThirdParty\BlogArticle\Model\PostTagLink;
 use ThirdParty\BlogArticle\Model\TagFactory;
 
-class View extends Template
+class View extends Template implements IdentityInterface
 {
     private $postFactory;
     private $postRepository;
@@ -60,6 +61,15 @@ class View extends Template
         if (!$post->getId() || !(int) $post->getIsActive()) {
             $this->post = null;
             return null;
+        }
+        $publishedAt = $post->getPublishedAt();
+        if ($publishedAt) {
+            $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->getTimestamp();
+            $pub = strtotime((string) $publishedAt . ' UTC');
+            if ($pub && $pub > $now) {
+                $this->post = null;
+                return null;
+            }
         }
 
         $this->post = $post;
@@ -173,5 +183,17 @@ class View extends Template
         return $this->imageUploader->resolveUrl(
             $post->getFeaturedImage() ? (string) $post->getFeaturedImage() : null
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentities()
+    {
+        $post = $this->getPost();
+        if (!$post) {
+            return [Post::CACHE_TAG];
+        }
+        return $post->getIdentities();
     }
 }

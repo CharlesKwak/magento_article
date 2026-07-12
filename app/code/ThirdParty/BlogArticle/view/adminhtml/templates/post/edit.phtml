@@ -174,7 +174,7 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
                            style="width:100%; max-width:320px;"
                            value="<?= $block->escapeHtmlAttr((string) $post->getPublishedAt()) ?>"/>
                     <p class="admin__field-note">
-                        <?= $block->escapeHtml(__('Used for list sorting. Leave empty to use creation time.')) ?>
+                        <?= $block->escapeHtml(__('Used for list sorting and scheduled visibility. Future dates stay hidden on the storefront until that time (UTC recommended). Leave empty to publish immediately when Enabled.')) ?>
                     </p>
                 </div>
             </div>

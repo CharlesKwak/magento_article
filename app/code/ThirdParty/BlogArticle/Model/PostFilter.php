@@ -43,6 +43,25 @@ class PostFilter
     }
 
     /**
+     * Hide posts scheduled for a future publish time.
+     * NULL published_at is treated as immediately available.
+     *
+     * @param Collection $collection
+     * @param string|null $nowGmt Y-m-d H:i:s in GMT
+     * @return void
+     */
+    public function applyPublishedOnly(Collection $collection, ?string $nowGmt = null): void
+    {
+        if ($nowGmt === null) {
+            $nowGmt = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+        }
+        $collection->getSelect()->where(
+            '(main_table.published_at IS NULL OR main_table.published_at <= ?)',
+            $nowGmt
+        );
+    }
+
+    /**
      * @param Collection $collection
      * @param int|null $categoryId
      * @return void

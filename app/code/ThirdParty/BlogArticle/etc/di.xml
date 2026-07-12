@@ -20,6 +20,12 @@
                 <item name="blogarticle_post_listing_data_source" xsi:type="string">
                     ThirdParty\BlogArticle\Model\ResourceModel\Post\Grid\Collection
                 </item>
+                <item name="blogarticle_category_listing_data_source" xsi:type="string">
+                    ThirdParty\BlogArticle\Model\ResourceModel\Category\Grid\Collection
+                </item>
+                <item name="blogarticle_tag_listing_data_source" xsi:type="string">
+                    ThirdParty\BlogArticle\Model\ResourceModel\Tag\Grid\Collection
+                </item>
             </argument>
         </arguments>
     </type>
@@ -29,6 +35,22 @@
             <argument name="mainTable" xsi:type="string">thirdparty_blogarticle_post</argument>
             <argument name="resourceModel" xsi:type="string">ThirdParty\BlogArticle\Model\ResourceModel\Post</argument>
             <argument name="identifierName" xsi:type="string">post_id</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ThirdParty\BlogArticle\Model\ResourceModel\Category\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">thirdparty_blogarticle_category</argument>
+            <argument name="resourceModel" xsi:type="string">ThirdParty\BlogArticle\Model\ResourceModel\Category</argument>
+            <argument name="identifierName" xsi:type="string">category_id</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ThirdParty\BlogArticle\Model\ResourceModel\Tag\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">thirdparty_blogarticle_tag</argument>
+            <argument name="resourceModel" xsi:type="string">ThirdParty\BlogArticle\Model\ResourceModel\Tag</argument>
+            <argument name="identifierName" xsi:type="string">tag_id</argument>
         </arguments>
     </virtualType>
 

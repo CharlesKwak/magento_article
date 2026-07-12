@@ -1,6 +1,7 @@
 <?php
 namespace ThirdParty\BlogArticle\Block;
 
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
@@ -16,7 +17,7 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Post\Collection;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory;
 use ThirdParty\BlogArticle\Model\ResourceModel\Tag\CollectionFactory as TagCollectionFactory;
 
-class Article extends Template
+class Article extends Template implements IdentityInterface
 {
     /**
      * @var CollectionFactory
@@ -118,6 +119,7 @@ class Article extends Template
         if ($this->posts === null) {
             $collection = $this->collectionFactory->create();
             $this->postFilter->applyActiveOnly($collection);
+            $this->postFilter->applyPublishedOnly($collection);
             $this->postFilter->applyStoreId($collection, (int) $this->storeManager->getStore()->getId());
             $this->postFilter->applySearch($collection, $this->getSearchQuery());
             $this->postFilter->applyCategoryId($collection, $this->getCategoryIdFilter());
@@ -397,5 +399,17 @@ class Article extends Template
     public function getRssUrl(): string
     {
         return $this->getUrl('blog/rss/feed');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentities()
+    {
+        $identities = [Post::CACHE_TAG];
+        foreach ($this->getPosts() as $post) {
+            $identities[] = Post::CACHE_TAG . '_' . $post->getId();
+        }
+        return array_unique($identities);
     }
 }

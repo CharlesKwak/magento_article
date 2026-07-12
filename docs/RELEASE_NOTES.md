@@ -1,5 +1,29 @@
 # Release Notes
 
+## 2.0.0 - 2026-07-12
+
+### Added
+- **Scheduled publish visibility**: Enabled posts with future `published_at` stay hidden until that time
+- FPC/block **cache identities** on posts and list/detail blocks
+- Cron job every 5 minutes flushes blog cache tags when scheduled posts become due
+- Admin **UI Component grids** for Categories and Tags (filters, mass delete)
+- Mass delete controllers for categories/tags
+
+### Changed
+- Module / package version **2.0.0** (feature-complete blog MVP stack)
+- Public surfaces (list, detail, REST, GraphQL, RSS, sitemap) honor publish schedule
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+# ensure cron is running: bin/magento cron:run
+```
+No new DB columns in 2.0.0 (uses existing `published_at`).
+
+---
+
 ## 1.9.0 - 2026-07-12
 
 ### Added

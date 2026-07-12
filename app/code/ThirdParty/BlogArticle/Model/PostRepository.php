@@ -48,7 +48,7 @@ class PostRepository implements PostRepositoryInterface
     public function getById($postId, $activeOnly = true)
     {
         $post = $this->postFactory->create()->load((int) $postId);
-        if (!$post->getId() || ($activeOnly && !(int) $post->getIsActive())) {
+        if (!$post->getId() || ($activeOnly && !$this->isPubliclyVisible($post))) {
             throw new NoSuchEntityException(
                 __('The blog post with ID "%1" does not exist or is disabled.', $postId)
             );
@@ -60,7 +60,7 @@ class PostRepository implements PostRepositoryInterface
     {
         $urlKey = trim((string) $urlKey);
         $post = $this->postFactory->create()->load($urlKey, 'url_key');
-        if (!$post->getId() || ($activeOnly && !(int) $post->getIsActive())) {
+        if (!$post->getId() || ($activeOnly && !$this->isPubliclyVisible($post))) {
             throw new NoSuchEntityException(
                 __('The blog post with URL key "%1" does not exist or is disabled.', $urlKey)
             );
@@ -77,6 +77,7 @@ class PostRepository implements PostRepositoryInterface
 
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
+        $this->postFilter->applyPublishedOnly($collection);
         $this->postFilter->applyStoreId($collection, (int) $this->storeManager->getStore()->getId());
         $this->postFilter->applySearch($collection, $search !== null ? (string) $search : null);
         $this->postFilter->applyCategoryId($collection, $categoryId);
@@ -98,6 +99,7 @@ class PostRepository implements PostRepositoryInterface
         $tagId = $tagId !== null && $tagId !== '' ? (int) $tagId : null;
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
+        $this->postFilter->applyPublishedOnly($collection);
         $this->postFilter->applyStoreId($collection, (int) $this->storeManager->getStore()->getId());
         $this->postFilter->applySearch($collection, $search !== null ? (string) $search : null);
         $this->postFilter->applyCategoryId($collection, $categoryId);
@@ -228,6 +230,7 @@ class PostRepository implements PostRepositoryInterface
         $build = function (?int $categoryId) use ($postId, $limit) {
             $collection = $this->collectionFactory->create();
             $this->postFilter->applyActiveOnly($collection);
+            $this->postFilter->applyPublishedOnly($collection);
             $this->postFilter->applyStoreId($collection, (int) $this->storeManager->getStore()->getId());
             $collection->addFieldToFilter('post_id', ['neq' => (int) $postId]);
             if ($categoryId) {
@@ -248,6 +251,24 @@ class PostRepository implements PostRepositoryInterface
             $items = $build(null);
         }
         return $items;
+    }
+
+    /**
+     * @param Post $post
+     * @return bool
+     */
+    private function isPubliclyVisible(Post $post): bool
+    {
+        if (!(int) $post->getIsActive()) {
+            return false;
+        }
+        $publishedAt = $post->getPublishedAt();
+        if (!$publishedAt) {
+            return true;
+        }
+        $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->getTimestamp();
+        $pub = strtotime((string) $publishedAt . ' UTC');
+        return !$pub || $pub <= $now;
     }
 
     private function toDataModel(Post $post): PostInterface

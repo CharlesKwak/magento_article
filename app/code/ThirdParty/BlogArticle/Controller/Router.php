@@ -72,6 +72,14 @@ class Router implements RouterInterface
         if (!$post->getId() || !(int) $post->getIsActive()) {
             return null;
         }
+        $publishedAt = $post->getPublishedAt();
+        if ($publishedAt) {
+            $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->getTimestamp();
+            $pub = strtotime((string) $publishedAt . ' UTC');
+            if ($pub && $pub > $now) {
+                return null;
+            }
+        }
         $postStore = (int) $post->getStoreId();
         $currentStore = (int) $this->storeManager->getStore()->getId();
         if ($postStore > 0 && $postStore !== $currentStore) {

@@ -46,6 +46,7 @@ class Feed extends Action
 
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
+        $this->postFilter->applyPublishedOnly($collection);
         $this->postFilter->applyStoreId($collection, (int) $store->getId());
         $this->postFilter->applyDefaultSort($collection);
         $collection->setPageSize(50);

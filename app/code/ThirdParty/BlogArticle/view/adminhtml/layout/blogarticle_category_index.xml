@@ -3,9 +3,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="ThirdParty\BlogArticle\Block\Adminhtml\Category"
-                   name="blogarticle.category.list"
-                   template="ThirdParty_BlogArticle::category/list.phtml"/>
+            <uiComponent name="blogarticle_category_listing"/>
         </referenceContainer>
     </body>
 </page>

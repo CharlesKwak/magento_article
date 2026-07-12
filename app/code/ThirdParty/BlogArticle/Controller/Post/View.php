@@ -59,6 +59,15 @@ class View extends Action
             $resultForward = $this->resultForwardFactory->create();
             return $resultForward->forward('noroute');
         }
+        $publishedAt = $post->getPublishedAt();
+        if ($publishedAt) {
+            $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->getTimestamp();
+            $pub = strtotime((string) $publishedAt . ' UTC');
+            if ($pub && $pub > $now) {
+                $resultForward = $this->resultForwardFactory->create();
+                return $resultForward->forward('noroute');
+            }
+        }
         $postStore = (int) $post->getStoreId();
         $currentStore = (int) $this->storeManager->getStore()->getId();
         if ($postStore > 0 && $postStore !== $currentStore) {

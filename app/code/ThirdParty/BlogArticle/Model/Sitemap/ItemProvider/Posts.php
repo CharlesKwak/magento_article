@@ -32,6 +32,7 @@ class Posts implements ItemProviderInterface
     {
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
+        $this->postFilter->applyPublishedOnly($collection);
         $this->postFilter->applyStoreId($collection, (int) $storeId);
         $this->postFilter->applyDefaultSort($collection);
 
