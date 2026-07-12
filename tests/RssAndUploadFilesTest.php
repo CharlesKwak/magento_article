@@ -16,6 +16,6 @@ class RssAndUploadFilesTest extends TestCase
     public function testModuleVersionIs180(): void
     {
         $c = file_get_contents(dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.0.0"', $c);
+        $this->assertStringContainsString('setup_version="2.1.0"', $c);
     }
 }

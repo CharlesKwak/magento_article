@@ -27,6 +27,6 @@ class CategoryFilesTest extends TestCase
         $content = file_get_contents(
             dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/etc/module.xml'
         );
-        $this->assertStringContainsString('setup_version="2.0.0"', $content);
+        $this->assertStringContainsString('setup_version="2.1.0"', $content);
     }
 }

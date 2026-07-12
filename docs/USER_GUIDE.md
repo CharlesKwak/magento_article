@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **2.0.0**
+Version covered: **2.1.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -23,7 +23,7 @@ This module provides a **database-backed blog post list** with Admin management:
 | REST | `/rest/V1/blogarticle/posts*` | Public read + search |
 | GraphQL | `/graphql` (`blogPosts`, `blogPost`) | Public read + search |
 
-### What you can do in v2.0.0
+### What you can do in v2.1.0
 
 - Search and page through the storefront blog list.
 - Filter Admin posts by keyword and status.
@@ -248,7 +248,7 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v2.0.0 |
+| Topic | Behavior in v2.1.0 |
 |---|---|
 | Multi-website / store view | No `store_id` column; **all posts show on all store views** that can reach the route |
 | Translation of post content | Not supported; store raw title/content per row only |
@@ -291,3 +291,10 @@ A: Root `LICENSE` is GPL-2.0; `composer.json` uses `GPL-2.0-only`.
 | [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md) | Install, enable, verify, uninstall |
 | [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md) | Dependencies, versions, SBOM |
 | [RELEASE_NOTES.md](./RELEASE_NOTES.md) | Changelog |
+
+
+## Comments
+
+- Storefront: comment form on post detail (when enabled).
+- Admin: **Content → Blog Comments** to approve or delete.
+- Config: **Stores → Configuration → Third Party → Blog Article → Comments**.

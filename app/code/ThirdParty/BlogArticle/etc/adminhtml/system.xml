@@ -18,6 +18,20 @@
                     <validate>validate-digits validate-greater-than-zero</validate>
                 </field>
             </group>
+            <group id="comments" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Comments</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Comments</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="auto_approve" translate="label comment" type="select" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Auto-approve Comments</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If No, comments require Admin approval under Content &gt; Blog Comments.</comment>
+                </field>
+            </group>
         </section>
     </system>
 </config>

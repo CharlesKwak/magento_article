@@ -13,6 +13,10 @@
                 type="ThirdParty\BlogArticle\Model\TagRepository"/>
     <preference for="ThirdParty\BlogArticle\Api\Data\TagInterface"
                 type="ThirdParty\BlogArticle\Model\Data\Tag"/>
+    <preference for="ThirdParty\BlogArticle\Api\CommentRepositoryInterface"
+                type="ThirdParty\BlogArticle\Model\CommentRepository"/>
+    <preference for="ThirdParty\BlogArticle\Api\Data\CommentInterface"
+                type="ThirdParty\BlogArticle\Model\Data\Comment"/>
 
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
@@ -25,6 +29,9 @@
                 </item>
                 <item name="blogarticle_tag_listing_data_source" xsi:type="string">
                     ThirdParty\BlogArticle\Model\ResourceModel\Tag\Grid\Collection
+                </item>
+                <item name="blogarticle_comment_listing_data_source" xsi:type="string">
+                    ThirdParty\BlogArticle\Model\ResourceModel\Comment\Grid\Collection
                 </item>
             </argument>
         </arguments>
@@ -51,6 +58,14 @@
             <argument name="mainTable" xsi:type="string">thirdparty_blogarticle_tag</argument>
             <argument name="resourceModel" xsi:type="string">ThirdParty\BlogArticle\Model\ResourceModel\Tag</argument>
             <argument name="identifierName" xsi:type="string">tag_id</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ThirdParty\BlogArticle\Model\ResourceModel\Comment\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">thirdparty_blogarticle_comment</argument>
+            <argument name="resourceModel" xsi:type="string">ThirdParty\BlogArticle\Model\ResourceModel\Comment</argument>
+            <argument name="identifierName" xsi:type="string">comment_id</argument>
         </arguments>
     </virtualType>
 

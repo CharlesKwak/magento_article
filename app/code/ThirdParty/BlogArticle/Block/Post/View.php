@@ -4,7 +4,10 @@ namespace ThirdParty\BlogArticle\Block\Post;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\Data\Form\FormKey;
+use ThirdParty\BlogArticle\Api\CommentRepositoryInterface;
 use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
+use ThirdParty\BlogArticle\Model\Config;
 use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFactory;
@@ -18,6 +21,9 @@ class View extends Template implements IdentityInterface
     private $postTagLink;
     private $tagFactory;
     private $imageUploader;
+    private $commentRepository;
+    private $config;
+    private $formKey;
     private $post;
     private $related;
     private $tagNameCache = [];
@@ -29,6 +35,9 @@ class View extends Template implements IdentityInterface
         PostTagLink $postTagLink,
         TagFactory $tagFactory,
         FeaturedImageUploader $imageUploader,
+        CommentRepositoryInterface $commentRepository,
+        Config $config,
+        FormKey $formKey,
         array $data = []
     ) {
         $this->postFactory = $postFactory;
@@ -36,6 +45,9 @@ class View extends Template implements IdentityInterface
         $this->postTagLink = $postTagLink;
         $this->tagFactory = $tagFactory;
         $this->imageUploader = $imageUploader;
+        $this->commentRepository = $commentRepository;
+        $this->config = $config;
+        $this->formKey = $formKey;
         parent::__construct($context, $data);
     }
 
@@ -183,6 +195,33 @@ class View extends Template implements IdentityInterface
         return $this->imageUploader->resolveUrl(
             $post->getFeaturedImage() ? (string) $post->getFeaturedImage() : null
         );
+    }
+
+    public function isCommentsEnabled(): bool
+    {
+        return $this->config->isCommentsEnabled();
+    }
+
+    /**
+     * @return \ThirdParty\BlogArticle\Api\Data\CommentInterface[]
+     */
+    public function getComments(): array
+    {
+        $post = $this->getPost();
+        if (!$post || !$this->isCommentsEnabled()) {
+            return [];
+        }
+        return $this->commentRepository->getListByPostId((int) $post->getId());
+    }
+
+    public function getCommentFormAction(): string
+    {
+        return $this->getUrl('blog/comment/post');
+    }
+
+    public function getFormKeyValue(): string
+    {
+        return $this->formKey->getFormKey();
     }
 
     /**

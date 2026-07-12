@@ -59,5 +59,54 @@ $tagNames = $block->getTagNames();
                 </ul>
             </section>
         <?php endif; ?>
+
+        <?php if ($block->isCommentsEnabled()): ?>
+            <?php $comments = $block->getComments(); ?>
+            <section class="blog-comments" style="margin-top:2rem;">
+                <h2><?= $block->escapeHtml(__('Comments')) ?></h2>
+                <?php if ($comments): ?>
+                    <ul class="blog-comment-list" style="list-style:none;padding:0;">
+                        <?php foreach ($comments as $comment): ?>
+                            <li class="blog-comment" style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid #eee;">
+                                <strong><?= $block->escapeHtml($comment->getAuthorName()) ?></strong>
+                                <?php if ($comment->getCreationTime()): ?>
+                                    <span class="blog-comment-date">
+                                        · <?= $block->escapeHtml((string) $comment->getCreationTime()) ?>
+                                    </span>
+                                <?php endif; ?>
+                                <div class="blog-comment-body" style="margin-top:0.35rem;">
+                                    <?= $block->escapeHtml($comment->getContent()) ?>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p><?= $block->escapeHtml(__('No comments yet. Be the first to comment.')) ?></p>
+                <?php endif; ?>
+
+                <form class="blog-comment-form" method="post"
+                      action="<?= $block->escapeUrl($block->getCommentFormAction()) ?>"
+                      style="margin-top:1.25rem;max-width:480px;">
+                    <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKeyValue()) ?>"/>
+                    <input type="hidden" name="post_id" value="<?= (int) $post->getId() ?>"/>
+                    <input type="hidden" name="url_key" value="<?= $block->escapeHtmlAttr((string) $post->getUrlKey()) ?>"/>
+                    <div style="margin-bottom:0.75rem;">
+                        <label for="author_name"><?= $block->escapeHtml(__('Name')) ?> *</label><br/>
+                        <input type="text" id="author_name" name="author_name" required="required" maxlength="255" style="width:100%;"/>
+                    </div>
+                    <div style="margin-bottom:0.75rem;">
+                        <label for="author_email"><?= $block->escapeHtml(__('Email')) ?></label><br/>
+                        <input type="email" id="author_email" name="author_email" maxlength="255" style="width:100%;"/>
+                    </div>
+                    <div style="margin-bottom:0.75rem;">
+                        <label for="comment_content"><?= $block->escapeHtml(__('Comment')) ?> *</label><br/>
+                        <textarea id="comment_content" name="content" required="required" rows="4" style="width:100%;"></textarea>
+                    </div>
+                    <button type="submit" class="action primary">
+                        <span><?= $block->escapeHtml(__('Submit comment')) ?></span>
+                    </button>
+                </form>
+            </section>
+        <?php endif; ?>
     <?php endif; ?>
 </div>

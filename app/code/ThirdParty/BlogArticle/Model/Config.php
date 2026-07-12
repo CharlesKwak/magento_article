@@ -7,10 +7,9 @@ use Magento\Store\Model\ScopeInterface;
 class Config
 {
     public const XML_PATH_PAGE_SIZE = 'blogarticle/list/page_size';
+    public const XML_PATH_COMMENTS_ENABLED = 'blogarticle/comments/enabled';
+    public const XML_PATH_COMMENTS_AUTO_APPROVE = 'blogarticle/comments/auto_approve';
 
-    /**
-     * @var ScopeConfigInterface
-     */
     private $scopeConfig;
 
     public function __construct(ScopeConfigInterface $scopeConfig)
@@ -18,12 +17,6 @@ class Config
         $this->scopeConfig = $scopeConfig;
     }
 
-    /**
-     * Storefront list page size.
-     *
-     * @param int|null $storeId
-     * @return int
-     */
     public function getPageSize(?int $storeId = null): int
     {
         $size = (int) $this->scopeConfig->getValue(
@@ -35,5 +28,23 @@ class Config
             return 5;
         }
         return min(50, $size);
+    }
+
+    public function isCommentsEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_COMMENTS_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    public function isCommentsAutoApprove(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_COMMENTS_AUTO_APPROVE,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 }

@@ -6,6 +6,10 @@
             <list>
                 <page_size>5</page_size>
             </list>
+            <comments>
+                <enabled>1</enabled>
+                <auto_approve>0</auto_approve>
+            </comments>
         </blogarticle>
     </default>
 </config>

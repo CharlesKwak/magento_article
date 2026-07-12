@@ -2,25 +2,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Menu/etc/menu.xsd">
     <menu>
-        <add id="ThirdParty_BlogArticle::posts"
-             title="Blog Posts"
-             module="ThirdParty_BlogArticle"
-             sortOrder="100"
-             parent="Magento_Backend::content"
-             resource="ThirdParty_BlogArticle::posts"/>
-        <add id="ThirdParty_BlogArticle::categories"
-             title="Blog Categories"
-             module="ThirdParty_BlogArticle"
-             sortOrder="110"
-             parent="Magento_Backend::content"
-             resource="ThirdParty_BlogArticle::categories"
-             action="blogarticle/category/index"/>
-        <add id="ThirdParty_BlogArticle::tags"
-             title="Blog Tags"
-             module="ThirdParty_BlogArticle"
-             sortOrder="120"
-             parent="Magento_Backend::content"
-             resource="ThirdParty_BlogArticle::tags"
-             action="blogarticle/tag/index"/>
+        <add id="ThirdParty_BlogArticle::posts" title="Blog Posts" module="ThirdParty_BlogArticle" sortOrder="100" parent="Magento_Backend::content" resource="ThirdParty_BlogArticle::posts"/>
+        <add id="ThirdParty_BlogArticle::categories" title="Blog Categories" module="ThirdParty_BlogArticle" sortOrder="110" parent="Magento_Backend::content" resource="ThirdParty_BlogArticle::categories" action="blogarticle/category/index"/>
+        <add id="ThirdParty_BlogArticle::tags" title="Blog Tags" module="ThirdParty_BlogArticle" sortOrder="120" parent="Magento_Backend::content" resource="ThirdParty_BlogArticle::tags" action="blogarticle/tag/index"/>
+        <add id="ThirdParty_BlogArticle::comments" title="Blog Comments" module="ThirdParty_BlogArticle" sortOrder="130" parent="Magento_Backend::content" resource="ThirdParty_BlogArticle::comments" action="blogarticle/comment/index"/>
     </menu>
 </config>

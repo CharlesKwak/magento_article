@@ -125,5 +125,24 @@
         <service class="ThirdParty\BlogArticle\Api\TagRepositoryInterface" method="deleteById"/>
         <resources><resource ref="ThirdParty_BlogArticle::tags"/></resources>
     </route>
+
+    <!-- Comments -->
+    <route url="/V1/blogarticle/posts/:postId/comments" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="getListByPostId"/>
+        <resources><resource ref="anonymous"/></resources>
+    </route>
+    <route url="/V1/blogarticle/comments" method="POST">
+        <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="submit"/>
+        <resources><resource ref="anonymous"/></resources>
+    </route>
+    <route url="/V1/blogarticle/comments/:commentId/approve" method="PUT">
+        <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="approve"/>
+        <resources><resource ref="ThirdParty_BlogArticle::comments"/></resources>
+    </route>
+    <route url="/V1/blogarticle/comments/:commentId" method="DELETE">
+        <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="deleteById"/>
+        <resources><resource ref="ThirdParty_BlogArticle::comments"/></resources>
+    </route>
 </routes>
+
 

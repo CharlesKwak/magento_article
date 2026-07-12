@@ -1,5 +1,31 @@
 # Release Notes
 
+## 2.1.0 - 2026-07-12
+
+### Added
+- **GraphQL mutations** (admin/integration identity):
+  - `createBlogPost`, `updateBlogPost`, `deleteBlogPost`
+- **Comments**:
+  - Table `thirdparty_blogarticle_comment`
+  - Storefront list + submit form on post detail
+  - Admin **Content → Blog Comments** UI grid (approve / mass approve / delete)
+  - Config: enable comments, auto-approve
+  - REST: list/submit public; approve/delete admin
+  - GraphQL: `comments` on `BlogPost`, `submitBlogComment` mutation
+
+### Changed
+- Module / package version **2.1.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+Configure comments under **Stores → Configuration → Third Party → Blog Article → Comments**.
+
+---
+
 ## 2.0.0 - 2026-07-12
 
 ### Added

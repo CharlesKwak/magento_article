@@ -18,6 +18,16 @@ type BlogTag {
     update_time: String
 }
 
+type BlogComment {
+    comment_id: Int
+    post_id: Int
+    author_name: String
+    author_email: String
+    content: String
+    is_approved: Int
+    creation_time: String
+}
+
 type BlogPost {
     post_id: Int
     title: String
@@ -36,6 +46,8 @@ type BlogPost {
     published_at: String
     related_posts: [BlogPost]
         @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\RelatedPosts")
+    comments: [BlogComment]
+        @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\PostComments")
 }
 
 type BlogPostList {
@@ -44,6 +56,21 @@ type BlogPostList {
     page_size: Int
     current_page: Int
     total_pages: Int
+}
+
+input BlogPostInput {
+    title: String
+    url_key: String
+    content: String
+    excerpt: String
+    featured_image: String
+    meta_title: String
+    meta_description: String
+    is_active: Int
+    category_id: Int
+    store_id: Int
+    tag_ids: [Int]
+    published_at: String
 }
 
 type Query {
@@ -70,4 +97,27 @@ type Query {
 
     blogTag(id: Int, url_key: String): BlogTag
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Tag")
+}
+
+type Mutation {
+    createBlogPost(input: BlogPostInput!): BlogPost
+    @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\CreateBlogPost")
+    @doc(description: "Create post (admin/integration identity required)")
+
+    updateBlogPost(post_id: Int!, input: BlogPostInput!): BlogPost
+    @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\UpdateBlogPost")
+    @doc(description: "Update post (admin/integration identity required)")
+
+    deleteBlogPost(post_id: Int!): Boolean
+    @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\DeleteBlogPost")
+    @doc(description: "Delete post (admin/integration identity required)")
+
+    submitBlogComment(
+        post_id: Int!
+        author_name: String!
+        author_email: String
+        content: String!
+    ): BlogComment
+    @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\SubmitBlogComment")
+    @doc(description: "Submit a storefront comment (public when comments enabled)")
 }

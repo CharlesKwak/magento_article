@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">blogarticle_comment_listing.blogarticle_comment_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>blogarticle_comment_columns</spinner>
+        <deps>
+            <dep>blogarticle_comment_listing.blogarticle_comment_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="blogarticle_comment_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">comment_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>ThirdParty_BlogArticle::comments</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"
+                      name="blogarticle_comment_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>comment_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters"/>
+        <massaction name="listing_massaction">
+            <action name="approve">
+                <settings>
+                    <url path="blogarticle/comment/massApprove"/>
+                    <type>approve</type>
+                    <label translate="true">Approve</label>
+                </settings>
+            </action>
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Delete selected comments?</message>
+                        <title translate="true">Delete items</title>
+                    </confirm>
+                    <url path="blogarticle/comment/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+        </massaction>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="blogarticle_comment_columns">
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>comment_id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="comment_id">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+            </settings>
+        </column>
+        <column name="post_id">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Post ID</label>
+            </settings>
+        </column>
+        <column name="author_name">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Author</label>
+            </settings>
+        </column>
+        <column name="author_email">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Email</label>
+            </settings>
+        </column>
+        <column name="content">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Content</label>
+            </settings>
+        </column>
+        <column name="is_approved" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="ThirdParty\BlogArticle\Model\Source\IsApproved"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Approved</label>
+            </settings>
+        </column>
+        <column name="creation_time" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Created</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="ThirdParty\BlogArticle\Ui\Component\Listing\Column\CommentActions">
+            <settings>
+                <indexField>comment_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

@@ -244,6 +244,23 @@ class InstallSchema implements InstallSchemaInterface
             $connection->createTable($linkTable);
         }
 
+
+        $commentTableName = $installer->getTable('thirdparty_blogarticle_comment');
+        if (!$connection->isTableExists($commentTableName)) {
+            $commentTable = $connection->newTable($commentTableName)
+                ->addColumn('comment_id', Table::TYPE_INTEGER, null, ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true], 'Comment ID')
+                ->addColumn('post_id', Table::TYPE_INTEGER, null, ['unsigned' => true, 'nullable' => false], 'Post ID')
+                ->addColumn('author_name', Table::TYPE_TEXT, 255, ['nullable' => false], 'Author name')
+                ->addColumn('author_email', Table::TYPE_TEXT, 255, ['nullable' => true], 'Author email')
+                ->addColumn('content', Table::TYPE_TEXT, '64k', ['nullable' => false], 'Comment body')
+                ->addColumn('is_approved', Table::TYPE_SMALLINT, null, ['unsigned' => true, 'nullable' => false, 'default' => 0], 'Is approved')
+                ->addColumn('creation_time', Table::TYPE_TIMESTAMP, null, ['nullable' => false, 'default' => Table::TIMESTAMP_INIT], 'Creation Time')
+                ->addIndex($installer->getIdxName($commentTableName, ['post_id']), ['post_id'])
+                ->addIndex($installer->getIdxName($commentTableName, ['is_approved']), ['is_approved'])
+                ->setComment('BlogArticle Comments');
+            $connection->createTable($commentTable);
+        }
+
         $installer->endSetup();
     }
 }
