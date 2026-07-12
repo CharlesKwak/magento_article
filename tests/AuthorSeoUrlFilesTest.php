@@ -80,11 +80,11 @@ class AuthorSeoUrlFilesTest extends TestCase
         $this->assertStringContainsString('name="author"', $edit);
     }
 
-    public function testModuleVersionIs240(): void
+    public function testModuleVersionIs250(): void
     {
         $c = file_get_contents($this->root() . '/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.4.0"', $c);
+        $this->assertStringContainsString('setup_version="2.5.0"', $c);
         $composer = file_get_contents(dirname(__DIR__) . '/composer.json');
-        $this->assertStringContainsString('"version": "2.4.0"', $composer);
+        $this->assertStringContainsString('"version": "2.5.0"', $composer);
     }
 }

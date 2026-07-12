@@ -1,5 +1,27 @@
 # Release Notes
 
+## 2.5.0 - 2026-07-12
+
+### Added
+- Admin post grid **mass actions**: Enable, Disable (plus existing Delete)
+- CLI commands:
+  - `bin/magento blogarticle:post:list [--status=all|enabled|disabled] [--limit=50] [--search=…]`
+  - `bin/magento blogarticle:post:show <id|url_key>`
+  - `bin/magento blogarticle:post:set-status <id> enabled|disabled`
+
+### Changed
+- Module / package version **2.5.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.5.0.
+
+---
+
 ## 2.4.0 - 2026-07-12
 
 ### Added

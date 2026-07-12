@@ -78,4 +78,20 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="blogarticle_post_list" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\PostListCommand
+                </item>
+                <item name="blogarticle_post_show" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\PostShowCommand
+                </item>
+                <item name="blogarticle_post_set_status" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\PostSetStatusCommand
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
