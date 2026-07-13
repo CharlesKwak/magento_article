@@ -68,12 +68,13 @@ class PostRepository implements PostRepositoryInterface
         return $this->toDataModel($post);
     }
 
-    public function getList($page = 1, $pageSize = 10, $search = null, $categoryId = null, $tagId = null)
+    public function getList($page = 1, $pageSize = 10, $search = null, $categoryId = null, $tagId = null, $author = null)
     {
         $page = max(1, (int) $page);
         $pageSize = max(1, min(100, (int) $pageSize));
         $categoryId = $categoryId !== null && $categoryId !== '' ? (int) $categoryId : null;
         $tagId = $tagId !== null && $tagId !== '' ? (int) $tagId : null;
+        $author = $author !== null && $author !== '' ? (string) $author : null;
 
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
@@ -82,6 +83,7 @@ class PostRepository implements PostRepositoryInterface
         $this->postFilter->applySearch($collection, $search !== null ? (string) $search : null);
         $this->postFilter->applyCategoryId($collection, $categoryId);
         $this->postFilter->applyTagId($collection, $tagId);
+        $this->postFilter->applyAuthorKey($collection, $author);
         $this->postFilter->applyDefaultSort($collection);
         $collection->setPageSize($pageSize);
         $collection->setCurPage($page);
@@ -93,10 +95,11 @@ class PostRepository implements PostRepositoryInterface
         return $items;
     }
 
-    public function getListTotalCount($search = null, $categoryId = null, $tagId = null)
+    public function getListTotalCount($search = null, $categoryId = null, $tagId = null, $author = null)
     {
         $categoryId = $categoryId !== null && $categoryId !== '' ? (int) $categoryId : null;
         $tagId = $tagId !== null && $tagId !== '' ? (int) $tagId : null;
+        $author = $author !== null && $author !== '' ? (string) $author : null;
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
         $this->postFilter->applyPublishedOnly($collection);
@@ -104,6 +107,7 @@ class PostRepository implements PostRepositoryInterface
         $this->postFilter->applySearch($collection, $search !== null ? (string) $search : null);
         $this->postFilter->applyCategoryId($collection, $categoryId);
         $this->postFilter->applyTagId($collection, $tagId);
+        $this->postFilter->applyAuthorKey($collection, $author);
         return (int) $collection->getSize();
     }
 

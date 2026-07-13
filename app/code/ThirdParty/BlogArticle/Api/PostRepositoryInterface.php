@@ -29,17 +29,19 @@ interface PostRepositoryInterface
      * @param string|null $search
      * @param int|null $categoryId
      * @param int|null $tagId
+     * @param string|null $author Author display name or URL slug
      * @return \ThirdParty\BlogArticle\Api\Data\PostInterface[]
      */
-    public function getList($page = 1, $pageSize = 10, $search = null, $categoryId = null, $tagId = null);
+    public function getList($page = 1, $pageSize = 10, $search = null, $categoryId = null, $tagId = null, $author = null);
 
     /**
      * @param string|null $search
      * @param int|null $categoryId
      * @param int|null $tagId
+     * @param string|null $author Author display name or URL slug
      * @return int
      */
-    public function getListTotalCount($search = null, $categoryId = null, $tagId = null);
+    public function getListTotalCount($search = null, $categoryId = null, $tagId = null, $author = null);
 
     /**
      * @param \ThirdParty\BlogArticle\Api\Data\PostInterface $post

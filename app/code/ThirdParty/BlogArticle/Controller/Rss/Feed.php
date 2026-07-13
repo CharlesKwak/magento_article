@@ -4,14 +4,21 @@ namespace ThirdParty\BlogArticle\Controller\Rss;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\RawFactory;
-use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Store\Model\StoreManagerInterface;
+use ThirdParty\BlogArticle\Model\CategoryFactory;
+use ThirdParty\BlogArticle\Model\Config;
 use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
 use ThirdParty\BlogArticle\Model\PostFilter;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory;
+use ThirdParty\BlogArticle\Model\TagFactory;
 
 /**
  * Public RSS 2.0 feed of enabled blog posts.
+ *
+ * Optional filters (query or path params):
+ *  - category / cat: category url_key
+ *  - tag: tag url_key
+ *  - author: author slug or name
  */
 class Feed extends Action
 {
@@ -20,6 +27,9 @@ class Feed extends Action
     private $postFilter;
     private $storeManager;
     private $imageUploader;
+    private $config;
+    private $categoryFactory;
+    private $tagFactory;
 
     public function __construct(
         Context $context,
@@ -27,7 +37,10 @@ class Feed extends Action
         CollectionFactory $collectionFactory,
         PostFilter $postFilter,
         StoreManagerInterface $storeManager,
-        FeaturedImageUploader $imageUploader
+        FeaturedImageUploader $imageUploader,
+        Config $config,
+        CategoryFactory $categoryFactory,
+        TagFactory $tagFactory
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
@@ -35,6 +48,9 @@ class Feed extends Action
         $this->postFilter = $postFilter;
         $this->storeManager = $storeManager;
         $this->imageUploader = $imageUploader;
+        $this->config = $config;
+        $this->categoryFactory = $categoryFactory;
+        $this->tagFactory = $tagFactory;
     }
 
     public function execute()
@@ -42,12 +58,60 @@ class Feed extends Action
         $store = $this->storeManager->getStore();
         $baseUrl = rtrim($store->getBaseUrl(), '/');
         $listUrl = $baseUrl . '/blog/';
+        $blogName = $this->config->getBlogName();
+
+        $categoryKey = trim((string) $this->getRequest()->getParam('category', ''));
+        if ($categoryKey === '') {
+            $categoryKey = trim((string) $this->getRequest()->getParam('cat', ''));
+        }
+        $tagKey = trim((string) $this->getRequest()->getParam('tag', ''));
+        $authorKey = trim((string) $this->getRequest()->getParam('author', ''));
+
+        $feedQuery = [];
+        $channelTitle = $blogName;
+        $channelDesc = (string) __('Latest blog posts');
+        $categoryId = null;
+        $tagId = null;
+
+        if ($categoryKey !== '') {
+            $category = $this->categoryFactory->create()->load($categoryKey, 'url_key');
+            if ($category->getId() && (int) $category->getIsActive()) {
+                $categoryId = (int) $category->getId();
+                $feedQuery['category'] = $categoryKey;
+                $channelTitle = (string) __('%1 — %2', $blogName, $category->getName());
+                $channelDesc = (string) __('Posts in category %1', $category->getName());
+                $listUrl = $baseUrl . '/blog/category/' . rawurlencode($categoryKey);
+            }
+        }
+        if ($tagKey !== '') {
+            $tag = $this->tagFactory->create()->load($tagKey, 'url_key');
+            if ($tag->getId() && (int) $tag->getIsActive()) {
+                $tagId = (int) $tag->getId();
+                $feedQuery['tag'] = $tagKey;
+                $channelTitle = (string) __('%1 — #%2', $blogName, $tag->getName());
+                $channelDesc = (string) __('Posts tagged %1', $tag->getName());
+                $listUrl = $baseUrl . '/blog/tag/' . rawurlencode($tagKey);
+            }
+        }
+        if ($authorKey !== '') {
+            $feedQuery['author'] = $authorKey;
+            $channelTitle = (string) __('%1 — Author %2', $blogName, str_replace('-', ' ', $authorKey));
+            $channelDesc = (string) __('Posts by %1', str_replace('-', ' ', $authorKey));
+            $listUrl = $baseUrl . '/blog/author/' . rawurlencode($authorKey);
+        }
+
         $feedUrl = $baseUrl . '/blog/rss/feed/';
+        if ($feedQuery) {
+            $feedUrl .= '?' . http_build_query($feedQuery);
+        }
 
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
         $this->postFilter->applyPublishedOnly($collection);
         $this->postFilter->applyStoreId($collection, (int) $store->getId());
+        $this->postFilter->applyCategoryId($collection, $categoryId);
+        $this->postFilter->applyTagId($collection, $tagId);
+        $this->postFilter->applyAuthorKey($collection, $authorKey !== '' ? $authorKey : null);
         $this->postFilter->applyDefaultSort($collection);
         $collection->setPageSize(50);
 
@@ -74,24 +138,25 @@ class Feed extends Action
                     . $description;
             }
 
+            $author = trim((string) $post->getAuthor());
             $itemsXml .= '<item>'
                 . '<title>' . $this->xml($post->getTitle()) . '</title>'
                 . '<link>' . $this->xml($link) . '</link>'
                 . '<guid isPermaLink="true">' . $this->xml($link) . '</guid>'
                 . '<pubDate>' . $this->xml(date(DATE_RSS, $pubTs ?: time())) . '</pubDate>'
+                . ($author !== '' ? '<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">'
+                    . $this->xml($author) . '</dc:creator>' : '')
                 . '<description>' . $this->xml($description) . '</description>'
                 . '</item>';
         }
 
-        $channelTitle = (string) __('Blog');
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'
-            . '<rss version="2.0">'
+            . '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">'
             . '<channel>'
             . '<title>' . $this->xml($channelTitle) . '</title>'
             . '<link>' . $this->xml($listUrl) . '</link>'
-            . '<description>' . $this->xml((string) __('Latest blog posts')) . '</description>'
-            . '<atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="'
-            . $this->xml($feedUrl) . '" rel="self" type="application/rss+xml"/>'
+            . '<description>' . $this->xml($channelDesc) . '</description>'
+            . '<atom:link href="' . $this->xml($feedUrl) . '" rel="self" type="application/rss+xml"/>'
             . $itemsXml
             . '</channel></rss>';
 

@@ -76,8 +76,17 @@
     <type name="Magento\Sitemap\Model\ItemProvider\Composite">
         <arguments>
             <argument name="itemProviders" xsi:type="array">
+                <item name="blogarticle_index" xsi:type="object">
+                    ThirdParty\BlogArticle\Model\Sitemap\ItemProvider\Index
+                </item>
                 <item name="blogarticle_posts" xsi:type="object">
                     ThirdParty\BlogArticle\Model\Sitemap\ItemProvider\Posts
+                </item>
+                <item name="blogarticle_categories" xsi:type="object">
+                    ThirdParty\BlogArticle\Model\Sitemap\ItemProvider\Categories
+                </item>
+                <item name="blogarticle_tags" xsi:type="object">
+                    ThirdParty\BlogArticle\Model\Sitemap\ItemProvider\Tags
                 </item>
             </argument>
         </arguments>

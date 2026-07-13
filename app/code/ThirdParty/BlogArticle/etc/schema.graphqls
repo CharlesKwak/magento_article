@@ -94,8 +94,10 @@ type Query {
         search: String
         categoryId: Int
         tagId: Int
+        author: String
     ): BlogPostList
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Posts")
+    @doc(description: "List posts. Optional author is display name or URL slug (spaces as hyphens).")
 
     blogPost(id: Int, url_key: String): BlogPost
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Post")

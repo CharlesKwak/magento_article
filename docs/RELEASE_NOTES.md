@@ -1,5 +1,27 @@
 # Release Notes
 
+## 2.16.0 - 2026-07-13
+
+### Added
+- **GraphQL / REST author filter**: `blogPosts(author: "jane-doe")` and `getList(..., $author)`
+- **RSS filtered feeds**: `/blog/rss/feed/?category=`, `?tag=`, `?author=` (title uses blog name)
+- **Sitemap**: blog index, category URLs, tag URLs (in addition to posts)
+- List page RSS link inherits active category/tag/author filters
+
+### Changed
+- Module / package version **2.16.0**
+- GraphQL `Posts` resolver uses shared `PostMapper` (includes `view_count`)
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns. Regenerate sitemap after upgrade for new URLs.
+
+---
+
 ## 2.15.0 - 2026-07-13
 
 ### Added

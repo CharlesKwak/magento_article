@@ -507,7 +507,20 @@ class Article extends Template implements IdentityInterface
      */
     public function getRssUrl(): string
     {
-        return $this->getUrl('blog/rss/feed');
+        $params = [];
+        $cat = $this->getCategoryKeyFilter();
+        if ($cat !== '') {
+            $params['category'] = $cat;
+        }
+        $tag = $this->getTagKeyFilter();
+        if ($tag !== '') {
+            $params['tag'] = $tag;
+        }
+        $author = $this->getAuthorKeyFilter();
+        if ($author !== '') {
+            $params['author'] = $author;
+        }
+        return $this->getUrl('blog/rss/feed', $params);
     }
 
     /**

@@ -5,14 +5,19 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
+use ThirdParty\BlogArticle\Model\Resolver\DataMapper\PostMapper;
 
 class Posts implements ResolverInterface
 {
     private $postRepository;
+    private $postMapper;
 
-    public function __construct(PostRepositoryInterface $postRepository)
-    {
+    public function __construct(
+        PostRepositoryInterface $postRepository,
+        PostMapper $postMapper
+    ) {
         $this->postRepository = $postRepository;
+        $this->postMapper = $postMapper;
     }
 
     public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
@@ -22,35 +27,29 @@ class Posts implements ResolverInterface
         $search = isset($args['search']) ? (string) $args['search'] : null;
         $categoryId = isset($args['categoryId']) ? (int) $args['categoryId'] : null;
         $tagId = isset($args['tagId']) ? (int) $args['tagId'] : null;
+        $author = isset($args['author']) ? trim((string) $args['author']) : null;
+        if ($author === '') {
+            $author = null;
+        }
 
         $pageSize = max(1, min(100, $pageSize));
         $currentPage = max(1, $currentPage);
 
-        $items = $this->postRepository->getList($currentPage, $pageSize, $search, $categoryId, $tagId);
-        $totalCount = $this->postRepository->getListTotalCount($search, $categoryId, $tagId);
+        $items = $this->postRepository->getList(
+            $currentPage,
+            $pageSize,
+            $search,
+            $categoryId,
+            $tagId,
+            $author
+        );
+        $totalCount = $this->postRepository->getListTotalCount($search, $categoryId, $tagId, $author);
         $totalPages = $pageSize > 0 ? (int) ceil($totalCount / $pageSize) : 0;
 
         $mapped = [];
         foreach ($items as $item) {
-            $mapped[] = [
-                'post_id' => $item->getPostId(),
-                'title' => $item->getTitle(),
-                'author' => $item->getAuthor(),
-                'url_key' => $item->getUrlKey(),
-                'content' => $item->getContent(),
-                'excerpt' => $item->getExcerpt(),
-                'featured_image' => $item->getFeaturedImage(),
-                'meta_title' => $item->getMetaTitle(),
-                'meta_description' => $item->getMetaDescription(),
-                'is_active' => $item->getIsActive(),
-                'category_id' => $item->getCategoryId(),
-                'store_id' => $item->getStoreId(),
-                'tag_ids' => $item->getTagIds() ?: [],
-                'creation_time' => $item->getCreationTime(),
-                'update_time' => $item->getUpdateTime(),
-                'published_at' => $item->getPublishedAt(),
-                'model' => $item,
-            ];
+            $row = $this->postMapper->toGraphQlArray($item);
+            $mapped[] = $row;
         }
 
         return [
