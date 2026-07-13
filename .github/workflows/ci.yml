@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -23,7 +23,7 @@ jobs:
       - name: Package module
         run: zip -r module.zip app
       - name: Deploy to server
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && secrets.DEPLOY_HOST != ''
         env:
           HOST: ${{ secrets.DEPLOY_HOST }}
           USER: ${{ secrets.DEPLOY_USER }}
@@ -32,4 +32,4 @@ jobs:
         run: |
           echo "$SSH_KEY" > deploy_key
           chmod 600 deploy_key
-          scp -i deploy_key module.zip "$USER@$HOST:$TARGET_DIR/"
+          scp -i deploy_key -o StrictHostKeyChecking=accept-new module.zip "$USER@$HOST:$TARGET_DIR/"
