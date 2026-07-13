@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <!-- Magento AbstractModel dispatches clean_cache_by_tags; we also listen to generic save/delete -->
+    <event name="model_save_after">
+        <observer name="thirdparty_blogarticle_flush_cache_save"
+                  instance="ThirdParty\BlogArticle\Observer\FlushBlogCache"/>
+    </event>
+    <event name="model_delete_after">
+        <observer name="thirdparty_blogarticle_flush_cache_delete"
+                  instance="ThirdParty\BlogArticle\Observer\FlushBlogCache"/>
+    </event>
+</config>

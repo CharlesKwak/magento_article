@@ -94,6 +94,44 @@ class FeaturedImageUploader
     }
 
     /**
+     * Local filesystem path for a media-relative image (empty for remote URLs).
+     */
+    public function resolveLocalPath(?string $value): string
+    {
+        $value = trim((string) $value);
+        if ($value === '' || preg_match('#^https?://#i', $value)) {
+            return '';
+        }
+        $relative = preg_replace('#^/?media/#', '', $value);
+        $relative = ltrim((string) $relative, '/');
+        if ($relative === '') {
+            return '';
+        }
+        $mediaDir = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $absolute = $mediaDir->getAbsolutePath($relative);
+        return is_file($absolute) ? $absolute : '';
+    }
+
+    /**
+     * @return array{width:?int,height:?int}
+     */
+    public function getImageDimensions(?string $value): array
+    {
+        $path = $this->resolveLocalPath($value);
+        if ($path === '') {
+            return ['width' => null, 'height' => null];
+        }
+        $size = @getimagesize($path);
+        if (!is_array($size) || empty($size[0]) || empty($size[1])) {
+            return ['width' => null, 'height' => null];
+        }
+        return [
+            'width' => (int) $size[0],
+            'height' => (int) $size[1],
+        ];
+    }
+
+    /**
      * @param string $relativePath under media
      * @return string
      */

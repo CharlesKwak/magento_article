@@ -95,6 +95,9 @@
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
+                <item name="blogarticle_stats" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\StatsCommand
+                </item>
                 <item name="blogarticle_post_list" xsi:type="object">
                     ThirdParty\BlogArticle\Console\Command\PostListCommand
                 </item>

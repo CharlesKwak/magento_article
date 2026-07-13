@@ -1,5 +1,27 @@
 # Release Notes
 
+## 2.21.0 - 2026-07-14
+
+### Added
+- **CLI** `blogarticle:stats` — posts/comments/views summary
+- **Cache flush observer** for Post/Comment save & delete (block cache tags only)
+- **Admin dashboard**: pending badge, recently updated posts, top viewed posts
+- **Featured image dimensions** (`width`/`height`) when media file is local (CLS)
+- Post view **cache identities** include related post tags
+
+### Changed
+- Module / package version **2.21.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.21.0.
+
+---
+
 ## 2.20.0 - 2026-07-14
 
 ### Added

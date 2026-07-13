@@ -1,20 +1,64 @@
 <?php
 /** @var \ThirdParty\BlogArticle\Block\Adminhtml\Dashboard\Stats $block */
+$pending = $block->getCommentsPending();
+$recent = $block->getRecentPosts(5);
+$top = $block->getTopViewedPosts(5);
 ?>
 <div class="dashboard-container blogarticle-dashboard-stats" style="margin:1.5rem 0;">
     <div class="dashboard-item" style="border:1px solid #e3e3e3;padding:1rem 1.25rem;background:#fff;">
         <strong style="font-size:1.1rem;"><?= $block->escapeHtml(__('Blog Article')) ?></strong>
+        <?php if ($pending > 0): ?>
+            <span style="margin-left:0.5rem;background:#e22626;color:#fff;border-radius:3px;padding:0.1rem 0.45rem;font-size:0.85rem;">
+                <?= $block->escapeHtml(__('%1 pending', $pending)) ?>
+            </span>
+        <?php endif; ?>
         <ul style="margin:0.75rem 0 0;padding-left:1.25rem;line-height:1.6;">
             <li>
                 <?= $block->escapeHtml(__('Posts: %1 enabled / %2 total', $block->getPostsEnabled(), $block->getPostsTotal())) ?>
             </li>
             <li>
-                <?= $block->escapeHtml(__('Pending comments: %1', $block->getCommentsPending())) ?>
+                <?= $block->escapeHtml(__('Pending comments: %1', $pending)) ?>
+                <?php if ($pending > 0): ?>
+                    — <a href="<?= $block->escapeUrl($block->getPendingCommentsUrl()) ?>"><?= $block->escapeHtml(__('Review')) ?></a>
+                <?php endif; ?>
             </li>
             <li>
                 <?= $block->escapeHtml(__('Total views: %1', $block->getViewsTotal())) ?>
             </li>
         </ul>
+
+        <?php if ($recent): ?>
+            <div style="margin-top:1rem;">
+                <strong><?= $block->escapeHtml(__('Recently updated')) ?></strong>
+                <ul style="margin:0.35rem 0 0;padding-left:1.25rem;">
+                    <?php foreach ($recent as $row): ?>
+                        <li>
+                            <a href="<?= $block->escapeUrl($block->getPostEditUrl($row['id'])) ?>">
+                                <?= $block->escapeHtml($row['title']) ?>
+                            </a>
+                            <span style="color:#888;">(<?= $block->escapeHtml($row['status']) ?>)</span>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($top): ?>
+            <div style="margin-top:1rem;">
+                <strong><?= $block->escapeHtml(__('Top viewed')) ?></strong>
+                <ul style="margin:0.35rem 0 0;padding-left:1.25rem;">
+                    <?php foreach ($top as $row): ?>
+                        <li>
+                            <a href="<?= $block->escapeUrl($block->getPostEditUrl($row['id'])) ?>">
+                                <?= $block->escapeHtml($row['title']) ?>
+                            </a>
+                            <span style="color:#888;">— <?= (int) $row['views'] ?></span>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
         <p style="margin:0.75rem 0 0;">
             <a href="<?= $block->escapeUrl($block->getPostsUrl()) ?>"><?= $block->escapeHtml(__('Manage posts')) ?></a>
             &nbsp;|&nbsp;

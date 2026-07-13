@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **2.20.0**
+Version covered: **2.21.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -26,7 +26,7 @@ This module provides a **database-backed blog post list** with Admin management:
 | GraphQL | `/graphql` (`blogPosts`, `blogPost`) | Public read + search |
 | Widget | **Content → Widgets** | “Blog Article — Recent Posts” |
 
-### What you can do in v2.20.0
+### What you can do in v2.21.0
 
 - Search and page through the storefront blog list; open clean post/category/tag URLs.
 - Post detail: breadcrumbs, reading time, share/copy link, prev/next, clickable tags/category.
@@ -285,7 +285,7 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v2.20.0 |
+| Topic | Behavior in v2.21.0 |
 |---|---|
 | Multi-website / store view | Posts may target a store via `store_id` (0/NULL = all views) |
 | Translation of post content | Not supported; store raw title/content per row only |
@@ -585,3 +585,18 @@ php bin/magento blogarticle:post:create --title="Hi" --content="<p>x</p>" --meta
 php bin/magento blogarticle:post:update --id=1 --meta-robots=INDEX,FOLLOW
 php bin/magento blogarticle:post:show 1
 ```
+
+
+---
+
+## Ops: stats CLI & cache (v2.21)
+
+```bash
+php bin/magento blogarticle:stats
+```
+
+Prints posts_total, posts_enabled, comments_total, comments_pending, categories_total, tags_total, views_total.
+
+Saving or deleting posts/comments flushes blog block cache tags (`blogarticle_post`, per-post tags).
+
+Admin **Dashboard** shows recent posts, top viewed posts, and a pending-comment badge.

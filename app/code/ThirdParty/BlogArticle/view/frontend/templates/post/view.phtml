@@ -77,10 +77,13 @@ $related = $block->getRelatedPosts();
                 </p>
             <?php endif; ?>
             <?php if ($block->getFeaturedImageUrl()): ?>
+                <?php $dims = $block->getFeaturedImageDimensions(); ?>
                 <p class="blog-featured-image">
                     <img src="<?= $block->escapeUrl($block->getFeaturedImageUrl()) ?>"
                          alt="<?= $block->escapeHtmlAttr((string) $post->getTitle()) ?>"
                          style="max-width:100%;height:auto;"
+                         <?php if (!empty($dims['width'])): ?>width="<?= (int) $dims['width'] ?>"<?php endif; ?>
+                         <?php if (!empty($dims['height'])): ?>height="<?= (int) $dims['height'] ?>"<?php endif; ?>
                          <?php if ($block->isLazyLoadImagesEnabled()): ?>
                          loading="lazy" decoding="async"
                          <?php endif; ?>

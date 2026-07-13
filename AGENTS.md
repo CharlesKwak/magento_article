@@ -10,7 +10,7 @@ Project rules for every Grok agent working in this repository. Keep answers grou
 | Composer package | `thirdparty/module-blog-article` |
 | Magento module | `ThirdParty_BlogArticle` |
 | PHP namespace | `ThirdParty\BlogArticle\` |
-| Version | **2.20.0** (see `composer.json` + `etc/module.xml`) |
+| Version | **2.21.0** (see `composer.json` + `etc/module.xml`) |
 | License | GPL-2.0-only |
 | Repo | https://github.com/CharlesKwak/magento_article |
 | Code root | `app/code/ThirdParty/BlogArticle/` |

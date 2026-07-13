@@ -64,6 +64,53 @@ class Stats extends Template
         return (int) $connection->fetchOne($select);
     }
 
+    /**
+     * Latest posts for dashboard snapshot.
+     *
+     * @return array<int, array{id:int,title:string,status:string}>
+     */
+    public function getRecentPosts(int $limit = 5): array
+    {
+        $c = $this->postCollectionFactory->create();
+        $c->setOrder('update_time', 'DESC');
+        $c->setPageSize(max(1, min(10, $limit)));
+        $rows = [];
+        foreach ($c as $post) {
+            $rows[] = [
+                'id' => (int) $post->getId(),
+                'title' => (string) $post->getTitle(),
+                'status' => (int) $post->getIsActive() ? 'enabled' : 'disabled',
+            ];
+        }
+        return $rows;
+    }
+
+    /**
+     * Top posts by view_count.
+     *
+     * @return array<int, array{id:int,title:string,views:int}>
+     */
+    public function getTopViewedPosts(int $limit = 5): array
+    {
+        $c = $this->postCollectionFactory->create();
+        $c->setOrder('view_count', 'DESC');
+        $c->setPageSize(max(1, min(10, $limit)));
+        $rows = [];
+        foreach ($c as $post) {
+            $rows[] = [
+                'id' => (int) $post->getId(),
+                'title' => (string) $post->getTitle(),
+                'views' => (int) $post->getData('view_count'),
+            ];
+        }
+        return $rows;
+    }
+
+    public function getPostEditUrl(int $postId): string
+    {
+        return $this->getUrl('blogarticle/post/edit', ['post_id' => $postId]);
+    }
+
     public function getPostsUrl(): string
     {
         return $this->getUrl('blogarticle/post/index');
@@ -71,6 +118,12 @@ class Stats extends Template
 
     public function getCommentsUrl(): string
     {
+        return $this->getUrl('blogarticle/comment/index');
+    }
+
+    public function getPendingCommentsUrl(): string
+    {
+        // Grid filters are UI-state; deep-link to comments index.
         return $this->getUrl('blogarticle/comment/index');
     }
 

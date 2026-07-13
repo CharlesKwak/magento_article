@@ -789,6 +789,21 @@ class View extends Template implements IdentityInterface
     }
 
     /**
+     * Width/height for featured image when file is local (CLS-friendly).
+     *
+     * @return array{width:?int,height:?int}
+     */
+    public function getFeaturedImageDimensions(): array
+    {
+        $post = $this->getPost();
+        if (!$post) {
+            return ['width' => null, 'height' => null];
+        }
+        $value = $post->getFeaturedImage() ? (string) $post->getFeaturedImage() : null;
+        return $this->imageUploader->getImageDimensions($value);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getIdentities()
@@ -797,6 +812,19 @@ class View extends Template implements IdentityInterface
         if (!$post) {
             return [Post::CACHE_TAG];
         }
-        return $post->getIdentities();
+        $tags = $post->getIdentities();
+        // Related posts affect this block output.
+        try {
+            foreach ($this->getRelatedPosts() as $related) {
+                if (method_exists($related, 'getIdentities')) {
+                    $tags = array_merge($tags, $related->getIdentities());
+                } elseif (method_exists($related, 'getPostId') && $related->getPostId()) {
+                    $tags[] = Post::CACHE_TAG . '_' . (int) $related->getPostId();
+                }
+            }
+        } catch (\Throwable $e) {
+            // ignore
+        }
+        return array_values(array_unique($tags));
     }
 }

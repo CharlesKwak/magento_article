@@ -97,11 +97,14 @@ $searchQuery = $block->getSearchQuery();
         <?php foreach ($posts as $post): ?>
             <article class="blog-post blog-post-summary">
                 <?php if ($block->getFeaturedImageUrl($post)): ?>
+                    <?php $dims = $block->getFeaturedImageDimensions($post); ?>
                     <p class="blog-featured-image">
                         <a href="<?= $block->escapeUrl($block->getPostUrl($post)) ?>">
                             <img src="<?= $block->escapeUrl($block->getFeaturedImageUrl($post)) ?>"
                                  alt="<?= $block->escapeHtmlAttr((string) $post->getTitle()) ?>"
                                  style="max-width:100%;height:auto;"
+                                 <?php if (!empty($dims['width'])): ?>width="<?= (int) $dims['width'] ?>"<?php endif; ?>
+                                 <?php if (!empty($dims['height'])): ?>height="<?= (int) $dims['height'] ?>"<?php endif; ?>
                                  <?php if ($block->isLazyLoadImagesEnabled()): ?>
                                  loading="lazy" decoding="async"
                                  <?php endif; ?>

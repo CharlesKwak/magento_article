@@ -520,6 +520,16 @@ class Article extends Template implements IdentityInterface
     }
 
     /**
+     * @return array{width:?int,height:?int}
+     */
+    public function getFeaturedImageDimensions(Post $post): array
+    {
+        return $this->imageUploader->getImageDimensions(
+            $post->getFeaturedImage() ? (string) $post->getFeaturedImage() : null
+        );
+    }
+
+    /**
      * @return string
      */
     public function getRssUrl(): string
