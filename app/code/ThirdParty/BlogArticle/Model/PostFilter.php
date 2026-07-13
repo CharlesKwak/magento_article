@@ -151,4 +151,35 @@ class PostFilter
             $normalized
         );
     }
+
+    /**
+     * Filter by calendar year and optional month of publish/create time.
+     *
+     * @param Collection $collection
+     * @param int|null $year
+     * @param int|null $month 1–12 or null for full year
+     * @return void
+     */
+    public function applyYearMonth(Collection $collection, ?int $year, ?int $month = null): void
+    {
+        if ($year === null || $year < 1970 || $year > 2100) {
+            return;
+        }
+        $dateExpr = 'IFNULL(main_table.published_at, main_table.creation_time)';
+        if ($month !== null && $month >= 1 && $month <= 12) {
+            $start = sprintf('%04d-%02d-01 00:00:00', $year, $month);
+            try {
+                $end = (new \DateTimeImmutable($start))->modify('first day of next month')->format('Y-m-d H:i:s');
+            } catch (\Exception $e) {
+                return;
+            }
+            $collection->getSelect()->where($dateExpr . ' >= ?', $start);
+            $collection->getSelect()->where($dateExpr . ' < ?', $end);
+            return;
+        }
+        $start = sprintf('%04d-01-01 00:00:00', $year);
+        $end = sprintf('%04d-01-01 00:00:00', $year + 1);
+        $collection->getSelect()->where($dateExpr . ' >= ?', $start);
+        $collection->getSelect()->where($dateExpr . ' < ?', $end);
+    }
 }

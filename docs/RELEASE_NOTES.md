@@ -1,5 +1,27 @@
 # Release Notes
 
+## 2.24.0 - 2026-07-14
+
+### Added
+- **Related posts** ranking: same category → shared tags → recent fill; config **Display → Related Posts Limit**
+- **Monthly archive** URLs `/blog/archive/YYYY` and `/blog/archive/YYYY/MM`
+- **Sidebar Archive** block with month counts (config under Sidebar)
+- `PostFilter::applyYearMonth`, `Model/Archive` monthly buckets
+
+### Changed
+- Module / package version **2.24.0**
+- `PostRepository::getRelated()` fills from tags when category matches are short
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.24.0.
+
+---
+
 ## 2.23.0 - 2026-07-14
 
 ### Added
@@ -22,7 +44,6 @@ php bin/magento setup:di:compile
 No new DB columns in 2.23.0.
 
 ---
-
 ## 2.22.0 - 2026-07-14
 
 ### Added

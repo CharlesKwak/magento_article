@@ -4,7 +4,7 @@ This guide explains how to install and verify the **ThirdParty_BlogArticle** mod
 
 Module package name: `thirdparty/module-blog-article`  
 Module code name: `ThirdParty_BlogArticle`  
-Current version: **2.23.0**
+Current version: **2.24.0**
 
 ---
 
@@ -18,7 +18,7 @@ After a successful install, the module:
 4. Exposes a **storefront list page** at `/blog/index/index` (frontName: `blog`).
 5. Exposes an **Admin list + CRUD** under **Content → Blog Posts** (Add / Edit / Delete).
 
-### Capability matrix (v2.23.0)
+### Capability matrix (v2.24.0)
 
 | Capability | Status |
 |---|---|
@@ -44,6 +44,8 @@ After a successful install, the module:
 | Configurable page size / comments / media | **Supported** (Admin config) |
 | Admin post grid image thumbnail | **Supported** |
 | Post table of contents (h2–h4) | **Supported** (Display config) |
+| Monthly archive URLs + sidebar | **Supported** |
+| Related posts by category/tags | **Supported** |
 
 For dependency and runtime inventory (PHP, MySQL, Magento, SBOM-style notes), see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
 

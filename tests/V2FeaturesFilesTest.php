@@ -18,6 +18,6 @@ class V2FeaturesFilesTest extends TestCase
     public function testModuleVersionIs200(): void
     {
         $c = file_get_contents(dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.23.0"', $c);
+        $this->assertStringContainsString('setup_version="2.24.0"', $c);
     }
 }

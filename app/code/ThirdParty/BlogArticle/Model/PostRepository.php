@@ -237,28 +237,83 @@ class PostRepository implements PostRepositoryInterface
             throw new NoSuchEntityException(__('The blog post with ID "%1" does not exist.', $postId));
         }
 
-        $build = function (?int $categoryId) use ($postId, $limit) {
-            $collection = $this->collectionFactory->create();
-            $this->postFilter->applyActiveOnly($collection);
-            $this->postFilter->applyPublishedOnly($collection);
-            $this->postFilter->applyStoreId($collection, (int) $this->storeManager->getStore()->getId());
-            $collection->addFieldToFilter('post_id', ['neq' => (int) $postId]);
-            if ($categoryId) {
-                $collection->addFieldToFilter('category_id', $categoryId);
+        $storeId = (int) $this->storeManager->getStore()->getId();
+        $exclude = [(int) $postId];
+        $items = [];
+
+        $append = function (array $candidates) use (&$items, &$exclude, $limit): void {
+            foreach ($candidates as $item) {
+                if (count($items) >= $limit) {
+                    return;
+                }
+                $id = (int) $item->getPostId();
+                if ($id <= 0 || in_array($id, $exclude, true)) {
+                    continue;
+                }
+                $exclude[] = $id;
+                $items[] = $item;
             }
-            $this->postFilter->applyDefaultSort($collection);
-            $collection->setPageSize($limit);
-            $items = [];
-            foreach ($collection as $post) {
-                $items[] = $this->toDataModel($post);
-            }
-            return $items;
         };
 
         $categoryId = $source->getCategoryId() ? (int) $source->getCategoryId() : null;
-        $items = $build($categoryId);
-        if (!$items && $categoryId) {
-            $items = $build(null);
+        if ($categoryId) {
+            $append($this->collectRelatedCandidates($exclude, $limit, $storeId, $categoryId, null));
+        }
+
+        $tagIds = $this->postTagLink->getTagIdsForPost((int) $postId);
+        if (count($items) < $limit && $tagIds) {
+            $append($this->collectRelatedCandidates($exclude, $limit - count($items), $storeId, null, $tagIds));
+        }
+
+        if (count($items) < $limit) {
+            $append($this->collectRelatedCandidates($exclude, $limit - count($items), $storeId, null, null));
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param int[] $excludeIds
+     * @param int[]|null $tagIds
+     * @return PostInterface[]
+     */
+    private function collectRelatedCandidates(
+        array $excludeIds,
+        int $need,
+        int $storeId,
+        ?int $categoryId,
+        ?array $tagIds
+    ): array {
+        if ($need < 1) {
+            return [];
+        }
+        $collection = $this->collectionFactory->create();
+        $this->postFilter->applyActiveOnly($collection);
+        $this->postFilter->applyPublishedOnly($collection);
+        $this->postFilter->applyStoreId($collection, $storeId);
+        if ($excludeIds) {
+            $collection->addFieldToFilter('post_id', ['nin' => $excludeIds]);
+        }
+        if ($categoryId) {
+            $collection->addFieldToFilter('category_id', $categoryId);
+        }
+        if ($tagIds) {
+            $tagIds = array_values(array_unique(array_filter(array_map('intval', $tagIds))));
+            if ($tagIds) {
+                $linkTable = $collection->getTable('thirdparty_blogarticle_post_tag');
+                $collection->getSelect()->join(
+                    ['blog_rel_pt' => $linkTable],
+                    'main_table.post_id = blog_rel_pt.post_id',
+                    []
+                )->where('blog_rel_pt.tag_id IN (?)', $tagIds)
+                    ->group('main_table.post_id');
+            }
+        }
+        $this->postFilter->applyDefaultSort($collection);
+        $collection->setPageSize($need);
+        $items = [];
+        foreach ($collection as $post) {
+            $items[] = $this->toDataModel($post);
         }
         return $items;
     }

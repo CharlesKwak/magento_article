@@ -27,6 +27,7 @@ class Router implements RouterInterface
         'category',
         'tag',
         'author',
+        'archive',
         'comment',
         'rss',
         'robots.txt',
@@ -114,6 +115,27 @@ class Router implements RouterInterface
                 ->setActionName('index')
                 ->setParam('author', $authorKey)
                 ->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
+            return $this->actionFactory->create(Forward::class);
+        }
+
+        // /blog/archive/{YYYY} or /blog/archive/{YYYY}/{MM}
+        if (preg_match('#^blog/archive/(\d{4})(?:/(\d{1,2}))?/?$#', $identifier, $matches)) {
+            $year = (int) $matches[1];
+            $month = isset($matches[2]) && $matches[2] !== '' ? (int) $matches[2] : 0;
+            if ($year < 1970 || $year > 2100) {
+                return null;
+            }
+            if ($month !== 0 && ($month < 1 || $month > 12)) {
+                return null;
+            }
+            $request->setModuleName('blog')
+                ->setControllerName('index')
+                ->setActionName('index')
+                ->setParam('year', $year);
+            if ($month > 0) {
+                $request->setParam('month', $month);
+            }
+            $request->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
             return $this->actionFactory->create(Forward::class);
         }
 

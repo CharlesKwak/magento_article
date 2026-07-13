@@ -27,6 +27,9 @@ class Config
     public const XML_PATH_SIDEBAR_SHOW_SEARCH = 'blogarticle/sidebar/show_search';
     public const XML_PATH_SIDEBAR_MOST_VIEWED = 'blogarticle/sidebar/show_most_viewed';
     public const XML_PATH_SIDEBAR_MOST_VIEWED_COUNT = 'blogarticle/sidebar/most_viewed_count';
+    public const XML_PATH_SIDEBAR_ARCHIVE = 'blogarticle/sidebar/show_archive';
+    public const XML_PATH_SIDEBAR_ARCHIVE_LIMIT = 'blogarticle/sidebar/archive_limit';
+    public const XML_PATH_RELATED_POSTS_LIMIT = 'blogarticle/display/related_posts_limit';
     public const XML_PATH_PRODUCT_RELATED_ENABLED = 'blogarticle/catalog/show_related_posts';
     public const XML_PATH_PRODUCT_RELATED_LIMIT = 'blogarticle/catalog/related_posts_limit';
     public const XML_PATH_COMMENTS_ENABLED = 'blogarticle/comments/enabled';
@@ -276,6 +279,44 @@ class Config
         );
         if ($n < 1) {
             return 5;
+        }
+        return min(20, $n);
+    }
+
+    public function isArchiveSidebarEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SIDEBAR_ARCHIVE,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    public function getArchiveSidebarLimit(?int $storeId = null): int
+    {
+        $n = (int) $this->scopeConfig->getValue(
+            self::XML_PATH_SIDEBAR_ARCHIVE_LIMIT,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        if ($n < 1) {
+            return 12;
+        }
+        return min(60, $n);
+    }
+
+    /**
+     * Related posts count on post detail (1–20).
+     */
+    public function getRelatedPostsLimit(?int $storeId = null): int
+    {
+        $n = (int) $this->scopeConfig->getValue(
+            self::XML_PATH_RELATED_POSTS_LIMIT,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        if ($n < 1) {
+            return 3;
         }
         return min(20, $n);
     }

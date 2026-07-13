@@ -246,7 +246,8 @@ class View extends Template implements IdentityInterface
             return $this->related;
         }
         try {
-            $this->related = $this->postRepository->getRelated((int) $post->getId(), 3);
+            $limit = $this->config->getRelatedPostsLimit();
+            $this->related = $this->postRepository->getRelated((int) $post->getId(), $limit);
         } catch (\Exception $e) {
             $this->related = [];
         }

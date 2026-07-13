@@ -25,6 +25,7 @@
                 <lazy_load_images>1</lazy_load_images>
                 <toc_enabled>1</toc_enabled>
                 <toc_min_headings>2</toc_min_headings>
+                <related_posts_limit>3</related_posts_limit>
             </display>
             <sidebar>
                 <enabled>1</enabled>
@@ -32,6 +33,8 @@
                 <show_search>1</show_search>
                 <show_most_viewed>1</show_most_viewed>
                 <most_viewed_count>5</most_viewed_count>
+                <show_archive>1</show_archive>
+                <archive_limit>12</archive_limit>
             </sidebar>
             <catalog>
                 <show_related_posts>1</show_related_posts>

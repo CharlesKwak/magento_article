@@ -193,6 +193,7 @@ class Article extends Template implements IdentityInterface
             $this->postFilter->applyCategoryId($collection, $this->getCategoryIdFilter());
             $this->postFilter->applyTagId($collection, $this->getTagIdFilter());
             $this->postFilter->applyAuthorKey($collection, $this->getAuthorKeyFilter());
+            $this->postFilter->applyYearMonth($collection, $this->getYearFilter(), $this->getMonthFilter());
             $this->postFilter->applyDefaultSort($collection);
             $collection->setPageSize($this->getPageSize());
             $collection->setCurPage($this->getCurrentPage());
@@ -278,6 +279,33 @@ class Article extends Template implements IdentityInterface
     public function getAuthorKeyFilter(): string
     {
         return trim((string) $this->getRequest()->getParam('author', ''));
+    }
+
+    /**
+     * Archive year from /blog/archive/{YYYY} or ?year=
+     */
+    public function getYearFilter(): ?int
+    {
+        $year = (int) $this->getRequest()->getParam('year', 0);
+        if ($year < 1970 || $year > 2100) {
+            return null;
+        }
+        return $year;
+    }
+
+    /**
+     * Archive month 1–12 from /blog/archive/{YYYY}/{MM} or ?month=
+     */
+    public function getMonthFilter(): ?int
+    {
+        if ($this->getYearFilter() === null) {
+            return null;
+        }
+        $month = (int) $this->getRequest()->getParam('month', 0);
+        if ($month < 1 || $month > 12) {
+            return null;
+        }
+        return $month;
     }
 
     /**
@@ -460,6 +488,19 @@ class Article extends Template implements IdentityInterface
             $label = str_replace('-', ' ', $authorKey);
             return (string) __('Author: %1', $label);
         }
+        $year = $this->getYearFilter();
+        if ($year !== null) {
+            $month = $this->getMonthFilter();
+            if ($month !== null) {
+                try {
+                    $label = (new \DateTimeImmutable(sprintf('%04d-%02d-01', $year, $month)))->format('F Y');
+                } catch (\Exception $e) {
+                    $label = sprintf('%04d-%02d', $year, $month);
+                }
+                return (string) __('Archive: %1', $label);
+            }
+            return (string) __('Archive: %1', (string) $year);
+        }
         return '';
     }
 
@@ -567,6 +608,16 @@ class Article extends Template implements IdentityInterface
         if ($author !== '') {
             return $this->getUrl('', ['_direct' => 'blog/author/' . $author]);
         }
+        $year = $this->getYearFilter();
+        if ($year !== null) {
+            $month = $this->getMonthFilter();
+            if ($month !== null) {
+                return $this->getUrl('', [
+                    '_direct' => sprintf('blog/archive/%04d/%02d', $year, $month),
+                ]);
+            }
+            return $this->getUrl('', ['_direct' => sprintf('blog/archive/%04d', $year)]);
+        }
         return $this->getUrl('blog/index/index');
     }
 
@@ -586,6 +637,14 @@ class Article extends Template implements IdentityInterface
         $author = $this->getAuthorKeyFilter();
         if ($author !== '') {
             return 'blog/author/' . $author;
+        }
+        $year = $this->getYearFilter();
+        if ($year !== null) {
+            $month = $this->getMonthFilter();
+            if ($month !== null) {
+                return sprintf('blog/archive/%04d/%02d', $year, $month);
+            }
+            return sprintf('blog/archive/%04d', $year);
         }
         return 'blog/';
     }

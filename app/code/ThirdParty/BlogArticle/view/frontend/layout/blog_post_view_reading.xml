@@ -10,6 +10,7 @@
         <referenceBlock name="blog.sidebar.search" remove="true"/>
         <referenceBlock name="blog.sidebar.recent" remove="true"/>
         <referenceBlock name="blog.sidebar.mostviewed" remove="true"/>
+        <referenceBlock name="blog.sidebar.archive" remove="true"/>
         <referenceBlock name="blogarticle.sidebar.above.recent" remove="true"/>
         <referenceBlock name="blogarticle.sidebar.under.recent" remove="true"/>
     </body>

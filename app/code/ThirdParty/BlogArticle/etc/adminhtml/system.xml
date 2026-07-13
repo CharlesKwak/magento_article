@@ -116,6 +116,12 @@
                         <field id="toc_enabled">1</field>
                     </depends>
                 </field>
+                <field id="related_posts_limit" translate="label comment" type="text" sortOrder="50"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Related Posts Limit</label>
+                    <comment>On post detail, max related posts (category match, then shared tags, then recent). 1–20. Default: 3.</comment>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                </field>
             </group>
 
             <group id="sidebar" translate="label" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -160,6 +166,25 @@
                     <depends>
                         <field id="enabled">1</field>
                         <field id="show_most_viewed">1</field>
+                    </depends>
+                </field>
+                <field id="show_archive" translate="label comment" type="select" sortOrder="60"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Monthly Archive</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Lists months with post counts; links to /blog/archive/YYYY/MM.</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="archive_limit" translate="label comment" type="text" sortOrder="70"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Archive Months to Show</label>
+                    <comment>1–60. Default: 12.</comment>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                    <depends>
+                        <field id="enabled">1</field>
+                        <field id="show_archive">1</field>
                     </depends>
                 </field>
             </group>
