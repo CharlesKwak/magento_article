@@ -4,7 +4,7 @@ This document describes what **ThirdParty_BlogArticle** depends on, what runs in
 
 It is an **SBOM-style inventory for humans**, not a machine-generated CycloneDX/SPDX file. Generate a formal SBOM from your Magento root if compliance tooling requires it (see [§6](#6-generating-a-machine-readable-sbom)).
 
-Module version: **2.9.0**  
+Module version: **2.10.0**  
 Package name: `thirdparty/module-blog-article`
 
 ---
@@ -213,7 +213,7 @@ Also note the workflow listens to branch name `main`, while this project histori
 - `LICENSE`
 - `docs/`
 
-Package artifact name: `thirdparty-blog-article-2.9.0.zip`.
+Package artifact name: `thirdparty-blog-article-2.10.0.zip`.
 
 It does **not** ship `vendor/`, `composer.lock`, or Magento core. Target systems must already have Magento + PHP + MySQL.
 

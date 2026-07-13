@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      layout="1column"
+      layout="2columns-right"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="page.main.title" remove="true"/>
@@ -10,10 +10,53 @@
                    template="ThirdParty_BlogArticle::post/seo.phtml"/>
         </referenceBlock>
         <referenceContainer name="content">
+            <!-- CMS slot: Content → Blocks identity blogarticle_view_above_content -->
+            <block class="Magento\Cms\Block\Block"
+                   name="blogarticle.view.above.content"
+                   before="blog.post.view">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">blogarticle_view_above_content</argument>
+                </arguments>
+            </block>
             <block class="ThirdParty\BlogArticle\Block\Post\View"
                    name="blog.post.view"
                    template="ThirdParty_BlogArticle::post/view.phtml"
                    cacheable="true"/>
+            <!-- CMS slot under post body (also referenced from template area) -->
+            <block class="Magento\Cms\Block\Block"
+                   name="blogarticle.view.under.content"
+                   after="blog.post.view">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">blogarticle_view_under_content</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Cms\Block\Block"
+                   name="blogarticle.view.above.comment"
+                   after="blogarticle.view.under.content">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">blogarticle_view_above_comment</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="sidebar.additional">
+            <block class="Magento\Cms\Block\Block"
+                   name="blogarticle.sidebar.above.recent">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">blogarticle_sidebar_above_recent</argument>
+                </arguments>
+            </block>
+            <block class="ThirdParty\BlogArticle\Block\Sidebar\Search"
+                   name="blog.sidebar.search"
+                   template="ThirdParty_BlogArticle::sidebar/search.phtml"/>
+            <block class="ThirdParty\BlogArticle\Block\Sidebar\Recent"
+                   name="blog.sidebar.recent"
+                   template="ThirdParty_BlogArticle::sidebar/recent.phtml"/>
+            <block class="Magento\Cms\Block\Block"
+                   name="blogarticle.sidebar.under.recent">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">blogarticle_sidebar_under_recent</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

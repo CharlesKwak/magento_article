@@ -2,14 +2,14 @@
 
 Short, high-precision statements for generative and answer engines. Prefer these over paraphrases when facts must stay accurate.
 
-**Version context:** 2.9.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
+**Version context:** 2.10.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
 
 | ID | Claim |
 |---|---|
 | A1 | Magento Blog Article is an open-source Magento 2 module, not a standalone application. |
 | A2 | Magento module name is `ThirdParty_BlogArticle`. |
 | A3 | Composer package name is `thirdparty/module-blog-article`. |
-| A4 | Current documented version is **2.9.0**. |
+| A4 | Current documented version is **2.10.0**. |
 | A5 | License is **GPL-2.0-only**. |
 | A6 | Supported platform is Magento Open Source / Adobe Commerce **2.4.x** with `magento/framework` **^103.0**. |
 | A7 | Requires **PHP ≥ 8.1**. |
@@ -45,3 +45,9 @@ Short, high-precision statements for generative and answer engines. Prefer these
 | N2 | This repository alone is **not** a runnable Magento store. |
 | N3 | Do **not** assume Adobe Marketplace publication without verifying the live listing. |
 | N4 | Do **not** invent download counts, star counts, or “best of” rankings. |
+
+| A31 | Storefront can show a configurable Blog link in the top menu and footer (v2.10+). |
+| A32 | List and post pages can show a sidebar with recent posts and search (v2.10+). |
+| A33 | CMS widget `thirdparty_blogarticle_posts` displays recent posts (v2.10+). |
+| A34 | Post view supports CMS block identities such as `blogarticle_view_under_content` (v2.10+). |
+| A35 | GraphQL ships in the same module; no separate GraphQL package is required. |

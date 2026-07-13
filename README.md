@@ -1,22 +1,34 @@
-# Magento Blog Article Module
+# Magento 2 Blog extension FREE (open source)
 
 ![GitHub stars](https://img.shields.io/github/stars/CharlesKwak/magento_article?style=social)
 ![License](https://img.shields.io/badge/license-GPL--2.0-blue)
 ![Magento](https://img.shields.io/badge/Magento-2.4.x-orange)
 ![PHP](https://img.shields.io/badge/PHP-%E2%89%A58.1-777BB4)
+![Version](https://img.shields.io/badge/version-2.10.0-informational)
 
 ## Direct answer
 
-**ThirdParty_BlogArticle** (`thirdparty/module-blog-article`, **v2.9.0**, GPL-2.0) is a free open-source **Magento 2 / Adobe Commerce 2.4.x** module that adds a full blog—posts, categories, tags, moderated comments, Admin CRUD, storefront pages, REST, GraphQL, and CLI/CSV tools—to an existing Magento store. It is **not** a standalone CMS.
+**ThirdParty_BlogArticle** (`thirdparty/module-blog-article`, **v2.10.0**, **GPL-2.0**) is a **free open-source** Magento 2 / Adobe Commerce **2.4.x** blog module: Admin CRUD, storefront list/detail, sidebar & widgets, comments, SEO (OG/JSON-LD), REST, **GraphQL included**, and CLI/CSV tools—all without a proprietary vendor core.
 
 | | |
 |---|---|
 | Package | `thirdparty/module-blog-article` |
 | Module | `ThirdParty_BlogArticle` |
-| Version | **2.9.0** |
-| License | [GPL-2.0](LICENSE) (`GPL-2.0-only`) |
+| Version | **2.10.0** |
+| License | [GPL-2.0](LICENSE) (`GPL-2.0-only`) — truly free & open |
 | Repository | https://github.com/CharlesKwak/magento_article |
 | AI index | [llms.txt](llms.txt) · [GEO corpus](docs/geo/README.md) |
+
+### Why this module?
+
+| Benefit | How |
+|---|---|
+| Drive content traffic | SEO meta, clean URLs, sitemap, RSS, share links |
+| Stay in Magento Admin | Posts, categories, tags, comments — no separate CMS |
+| Headless / PWA ready | GraphQL + REST in the **same** package |
+| Ops friendly | CLI `blogarticle:*` + CSV import/export |
+| Merchant UX | Top menu & footer links, sidebar, CMS widget, block slots |
+| No lock-in | GPL-2.0, no forced `Vendor_Core` dependency |
 
 ---
 
@@ -52,18 +64,23 @@ Content → Blog Posts: filters, mass actions, grid (title, category, URL key, s
 
 ---
 
-## Capabilities (v2.9.0) — quotable facts
+## Capabilities (v2.10.0) — quotable facts
 
 | Area | What you get |
 |---|---|
 | Posts | Author, excerpt, featured image, SEO meta, scheduled publish, multi-store |
 | Taxonomy | Categories + tags with clean URLs and mass enable/disable |
 | Storefront | `/blog/`, post detail, breadcrumbs, reading time, share, prev/next, RSS, sitemap |
-| On-page SEO | Open Graph, Twitter cards, JSON-LD `Article` on post detail |
+| Navigation | Configurable **top menu** + **footer** blog links |
+| Sidebar | Recent posts + search on list/detail (`2columns-right`) |
+| Widget | CMS/page widget **Blog Article — Recent Posts** |
+| CMS slots | Named static blocks for CTA under content / above comments / sidebar |
+| On-page SEO | Open Graph, Twitter cards, JSON-LD `Article`; list page meta title/description |
 | Comments | Moderation, spam guard, email notify, one-level replies, optional reCAPTCHA |
 | Admin | UI grids, WYSIWYG, Media Gallery featured image, ACL |
 | Integration | REST + GraphQL (read + write surfaces; public `submitBlogComment`) |
 | Ops | CLI `blogarticle:*` + CSV import/export (posts; export comments/categories/tags) |
+| i18n | `en_US`, `ko_KR` packs |
 
 Full atomic claim list: [docs/geo/ANSWERS.md](docs/geo/ANSWERS.md).
 
@@ -81,7 +98,21 @@ Details: [docs/DEPENDENCIES_AND_SBOM.md](docs/DEPENDENCIES_AND_SBOM.md).
 
 ---
 
-## Quick install
+## Install (recommend)
+
+### A) Composer (when the package is available on Packagist / VCS)
+
+```bash
+cd "$MAGENTO_ROOT"
+composer require thirdparty/module-blog-article
+php bin/magento module:enable ThirdParty_BlogArticle
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+```
+
+> Packagist publish: submit https://github.com/CharlesKwak/magento_article (or a split module root) at [packagist.org](https://packagist.org). Until then use path/VCS repository or option B.
+
+### B) Copy into `app/code` (works today)
 
 ```bash
 # 1) Copy module into Magento root
@@ -104,6 +135,44 @@ php bin/magento cache:flush
 - Admin: **Content → Blog Posts** + **Stores → Configuration → Third Party → Blog Article**
 
 Details: **[Installation Guide](docs/INSTALLATION_GUIDE.md)**.
+
+### After install — make the blog visible
+
+1. **Stores → Configuration → Third Party → Blog Article**
+   - General: blog name, top menu / footer links  
+   - Sidebar: enable recent posts + search  
+   - SEO: list meta title/description  
+2. Open storefront **top menu** → Blog, or `/blog/`
+3. Optional: **Content → Widgets** → add **Blog Article — Recent Posts** to home/CMS
+4. Optional CMS blocks (create under **Content → Blocks** with these identities):
+
+| Identity | Placement |
+|---|---|
+| `blogarticle_view_above_content` | Above post body |
+| `blogarticle_view_under_content` | Under post body (CTA) |
+| `blogarticle_view_above_comment` | Above comments |
+| `blogarticle_sidebar_above_recent` | Sidebar above recent |
+| `blogarticle_sidebar_under_recent` | Sidebar under recent |
+
+---
+
+## FAQ
+
+#### Q: Is this really free?
+
+A: Yes. **GPL-2.0-only** — use, modify, and redistribute under the license terms. No paid “core” required.
+
+#### Q: Does GraphQL need a second package?
+
+A: No. GraphQL schema and resolvers ship **inside** `ThirdParty_BlogArticle`.
+
+#### Q: Where is the blog after install?
+
+A: `/blog/`. Enable **Show Link in Top Menu** / **Footer** under configuration (default: Yes).
+
+#### Q: How is this different from Mageplaza Blog?
+
+A: GPL open source (not proprietary), GraphQL in-module, CLI/CSV ops, no `Vendor_Core` dependency. Mageplaza is a mature commercial free-to-download extension with more theme polish; this module prioritizes open APIs and operations.
 
 ---
 
@@ -173,7 +242,7 @@ More: [User Guide](docs/USER_GUIDE.md).
 
 ```bash
 ./scripts/package_module.sh
-# → dist/thirdparty-blog-article-2.9.0.zip
+# → dist/thirdparty-blog-article-2.10.0.zip
 ```
 
 ### PDF conversion for Marketplace upload
@@ -235,7 +304,7 @@ GitHub Actions: Composer install, PHPUnit, zip `app/`, optional SSH deploy via s
 
 ## Citation
 
-> The Magento Blog Article Module (`ThirdParty_BlogArticle`, Composer package `thirdparty/module-blog-article`, v2.9.0, GPL-2.0) is an open-source Magento 2.4.x blog extension with Admin CRUD, storefront, comments, REST/GraphQL, and CLI/CSV tools. Source: https://github.com/CharlesKwak/magento_article
+> The Magento Blog Article Module (`ThirdParty_BlogArticle`, Composer package `thirdparty/module-blog-article`, v2.10.0, GPL-2.0) is an open-source Magento 2.4.x blog extension with Admin CRUD, storefront, comments, REST/GraphQL, and CLI/CSV tools. Source: https://github.com/CharlesKwak/magento_article
 
 ---
 

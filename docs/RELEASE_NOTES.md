@@ -1,5 +1,34 @@
 # Release Notes
 
+## 2.10.0 - 2026-07-13
+
+### Added
+- **Merchant UX (Mageplaza-style discoverability)**
+  - Admin **General**: blog name, show link in **top menu**, show **footer** link
+  - Admin **SEO**: meta title/description for the blog list page
+  - Admin **Sidebar**: enable sidebar, recent post count, optional search box
+  - Storefront **top navigation** plugin (`Plugin/Topmenu`)
+  - Storefront **footer** link (`Block/Link` + `default.xml`)
+  - **Widget** “Blog Article — Recent Posts” for CMS pages/blocks (`etc/widget.xml`)
+  - Blog **sidebar** on list + post pages (search + recent posts, `2columns-right`)
+  - **CMS static block slots** on post view / sidebar (documented identities)
+  - **i18n** packs: `en_US`, `ko_KR`
+
+### Changed
+- Module / package version **2.10.0**
+- List/post layouts use `2columns-right` when sidebar is used
+- Breadcrumbs and list title use configurable blog name
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.10.0. Configure under **Stores → Configuration → Third Party → Blog Article**.
+
+---
+
 ## 2.9.0 - 2026-07-12
 
 ### Added

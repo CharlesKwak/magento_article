@@ -117,6 +117,19 @@ class Article extends Template implements IdentityInterface
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
+        $blogName = $this->config->getBlogName();
+        $metaTitle = $this->config->getListMetaTitle();
+        if ($metaTitle === '') {
+            $metaTitle = $blogName;
+        }
+        if ($metaTitle !== '') {
+            $this->pageConfig->getTitle()->set($metaTitle);
+        }
+        $metaDescription = $this->config->getListMetaDescription();
+        if ($metaDescription !== '') {
+            $this->pageConfig->setDescription($metaDescription);
+        }
+
         $breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
         if ($breadcrumbs) {
             $breadcrumbs->addCrumb(
@@ -130,8 +143,8 @@ class Article extends Template implements IdentityInterface
             $breadcrumbs->addCrumb(
                 'blog',
                 [
-                    'label' => __('Blog'),
-                    'title' => __('Blog'),
+                    'label' => $blogName,
+                    'title' => $blogName,
                     'link' => $this->getUrl('blog/index/index'),
                 ]
             );

@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **2.9.0**
+Version covered: **2.10.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -21,20 +21,25 @@ This module provides a **database-backed blog post list** with Admin management:
 | Tag list | `/blog/tag/<url_key>` | Posts with tag |
 | Storefront detail | `/blog/<url_key>` | Full article + OG/JSON-LD |
 | Admin | **Content → Blog Posts** | CRUD + author + search/status |
-| Config | **Stores → Configuration → Third Party → Blog Article** | List, comments, media |
+| Config | **Stores → Configuration → Third Party → Blog Article** | General, list, SEO, sidebar, comments, media |
 | REST | `/rest/V1/blogarticle/posts*` | Public read + search |
 | GraphQL | `/graphql` (`blogPosts`, `blogPost`) | Public read + search |
+| Widget | **Content → Widgets** | “Blog Article — Recent Posts” |
 
-### What you can do in v2.9.0
+### What you can do in v2.10.0
 
 - Search and page through the storefront blog list; open clean post/category/tag URLs.
 - Post detail: breadcrumbs, reading time, share/copy link, prev/next, clickable tags/category.
+- **Top menu** and **footer** links (configurable blog name).
+- **Sidebar** with search + recent posts on list and post pages.
+- Place **Recent Posts widget** on home/CMS pages.
+- Drop **CMS static blocks** into named slots on post view (CTA, promo banners).
 - Set an optional **author** on each post; shown on list, detail, and social meta.
 - Manage posts, categories, tags, and comments in Admin (mass status; WYSIWYG + Media Gallery).
 - CLI for posts/categories/tags/comments including CSV **import** and **export**.
 - Moderate comments; optional spam protection, email notify, reCAPTCHA, and one-level replies.
 - Integrate via REST or GraphQL (including `submitBlogComment` and admin post mutations).
-- Configure list page size, comments, and media limits per store.
+- Configure list page size, list SEO meta, sidebar, comments, and media limits per store.
 
 ### CLI cheat sheet
 
@@ -280,7 +285,7 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v2.9.0 |
+| Topic | Behavior in v2.10.0 |
 |---|---|
 | Multi-website / store view | Posts may target a store via `store_id` (0/NULL = all views) |
 | Translation of post content | Not supported; store raw title/content per row only |
@@ -358,3 +363,28 @@ mutation {
   }
 }
 ```
+
+---
+
+## Widget: Recent Posts
+
+1. Admin → **Content → Widgets** → **Add Widget**
+2. Type: **Blog Article — Recent Posts**
+3. Assign to a layout update (e.g. CMS Home Page) or theme container
+4. Options: **Title**, **Number of Posts**, optional **Category ID**
+
+---
+
+## CMS static block slots (post view)
+
+Create blocks under **Content → Blocks** using these **identifiers** (empty blocks are ignored):
+
+| Identifier | Where it appears |
+|---|---|
+| `blogarticle_view_above_content` | Above the post article |
+| `blogarticle_view_under_content` | Under the post body (ideal for CTA) |
+| `blogarticle_view_above_comment` | Above the comments section |
+| `blogarticle_sidebar_above_recent` | Sidebar, above recent posts |
+| `blogarticle_sidebar_under_recent` | Sidebar, under recent posts |
+
+Use for promotions, newsletters, or product banners without editing module templates.

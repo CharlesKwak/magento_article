@@ -1,0 +1,29 @@
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Sidebar\Search $block */
+?>
+<div class="block block-blogarticle-search">
+    <div class="block-title">
+        <strong><?= $block->escapeHtml(__('Search Blog')) ?></strong>
+    </div>
+    <div class="block-content">
+        <form class="form blogarticle-search" action="<?= $block->escapeUrl($block->getFormAction()) ?>" method="get">
+            <div class="field">
+                <label class="label" for="blogarticle-sidebar-q">
+                    <span><?= $block->escapeHtml(__('Search')) ?></span>
+                </label>
+                <div class="control">
+                    <input type="text"
+                           id="blogarticle-sidebar-q"
+                           name="q"
+                           value="<?= $block->escapeHtmlAttr($block->getQuery()) ?>"
+                           placeholder="<?= $block->escapeHtmlAttr(__('Search posts…')) ?>"/>
+                </div>
+            </div>
+            <div class="actions">
+                <button type="submit" class="action primary" title="<?= $block->escapeHtmlAttr(__('Search')) ?>">
+                    <span><?= $block->escapeHtml(__('Search')) ?></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

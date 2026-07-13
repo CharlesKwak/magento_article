@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="thirdparty_blogarticle_posts"
+            class="ThirdParty\BlogArticle\Block\Widget\Posts"
+            placeholder_image="Magento_Widget::placeholder.gif">
+        <label>Blog Article — Recent Posts</label>
+        <description>Display recent blog posts on any CMS page or block (optional category filter).</description>
+        <parameters>
+            <parameter name="title" xsi:type="text" required="false" visible="true" sort_order="10">
+                <label>Title</label>
+            </parameter>
+            <parameter name="post_count" xsi:type="text" required="true" visible="true" sort_order="20">
+                <label>Number of Posts</label>
+                <value>5</value>
+            </parameter>
+            <parameter name="category_id" xsi:type="text" required="false" visible="true" sort_order="30">
+                <label>Category ID (optional)</label>
+                <description>Leave empty for all categories. Use numeric category_id from Admin.</description>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>

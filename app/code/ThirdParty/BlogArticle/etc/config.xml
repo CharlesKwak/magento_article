@@ -3,9 +3,23 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <blogarticle>
+            <general>
+                <blog_name>Blog</blog_name>
+                <show_top_menu>1</show_top_menu>
+                <show_footer_link>1</show_footer_link>
+            </general>
             <list>
                 <page_size>5</page_size>
             </list>
+            <seo>
+                <list_meta_title></list_meta_title>
+                <list_meta_description></list_meta_description>
+            </seo>
+            <sidebar>
+                <enabled>1</enabled>
+                <recent_count>5</recent_count>
+                <show_search>1</show_search>
+            </sidebar>
             <comments>
                 <enabled>1</enabled>
                 <auto_approve>0</auto_approve>

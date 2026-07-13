@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 OUT_DIR="$ROOT_DIR/dist"
-PKG_NAME="thirdparty-blog-article-2.9.0"
+PKG_NAME="thirdparty-blog-article-2.10.0"
 PKG_PATH="$OUT_DIR/${PKG_NAME}.zip"
 
 mkdir -p "$OUT_DIR"

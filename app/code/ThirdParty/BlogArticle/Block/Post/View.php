@@ -98,11 +98,12 @@ class View extends Template implements IdentityInterface
                 'link' => $this->getBaseUrl(),
             ]
         );
+        $blogName = $this->config->getBlogName();
         $breadcrumbs->addCrumb(
             'blog',
             [
-                'label' => __('Blog'),
-                'title' => __('Blog'),
+                'label' => $blogName,
+                'title' => $blogName,
                 'link' => $this->getListUrl(),
             ]
         );

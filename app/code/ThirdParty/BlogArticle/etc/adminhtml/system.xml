@@ -9,6 +9,27 @@
             <label>Blog Article</label>
             <tab>thirdparty</tab>
             <resource>ThirdParty_BlogArticle::config</resource>
+
+            <group id="general" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="blog_name" translate="label comment" type="text" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Blog Name</label>
+                    <comment>Shown in navigation, breadcrumbs, and widgets. Default: Blog.</comment>
+                </field>
+                <field id="show_top_menu" translate="label comment" type="select" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Link in Top Menu</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Adds a Blog link to the storefront top navigation.</comment>
+                </field>
+                <field id="show_footer_link" translate="label comment" type="select" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Link in Footer</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+
             <group id="list" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Storefront List</label>
                 <field id="page_size" translate="label comment" type="text" sortOrder="10"
@@ -18,6 +39,47 @@
                     <validate>validate-digits validate-greater-than-zero</validate>
                 </field>
             </group>
+
+            <group id="seo" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>SEO (List Page)</label>
+                <field id="list_meta_title" translate="label comment" type="text" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Meta Title for Blog List</label>
+                    <comment>Leave empty to use the blog name.</comment>
+                </field>
+                <field id="list_meta_description" translate="label" type="textarea" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Meta Description for Blog List</label>
+                </field>
+            </group>
+
+            <group id="sidebar" translate="label" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Sidebar</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Blog Sidebar</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Shows recent posts (and optional search) on list and post pages.</comment>
+                </field>
+                <field id="recent_count" translate="label comment" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Number of Recent Posts</label>
+                    <comment>1–20. Default: 5.</comment>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="show_search" translate="label" type="select" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Search Box</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+
             <group id="comments" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Comments</label>
                 <field id="enabled" translate="label" type="select" sortOrder="10"

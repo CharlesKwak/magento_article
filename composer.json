@@ -1,11 +1,11 @@
 {
     "name": "thirdparty/module-blog-article",
-    "description": "Magento 2 blog article module with CSV import/export, storefront UX, media gallery, SEO, comments, and GraphQL.",
+    "description": "Free open-source Magento 2 blog module: Admin CRUD, storefront, sidebar, widgets, comments, SEO, REST, GraphQL, CLI and CSV import/export.",
     "type": "magento2-module",
     "license": [
         "GPL-2.0-only"
     ],
-    "version": "2.9.0",
+    "version": "2.10.0",
     "require": {
         "php": ">=8.1"
     },
@@ -28,5 +28,28 @@
             "framework": "^103.0",
             "php": ">=8.1"
         }
+    },
+    "keywords": [
+        "magento2",
+        "magento",
+        "blog",
+        "magento2-module",
+        "magento2-extension",
+        "magento2-blog",
+        "adobe-commerce",
+        "graphql",
+        "open-source"
+    ],
+    "homepage": "https://github.com/CharlesKwak/magento_article",
+    "authors": [
+        {
+            "name": "Charles Kwak / ThirdParty",
+            "homepage": "https://github.com/CharlesKwak/magento_article",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "source": "https://github.com/CharlesKwak/magento_article",
+        "issues": "https://github.com/CharlesKwak/magento_article/issues"
     }
 }

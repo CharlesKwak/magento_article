@@ -1,0 +1,29 @@
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Widget\Posts $block */
+$posts = $block->getPosts();
+?>
+<div class="block block-blogarticle-widget-posts">
+    <div class="block-title">
+        <strong><?= $block->escapeHtml($block->getWidgetTitle()) ?></strong>
+    </div>
+    <div class="block-content">
+        <?php if (!$posts || !$posts->getSize()): ?>
+            <p><?= $block->escapeHtml(__('No posts found.')) ?></p>
+        <?php else: ?>
+            <ul class="blogarticle-widget-post-list">
+                <?php foreach ($posts as $post): ?>
+                    <li>
+                        <a href="<?= $block->escapeUrl($block->getPostUrl($post)) ?>">
+                            <?= $block->escapeHtml((string) $post->getTitle()) ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+            <p class="blogarticle-widget-more">
+                <a href="<?= $block->escapeUrl($block->getBlogListUrl()) ?>">
+                    <?= $block->escapeHtml(__('View all %1 posts', $block->getBlogName())) ?>
+                </a>
+            </p>
+        <?php endif; ?>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Sidebar\Recent $block */
+$posts = $block->getPosts();
+?>
+<div class="block block-blogarticle-recent">
+    <div class="block-title">
+        <strong><?= $block->escapeHtml($block->getBlockTitle()) ?></strong>
+    </div>
+    <div class="block-content">
+        <?php if (!$posts || !$posts->getSize()): ?>
+            <p><?= $block->escapeHtml(__('No recent posts.')) ?></p>
+        <?php else: ?>
+            <ul class="blogarticle-recent-list">
+                <?php foreach ($posts as $post): ?>
+                    <li>
+                        <a href="<?= $block->escapeUrl($block->getPostUrl($post)) ?>">
+                            <?= $block->escapeHtml((string) $post->getTitle()) ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    </div>
+</div>

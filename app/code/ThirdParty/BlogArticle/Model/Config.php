@@ -7,7 +7,15 @@ use Magento\Store\Model\ScopeInterface;
 
 class Config
 {
+    public const XML_PATH_BLOG_NAME = 'blogarticle/general/blog_name';
+    public const XML_PATH_SHOW_TOP_MENU = 'blogarticle/general/show_top_menu';
+    public const XML_PATH_SHOW_FOOTER_LINK = 'blogarticle/general/show_footer_link';
     public const XML_PATH_PAGE_SIZE = 'blogarticle/list/page_size';
+    public const XML_PATH_LIST_META_TITLE = 'blogarticle/seo/list_meta_title';
+    public const XML_PATH_LIST_META_DESCRIPTION = 'blogarticle/seo/list_meta_description';
+    public const XML_PATH_SIDEBAR_ENABLED = 'blogarticle/sidebar/enabled';
+    public const XML_PATH_SIDEBAR_RECENT_COUNT = 'blogarticle/sidebar/recent_count';
+    public const XML_PATH_SIDEBAR_SHOW_SEARCH = 'blogarticle/sidebar/show_search';
     public const XML_PATH_COMMENTS_ENABLED = 'blogarticle/comments/enabled';
     public const XML_PATH_COMMENTS_AUTO_APPROVE = 'blogarticle/comments/auto_approve';
     public const XML_PATH_COMMENTS_SPAM = 'blogarticle/comments/spam_protection';
@@ -31,6 +39,34 @@ class Config
         $this->encryptor = $encryptor;
     }
 
+    public function getBlogName(?int $storeId = null): string
+    {
+        $name = trim((string) $this->scopeConfig->getValue(
+            self::XML_PATH_BLOG_NAME,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        ));
+        return $name !== '' ? $name : (string) __('Blog');
+    }
+
+    public function isShowTopMenu(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SHOW_TOP_MENU,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    public function isShowFooterLink(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SHOW_FOOTER_LINK,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
     public function getPageSize(?int $storeId = null): int
     {
         $size = (int) $this->scopeConfig->getValue(
@@ -42,6 +78,55 @@ class Config
             return 5;
         }
         return min(50, $size);
+    }
+
+    public function getListMetaTitle(?int $storeId = null): string
+    {
+        return trim((string) $this->scopeConfig->getValue(
+            self::XML_PATH_LIST_META_TITLE,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        ));
+    }
+
+    public function getListMetaDescription(?int $storeId = null): string
+    {
+        return trim((string) $this->scopeConfig->getValue(
+            self::XML_PATH_LIST_META_DESCRIPTION,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        ));
+    }
+
+    public function isSidebarEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SIDEBAR_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    public function getSidebarRecentCount(?int $storeId = null): int
+    {
+        $n = (int) $this->scopeConfig->getValue(
+            self::XML_PATH_SIDEBAR_RECENT_COUNT,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        if ($n < 1) {
+            return 5;
+        }
+        return min(20, $n);
+    }
+
+    public function isSidebarSearchEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SIDEBAR_SHOW_SEARCH,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     public function isCommentsEnabled(?int $storeId = null): bool
