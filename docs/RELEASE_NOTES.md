@@ -1,5 +1,25 @@
 # Release Notes
 
+## 2.27.0 - 2026-07-14
+
+### Added
+- **Reading progress bar** on post detail (Display → Show Reading Progress Bar)
+- **Admin post grid** **Published** column (`published_at`, date filter/sort)
+
+### Changed
+- Module / package version **2.27.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:static-content:deploy -f
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.27.0.
+
+---
+
 ## 2.26.0 - 2026-07-14
 
 ### Added
@@ -20,7 +40,6 @@ php bin/magento setup:di:compile
 No new DB columns in 2.26.0.
 
 ---
-
 ## 2.25.0 - 2026-07-14
 
 ### Added

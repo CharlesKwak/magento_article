@@ -4,6 +4,34 @@ $post = $block->getPost();
 $related = $block->getRelatedPosts();
 ?>
 <div class="blog-post-view<?= $block->isReadingMode() ? ' blog-post-view--reading' : '' ?>">
+    <?php if ($post && $block->isReadingProgressEnabled()): ?>
+        <div class="blog-reading-progress" aria-hidden="true">
+            <div class="blog-reading-progress__bar" id="blog-reading-progress-bar"></div>
+        </div>
+        <script>
+        (function () {
+            var bar = document.getElementById('blog-reading-progress-bar');
+            if (!bar) { return; }
+            var article = document.querySelector('.blog-post-view .blog-post .content')
+                || document.querySelector('.blog-post-view .blog-post');
+            function update() {
+                if (!article) {
+                    bar.style.width = '0%';
+                    return;
+                }
+                var rect = article.getBoundingClientRect();
+                var start = window.pageYOffset + rect.top;
+                var height = Math.max(1, rect.height - window.innerHeight);
+                var scrolled = window.pageYOffset - start;
+                var pct = Math.min(100, Math.max(0, (scrolled / height) * 100));
+                bar.style.width = pct.toFixed(1) + '%';
+            }
+            window.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+            update();
+        })();
+        </script>
+    <?php endif; ?>
     <p class="blog-back">
         <a href="<?= $block->escapeUrl($block->getListUrl()) ?>">
             ← <?= $block->escapeHtml(__('Back to blog')) ?>

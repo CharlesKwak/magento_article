@@ -32,6 +32,7 @@ class Config
     public const XML_PATH_SIDEBAR_RECENT_COMMENTS = 'blogarticle/sidebar/show_recent_comments';
     public const XML_PATH_SIDEBAR_RECENT_COMMENTS_COUNT = 'blogarticle/sidebar/recent_comments_count';
     public const XML_PATH_RELATED_POSTS_LIMIT = 'blogarticle/display/related_posts_limit';
+    public const XML_PATH_READING_PROGRESS = 'blogarticle/display/reading_progress';
     public const XML_PATH_PRODUCT_RELATED_ENABLED = 'blogarticle/catalog/show_related_posts';
     public const XML_PATH_PRODUCT_RELATED_LIMIT = 'blogarticle/catalog/related_posts_limit';
     public const XML_PATH_COMMENTS_ENABLED = 'blogarticle/comments/enabled';
@@ -343,6 +344,15 @@ class Config
             return 3;
         }
         return min(20, $n);
+    }
+
+    public function isReadingProgressEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_READING_PROGRESS,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     public function isProductRelatedPostsEnabled(?int $storeId = null): bool

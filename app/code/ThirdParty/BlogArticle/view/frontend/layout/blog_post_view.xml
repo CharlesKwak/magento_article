@@ -4,6 +4,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="ThirdParty_BlogArticle::css/blogarticle-toc.css"/>
+        <css src="ThirdParty_BlogArticle::css/blogarticle-progress.css"/>
     </head>
     <body>
         <referenceBlock name="page.main.title" remove="true"/>

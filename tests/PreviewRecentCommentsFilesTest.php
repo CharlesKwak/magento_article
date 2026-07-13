@@ -47,9 +47,9 @@ class PreviewRecentCommentsFilesTest extends TestCase
         $this->assertStringContainsString('blog.sidebar.recent.comments', $view);
 
         $module = file_get_contents($root . '/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.26.0"', $module);
+        $this->assertStringContainsString('setup_version="2.27.0"', $module);
 
         $composer = file_get_contents(dirname(__DIR__) . '/composer.json');
-        $this->assertStringContainsString('"version": "2.26.0"', $composer);
+        $this->assertStringContainsString('"version": "2.27.0"', $composer);
     }
 }

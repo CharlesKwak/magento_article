@@ -529,6 +529,11 @@ class View extends Template implements IdentityInterface
         return $this->config->isTocEnabled();
     }
 
+    public function isReadingProgressEnabled(): bool
+    {
+        return $this->config->isReadingProgressEnabled();
+    }
+
     /**
      * Table of contents built from h2–h4 in the post body (empty when disabled or below threshold).
      *
