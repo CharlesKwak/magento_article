@@ -29,6 +29,8 @@ class Config
     public const XML_PATH_SIDEBAR_MOST_VIEWED_COUNT = 'blogarticle/sidebar/most_viewed_count';
     public const XML_PATH_SIDEBAR_ARCHIVE = 'blogarticle/sidebar/show_archive';
     public const XML_PATH_SIDEBAR_ARCHIVE_LIMIT = 'blogarticle/sidebar/archive_limit';
+    public const XML_PATH_SIDEBAR_RECENT_COMMENTS = 'blogarticle/sidebar/show_recent_comments';
+    public const XML_PATH_SIDEBAR_RECENT_COMMENTS_COUNT = 'blogarticle/sidebar/recent_comments_count';
     public const XML_PATH_RELATED_POSTS_LIMIT = 'blogarticle/display/related_posts_limit';
     public const XML_PATH_PRODUCT_RELATED_ENABLED = 'blogarticle/catalog/show_related_posts';
     public const XML_PATH_PRODUCT_RELATED_LIMIT = 'blogarticle/catalog/related_posts_limit';
@@ -303,6 +305,28 @@ class Config
             return 12;
         }
         return min(60, $n);
+    }
+
+    public function isRecentCommentsSidebarEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SIDEBAR_RECENT_COMMENTS,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    public function getRecentCommentsSidebarCount(?int $storeId = null): int
+    {
+        $n = (int) $this->scopeConfig->getValue(
+            self::XML_PATH_SIDEBAR_RECENT_COMMENTS_COUNT,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        if ($n < 1) {
+            return 5;
+        }
+        return min(20, $n);
     }
 
     /**

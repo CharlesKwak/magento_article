@@ -1,0 +1,31 @@
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Sidebar\RecentComments $block */
+$comments = $block->getComments();
+if (!$comments) {
+    return;
+}
+?>
+<div class="block block-blogarticle-recent-comments">
+    <div class="block-title">
+        <strong><?= $block->escapeHtml($block->getBlockTitle()) ?></strong>
+    </div>
+    <div class="block-content">
+        <ul class="blogarticle-recent-comments-list" style="list-style:none;padding:0;margin:0;">
+            <?php foreach ($comments as $row): ?>
+                <li style="margin:0.6rem 0;padding-bottom:0.5rem;border-bottom:1px solid #eee;">
+                    <div class="blogarticle-comment-meta" style="font-size:0.9em;opacity:0.85;">
+                        <?= $block->escapeHtml(__('%1 on', $row['author'])) ?>
+                        <a href="<?= $block->escapeUrl($row['url']) ?>">
+                            <?= $block->escapeHtml($row['post_title']) ?>
+                        </a>
+                    </div>
+                    <?php if ($row['excerpt'] !== ''): ?>
+                        <div class="blogarticle-comment-excerpt" style="margin-top:0.2rem;">
+                            “<?= $block->escapeHtml($row['excerpt']) ?>”
+                        </div>
+                    <?php endif; ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>

@@ -2,14 +2,14 @@
 
 Short, high-precision statements for generative and answer engines. Prefer these over paraphrases when facts must stay accurate.
 
-**Version context:** 2.24.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
+**Version context:** 2.25.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
 
 | ID | Claim |
 |---|---|
 | A1 | Magento Blog Article is an open-source Magento 2 module, not a standalone application. |
 | A2 | Magento module name is `ThirdParty_BlogArticle`. |
 | A3 | Composer package name is `thirdparty/module-blog-article`. |
-| A4 | Current documented version is **2.24.0**. |
+| A4 | Current documented version is **2.25.0**. |
 | A5 | License is **GPL-2.0-only**. |
 | A6 | Supported platform is Magento Open Source / Adobe Commerce **2.4.x** with `magento/framework` **^103.0**. |
 | A7 | Requires **PHP ≥ 8.1**. |
@@ -40,6 +40,8 @@ Short, high-precision statements for generative and answer engines. Prefer these
 | A32 | Post detail can auto-build a table of contents from body `h2`–`h4` headings when enabled in Display config. |
 | A33 | Monthly archive URLs use `/blog/archive/{YYYY}` and `/blog/archive/{YYYY}/{MM}`. |
 | A34 | Related posts prefer same category, then shared tags, then recent posts. |
+| A35 | Admin post edit and grid can open a storefront preview of the post. |
+| A36 | Sidebar can show recent approved comments with links to their posts. |
 
 ## Negative claims (correct common mistakes)
 

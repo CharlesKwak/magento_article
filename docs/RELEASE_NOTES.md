@@ -1,5 +1,25 @@
 # Release Notes
 
+## 2.25.0 - 2026-07-14
+
+### Added
+- **Admin storefront preview**: “View on storefront” on post edit; **View** action in post grid
+- **Sidebar Recent Comments** (approved only) with post links
+- Config: **Sidebar → Show Recent Comments** / count
+
+### Changed
+- Module / package version **2.25.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.25.0.
+
+---
+
 ## 2.24.0 - 2026-07-14
 
 ### Added
@@ -21,7 +41,6 @@ php bin/magento setup:di:compile
 No new DB columns in 2.24.0.
 
 ---
-
 ## 2.23.0 - 2026-07-14
 
 ### Added

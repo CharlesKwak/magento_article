@@ -32,6 +32,6 @@ class RelatedAndMediaFilesTest extends TestCase
         $content = file_get_contents(
             dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/etc/module.xml'
         );
-        $this->assertStringContainsString('setup_version="2.24.0"', $content);
+        $this->assertStringContainsString('setup_version="2.25.0"', $content);
     }
 }

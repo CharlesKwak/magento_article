@@ -213,4 +213,31 @@ class Edit extends Template
             ]
         );
     }
+
+    /**
+     * Public storefront URL for the current post (empty if new / missing url_key).
+     */
+    public function getStorefrontPreviewUrl(): string
+    {
+        $post = $this->getPost();
+        if (!$post->getId()) {
+            return '';
+        }
+        $urlKey = trim((string) $post->getUrlKey());
+        if ($urlKey === '') {
+            return '';
+        }
+        try {
+            $storeId = $post->getStoreId() ? (int) $post->getStoreId() : 0;
+            if ($storeId > 0) {
+                $store = $this->_storeManager->getStore($storeId);
+            } else {
+                $store = $this->_storeManager->getDefaultStoreView()
+                    ?: $this->_storeManager->getStore();
+            }
+            return rtrim($store->getBaseUrl(), '/') . '/blog/' . ltrim($urlKey, '/');
+        } catch (\Exception $e) {
+            return '';
+        }
+    }
 }

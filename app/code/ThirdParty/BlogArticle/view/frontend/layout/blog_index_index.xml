@@ -28,6 +28,9 @@
             <block class="ThirdParty\BlogArticle\Block\Sidebar\Archive"
                    name="blog.sidebar.archive"
                    template="ThirdParty_BlogArticle::sidebar/archive.phtml"/>
+            <block class="ThirdParty\BlogArticle\Block\Sidebar\RecentComments"
+                   name="blog.sidebar.recent.comments"
+                   template="ThirdParty_BlogArticle::sidebar/recent_comments.phtml"/>
         </referenceContainer>
     </body>
 </page>

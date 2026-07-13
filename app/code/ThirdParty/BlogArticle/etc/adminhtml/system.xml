@@ -187,6 +187,25 @@
                         <field id="show_archive">1</field>
                     </depends>
                 </field>
+                <field id="show_recent_comments" translate="label comment" type="select" sortOrder="80"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Recent Comments</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Lists latest approved comments with links to their posts.</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="recent_comments_count" translate="label comment" type="text" sortOrder="90"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Number of Recent Comments</label>
+                    <comment>1–20. Default: 5.</comment>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                    <depends>
+                        <field id="enabled">1</field>
+                        <field id="show_recent_comments">1</field>
+                    </depends>
+                </field>
             </group>
 
             <group id="catalog" translate="label" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="1">

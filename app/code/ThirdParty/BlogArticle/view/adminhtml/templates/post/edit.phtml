@@ -9,6 +9,16 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
             <?= $block->escapeHtml(__('Back to list')) ?>
         </a>
         <?php if ($block->isExistingPost()): ?>
+            <?php $previewUrl = $block->getStorefrontPreviewUrl(); ?>
+            <?php if ($previewUrl !== ''): ?>
+                &nbsp;|&nbsp;
+                <a class="action-default"
+                   href="<?= $block->escapeUrl($previewUrl) ?>"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    <?= $block->escapeHtml(__('View on storefront')) ?>
+                </a>
+            <?php endif; ?>
             &nbsp;|&nbsp;
             <a class="action-default"
                href="<?= $block->escapeUrl($block->getDeleteUrl()) ?>"

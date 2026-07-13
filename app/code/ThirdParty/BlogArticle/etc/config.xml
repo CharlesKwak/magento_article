@@ -35,6 +35,8 @@
                 <most_viewed_count>5</most_viewed_count>
                 <show_archive>1</show_archive>
                 <archive_limit>12</archive_limit>
+                <show_recent_comments>1</show_recent_comments>
+                <recent_comments_count>5</recent_comments_count>
             </sidebar>
             <catalog>
                 <show_related_posts>1</show_related_posts>
