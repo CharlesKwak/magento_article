@@ -13,6 +13,8 @@ class Config
     public const XML_PATH_PAGE_SIZE = 'blogarticle/list/page_size';
     public const XML_PATH_LIST_META_TITLE = 'blogarticle/seo/list_meta_title';
     public const XML_PATH_LIST_META_DESCRIPTION = 'blogarticle/seo/list_meta_description';
+    public const XML_PATH_SEO_HREFLANG = 'blogarticle/seo/hreflang_enabled';
+    public const XML_PATH_READING_MODE = 'blogarticle/display/reading_mode_link';
     public const XML_PATH_SIDEBAR_ENABLED = 'blogarticle/sidebar/enabled';
     public const XML_PATH_SIDEBAR_RECENT_COUNT = 'blogarticle/sidebar/recent_count';
     public const XML_PATH_SIDEBAR_SHOW_SEARCH = 'blogarticle/sidebar/show_search';
@@ -100,6 +102,24 @@ class Config
             ScopeInterface::SCOPE_STORE,
             $storeId
         ));
+    }
+
+    public function isHreflangEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SEO_HREFLANG,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    public function isReadingModeLinkEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_READING_MODE,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     public function isSidebarEnabled(?int $storeId = null): bool

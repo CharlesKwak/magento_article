@@ -92,6 +92,13 @@ class View extends Action
         if ($metaDescription !== '') {
             $resultPage->getConfig()->setDescription($metaDescription);
         }
+
+        // Distraction-free reading mode: 1-column layout, no sidebar chrome.
+        if ($this->getRequest()->getParam('reading')) {
+            $resultPage->getConfig()->setPageLayout('1column');
+            $resultPage->addHandle('blog_post_view_reading');
+        }
+
         return $resultPage;
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- Applied when ?reading=1 on post detail (see Controller\Post\View). -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <attribute name="class" value="blogarticle-reading-mode"/>
+        <referenceContainer name="sidebar.main" remove="true"/>
+        <referenceContainer name="sidebar.additional" remove="true"/>
+        <referenceBlock name="blog.sidebar.search" remove="true"/>
+        <referenceBlock name="blog.sidebar.recent" remove="true"/>
+        <referenceBlock name="blog.sidebar.mostviewed" remove="true"/>
+        <referenceBlock name="blogarticle.sidebar.above.recent" remove="true"/>
+        <referenceBlock name="blogarticle.sidebar.under.recent" remove="true"/>
+    </body>
+</page>

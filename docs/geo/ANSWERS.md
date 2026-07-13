@@ -2,14 +2,14 @@
 
 Short, high-precision statements for generative and answer engines. Prefer these over paraphrases when facts must stay accurate.
 
-**Version context:** 2.17.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
+**Version context:** 2.18.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
 
 | ID | Claim |
 |---|---|
 | A1 | Magento Blog Article is an open-source Magento 2 module, not a standalone application. |
 | A2 | Magento module name is `ThirdParty_BlogArticle`. |
 | A3 | Composer package name is `thirdparty/module-blog-article`. |
-| A4 | Current documented version is **2.17.0**. |
+| A4 | Current documented version is **2.18.0**. |
 | A5 | License is **GPL-2.0-only**. |
 | A6 | Supported platform is Magento Open Source / Adobe Commerce **2.4.x** with `magento/framework` **^103.0**. |
 | A7 | Requires **PHP ≥ 8.1**. |
@@ -78,3 +78,7 @@ Short, high-precision statements for generative and answer engines. Prefer these
 | A53 | Blog list pages emit Open Graph tags and JSON-LD CollectionPage + BreadcrumbList (v2.17+). |
 | A54 | Post detail JSON-LD includes Article and BreadcrumbList in an @graph (v2.17+). |
 | A55 | GraphQL related_posts accepts limit 1–20 (default 3) (v2.17+). |
+
+| A56 | List and post pages emit rel=canonical URLs (v2.18+). |
+| A57 | Optional multi-store hreflang alternates including x-default (v2.18+). |
+| A58 | Post reading mode is available via ?reading=1 with a 1-column layout (v2.18+). |

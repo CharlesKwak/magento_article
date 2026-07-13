@@ -1,5 +1,25 @@
 # Release Notes
 
+## 2.18.0 - 2026-07-13
+
+### Added
+- **Canonical** `<link rel="canonical">` on list/filter and post detail pages
+- **hreflang** alternates for multi-store (config: SEO → Emit hreflang Alternates), plus `x-default`
+- **Reading mode** on post detail (`?reading=1`): 1-column layout, sidebar removed, toggle link (config: Display → Show Reading Mode Link)
+
+### Changed
+- Module / package version **2.18.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.18.0.
+
+---
+
 ## 2.17.0 - 2026-07-13
 
 ### Added

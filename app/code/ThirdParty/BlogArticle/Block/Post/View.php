@@ -20,6 +20,7 @@ use ThirdParty\BlogArticle\Model\PostFilter;
 use ThirdParty\BlogArticle\Model\PostProductLink;
 use ThirdParty\BlogArticle\Model\PostTagLink;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory as PostCollectionFactory;
+use ThirdParty\BlogArticle\Model\Seo\HreflangBuilder;
 use ThirdParty\BlogArticle\Model\TagFactory;
 
 class View extends Template implements IdentityInterface
@@ -45,6 +46,7 @@ class View extends Template implements IdentityInterface
     private $neighbors;
     private $tagNameCache = [];
     private $tagMetaCache = [];
+    private $hreflangBuilder;
 
     public function __construct(
         Context $context,
@@ -63,6 +65,7 @@ class View extends Template implements IdentityInterface
         PostFilter $postFilter,
         PostCollectionFactory $postCollectionFactory,
         StoreManagerInterface $storeManager,
+        HreflangBuilder $hreflangBuilder,
         array $data = []
     ) {
         $this->postFactory = $postFactory;
@@ -80,6 +83,7 @@ class View extends Template implements IdentityInterface
         $this->postFilter = $postFilter;
         $this->postCollectionFactory = $postCollectionFactory;
         $this->storeManager = $storeManager;
+        $this->hreflangBuilder = $hreflangBuilder;
         parent::__construct($context, $data);
     }
 
@@ -90,6 +94,14 @@ class View extends Template implements IdentityInterface
     {
         parent::_prepareLayout();
         $this->addBreadcrumbs();
+        $canonical = $this->getCanonicalUrl();
+        if ($canonical !== '') {
+            $this->pageConfig->addRemotePageAsset(
+                $canonical,
+                'canonical',
+                ['attributes' => ['rel' => 'canonical']]
+            );
+        }
         return $this;
     }
 
@@ -375,6 +387,46 @@ class View extends Template implements IdentityInterface
             return $this->getUrl('', ['_direct' => 'blog/' . $urlKey]);
         }
         return $this->getUrl('blog/post/view', ['id' => (int) $post->getId()]);
+    }
+
+    /**
+     * @return array<int, array{hreflang:string,href:string}>
+     */
+    public function getHreflangLinks(): array
+    {
+        $post = $this->getPost();
+        if (!$post) {
+            return [];
+        }
+        $urlKey = trim((string) $post->getUrlKey());
+        $path = $urlKey !== '' ? 'blog/' . $urlKey : 'blog/post/view/id/' . (int) $post->getId();
+        $storeId = $post->getStoreId() ? (int) $post->getStoreId() : null;
+        return $this->hreflangBuilder->buildForPath($path, $storeId);
+    }
+
+    public function isReadingMode(): bool
+    {
+        return (bool) $this->getRequest()->getParam('reading');
+    }
+
+    public function isReadingModeLinkEnabled(): bool
+    {
+        return $this->config->isReadingModeLinkEnabled();
+    }
+
+    public function getReadingModeUrl(): string
+    {
+        $url = $this->getCanonicalUrl();
+        if ($url === '') {
+            return '';
+        }
+        $sep = strpos($url, '?') === false ? '?' : '&';
+        return $url . $sep . 'reading=1';
+    }
+
+    public function getStandardModeUrl(): string
+    {
+        return $this->getCanonicalUrl();
     }
 
     public function getPageTitle(): string

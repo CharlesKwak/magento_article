@@ -51,6 +51,22 @@
                        showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Meta Description for Blog List</label>
                 </field>
+                <field id="hreflang_enabled" translate="label comment" type="select" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Emit hreflang Alternates</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Adds link rel=alternate hreflang for other store views when multi-store is used.</comment>
+                </field>
+            </group>
+
+            <group id="display" translate="label" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Display</label>
+                <field id="reading_mode_link" translate="label comment" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Reading Mode Link</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>On post detail, offer a distraction-free 1-column reading view (?reading=1).</comment>
+                </field>
             </group>
 
             <group id="sidebar" translate="label" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1">

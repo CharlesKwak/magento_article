@@ -4,11 +4,22 @@ $post = $block->getPost();
 $allowedTags = $block->getAllowedContentTags();
 $related = $block->getRelatedPosts();
 ?>
-<div class="blog-post-view">
+<div class="blog-post-view<?= $block->isReadingMode() ? ' blog-post-view--reading' : '' ?>">
     <p class="blog-back">
         <a href="<?= $block->escapeUrl($block->getListUrl()) ?>">
             ← <?= $block->escapeHtml(__('Back to blog')) ?>
         </a>
+        <?php if ($block->isReadingMode()): ?>
+            &nbsp;|&nbsp;
+            <a href="<?= $block->escapeUrl($block->getStandardModeUrl()) ?>">
+                <?= $block->escapeHtml(__('Exit reading mode')) ?>
+            </a>
+        <?php elseif ($block->isReadingModeLinkEnabled() && $block->getReadingModeUrl() !== ''): ?>
+            &nbsp;|&nbsp;
+            <a href="<?= $block->escapeUrl($block->getReadingModeUrl()) ?>" rel="nofollow">
+                <?= $block->escapeHtml(__('Reading mode')) ?>
+            </a>
+        <?php endif; ?>
     </p>
 
     <?php if (!$post): ?>

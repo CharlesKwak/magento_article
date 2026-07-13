@@ -14,7 +14,11 @@
             <seo>
                 <list_meta_title></list_meta_title>
                 <list_meta_description></list_meta_description>
+                <hreflang_enabled>1</hreflang_enabled>
             </seo>
+            <display>
+                <reading_mode_link>1</reading_mode_link>
+            </display>
             <sidebar>
                 <enabled>1</enabled>
                 <recent_count>5</recent_count>

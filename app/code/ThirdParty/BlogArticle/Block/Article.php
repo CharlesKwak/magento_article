@@ -11,6 +11,7 @@ use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFilter;
 use ThirdParty\BlogArticle\Model\PostTagLink;
+use ThirdParty\BlogArticle\Model\Seo\HreflangBuilder;
 use ThirdParty\BlogArticle\Model\TagFactory;
 use ThirdParty\BlogArticle\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\Collection;
@@ -70,6 +71,11 @@ class Article extends Template implements IdentityInterface
     private $storeManager;
 
     /**
+     * @var HreflangBuilder
+     */
+    private $hreflangBuilder;
+
+    /**
      * @var Collection|null
      */
     private $posts;
@@ -96,6 +102,7 @@ class Article extends Template implements IdentityInterface
         PostTagLink $postTagLink,
         FeaturedImageUploader $imageUploader,
         StoreManagerInterface $storeManager,
+        HreflangBuilder $hreflangBuilder,
         array $data = []
     ) {
         $this->collectionFactory = $collectionFactory;
@@ -108,6 +115,7 @@ class Article extends Template implements IdentityInterface
         $this->postTagLink = $postTagLink;
         $this->imageUploader = $imageUploader;
         $this->storeManager = $storeManager;
+        $this->hreflangBuilder = $hreflangBuilder;
         parent::__construct($context, $data);
     }
 
@@ -128,6 +136,14 @@ class Article extends Template implements IdentityInterface
         $metaDescription = $this->config->getListMetaDescription();
         if ($metaDescription !== '') {
             $this->pageConfig->setDescription($metaDescription);
+        }
+        $canonical = $this->getCanonicalUrl();
+        if ($canonical !== '') {
+            $this->pageConfig->addRemotePageAsset(
+                $canonical,
+                'canonical',
+                ['attributes' => ['rel' => 'canonical']]
+            );
         }
 
         $breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
@@ -541,6 +557,34 @@ class Article extends Template implements IdentityInterface
             return $this->getUrl('', ['_direct' => 'blog/author/' . $author]);
         }
         return $this->getUrl('blog/index/index');
+    }
+
+    /**
+     * Relative path used for multi-store hreflang generation.
+     */
+    public function getHreflangPath(): string
+    {
+        $cat = $this->getCategoryKeyFilter();
+        if ($cat !== '') {
+            return 'blog/category/' . $cat;
+        }
+        $tag = $this->getTagKeyFilter();
+        if ($tag !== '') {
+            return 'blog/tag/' . $tag;
+        }
+        $author = $this->getAuthorKeyFilter();
+        if ($author !== '') {
+            return 'blog/author/' . $author;
+        }
+        return 'blog/';
+    }
+
+    /**
+     * @return array<int, array{hreflang:string,href:string}>
+     */
+    public function getHreflangLinks(): array
+    {
+        return $this->hreflangBuilder->buildForPath($this->getHreflangPath(), null);
     }
 
     public function getListPageTitle(): string
