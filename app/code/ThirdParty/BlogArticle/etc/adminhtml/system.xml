@@ -38,6 +38,12 @@
                     <comment>Number of posts on the blog list (1–50). Default: 5.</comment>
                     <validate>validate-digits validate-greater-than-zero</validate>
                 </field>
+                <field id="default_sort" translate="label comment" type="select" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Default List Sort</label>
+                    <source_model>ThirdParty\BlogArticle\Model\Source\ListSort</source_model>
+                    <comment>Default order for blog list, filters, and RSS. Visitors may override with ?sort=.</comment>
+                </field>
             </group>
 
             <group id="seo" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">

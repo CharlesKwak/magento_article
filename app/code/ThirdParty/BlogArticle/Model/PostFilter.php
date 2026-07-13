@@ -106,11 +106,54 @@ class PostFilter
      */
     public function applyDefaultSort(Collection $collection): void
     {
-        $collection->getSelect()->order(
-            new \Magento\Framework\DB\Sql\Expression(
-                'IFNULL(main_table.published_at, main_table.creation_time) DESC'
-            )
+        $this->applySort($collection, 'newest');
+    }
+
+    /**
+     * Apply list sort mode: newest|oldest|title_asc|title_desc|most_viewed.
+     *
+     * @param Collection $collection
+     * @param string|null $sort
+     * @return void
+     */
+    public function applySort(Collection $collection, ?string $sort): void
+    {
+        $sort = strtolower(trim((string) $sort));
+        $allowed = Source\ListSort::allowed();
+        if ($sort === '' || !in_array($sort, $allowed, true)) {
+            $sort = Source\ListSort::NEWEST;
+        }
+
+        $dateDesc = new \Magento\Framework\DB\Sql\Expression(
+            'IFNULL(main_table.published_at, main_table.creation_time) DESC'
         );
+        $dateAsc = new \Magento\Framework\DB\Sql\Expression(
+            'IFNULL(main_table.published_at, main_table.creation_time) ASC'
+        );
+
+        switch ($sort) {
+            case Source\ListSort::OLDEST:
+                $collection->getSelect()->order($dateAsc);
+                break;
+            case Source\ListSort::TITLE_ASC:
+                $collection->setOrder('title', 'ASC');
+                break;
+            case Source\ListSort::TITLE_DESC:
+                $collection->setOrder('title', 'DESC');
+                break;
+            case Source\ListSort::MOST_VIEWED:
+                $collection->getSelect()->order(
+                    new \Magento\Framework\DB\Sql\Expression(
+                        'IFNULL(main_table.view_count, 0) DESC'
+                    )
+                );
+                $collection->getSelect()->order($dateDesc);
+                break;
+            case Source\ListSort::NEWEST:
+            default:
+                $collection->getSelect()->order($dateDesc);
+                break;
+        }
     }
 
     /**

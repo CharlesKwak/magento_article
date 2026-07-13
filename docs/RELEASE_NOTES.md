@@ -1,5 +1,27 @@
 # Release Notes
 
+## 2.32.0 - 2026-07-14
+
+### Added
+- **List sort modes**: newest, oldest, title A–Z / Z–A, most viewed (config + `?sort=` + GraphQL/REST `sort`)
+- Storefront sort dropdown on blog list / filters
+- **CLI** `blogarticle:post:preview-url --id=N` (optional `--url-key`, `--force-token`, `--store`, `--ttl`)
+- RSS feed honors `sort` (and config default)
+
+### Changed
+- Module / package version **2.32.0**
+- `PostFilter::applySort()`; `applyDefaultSort()` maps to newest
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.32.0.
+
+---
+
 ## 2.31.0 - 2026-07-14
 
 ### Added
@@ -20,7 +42,6 @@ php bin/magento setup:di:compile
 No new DB columns in 2.31.0. Tokens use Magento `crypt/key` for HMAC.
 
 ---
-
 ## 2.30.0 - 2026-07-14
 
 ### Added

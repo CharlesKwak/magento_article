@@ -145,7 +145,11 @@ class Feed extends Action
             $year > 0 ? $year : null,
             $month > 0 ? $month : null
         );
-        $this->postFilter->applyDefaultSort($collection);
+        $sort = strtolower(trim((string) $this->getRequest()->getParam('sort', '')));
+        if ($sort === '') {
+            $sort = $this->config->getDefaultListSort();
+        }
+        $this->postFilter->applySort($collection, $sort);
         $collection->setPageSize(50);
 
         $itemsXml = '';

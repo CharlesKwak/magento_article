@@ -40,6 +40,10 @@ class Posts implements ResolverInterface
         if ($month !== null && ($month < 1 || $month > 12)) {
             $month = null;
         }
+        $sort = isset($args['sort']) ? trim((string) $args['sort']) : null;
+        if ($sort === '') {
+            $sort = null;
+        }
 
         $pageSize = max(1, min(100, $pageSize));
         $currentPage = max(1, $currentPage);
@@ -52,7 +56,8 @@ class Posts implements ResolverInterface
             $tagId,
             $author,
             $year,
-            $month
+            $month,
+            $sort
         );
         $totalCount = $this->postRepository->getListTotalCount(
             $search,

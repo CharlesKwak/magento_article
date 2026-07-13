@@ -194,13 +194,26 @@ class Article extends Template implements IdentityInterface
             $this->postFilter->applyTagId($collection, $this->getTagIdFilter());
             $this->postFilter->applyAuthorKey($collection, $this->getAuthorKeyFilter());
             $this->postFilter->applyYearMonth($collection, $this->getYearFilter(), $this->getMonthFilter());
-            $this->postFilter->applyDefaultSort($collection);
+            $this->postFilter->applySort($collection, $this->getListSort());
             $collection->setPageSize($this->getPageSize());
             $collection->setCurPage($this->getCurrentPage());
             $this->posts = $collection;
         }
 
         return $this->posts;
+    }
+
+    /**
+     * Effective list sort: ?sort= overrides config when allowed.
+     */
+    public function getListSort(): string
+    {
+        $param = strtolower(trim((string) $this->getRequest()->getParam('sort', '')));
+        $allowed = \ThirdParty\BlogArticle\Model\Source\ListSort::allowed();
+        if ($param !== '' && in_array($param, $allowed, true)) {
+            return $param;
+        }
+        return $this->config->getDefaultListSort();
     }
 
     /**
@@ -639,6 +652,10 @@ class Article extends Template implements IdentityInterface
             if ($month !== null) {
                 $params['month'] = $month;
             }
+        }
+        $sort = $this->getListSort();
+        if ($sort !== '' && $sort !== 'newest') {
+            $params['sort'] = $sort;
         }
         return $this->getUrl('blog/rss/feed', $params);
     }

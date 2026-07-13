@@ -10,6 +10,7 @@
             </general>
             <list>
                 <page_size>5</page_size>
+                <default_sort>newest</default_sort>
             </list>
             <seo>
                 <list_meta_title></list_meta_title>

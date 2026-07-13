@@ -11,6 +11,7 @@ class Config
     public const XML_PATH_SHOW_TOP_MENU = 'blogarticle/general/show_top_menu';
     public const XML_PATH_SHOW_FOOTER_LINK = 'blogarticle/general/show_footer_link';
     public const XML_PATH_PAGE_SIZE = 'blogarticle/list/page_size';
+    public const XML_PATH_LIST_SORT = 'blogarticle/list/default_sort';
     public const XML_PATH_LIST_META_TITLE = 'blogarticle/seo/list_meta_title';
     public const XML_PATH_LIST_META_DESCRIPTION = 'blogarticle/seo/list_meta_description';
     public const XML_PATH_SEO_HREFLANG = 'blogarticle/seo/hreflang_enabled';
@@ -98,6 +99,23 @@ class Config
             return 5;
         }
         return min(50, $size);
+    }
+
+    /**
+     * Default storefront list sort: newest|oldest|title_asc|title_desc|most_viewed.
+     */
+    public function getDefaultListSort(?int $storeId = null): string
+    {
+        $sort = strtolower(trim((string) $this->scopeConfig->getValue(
+            self::XML_PATH_LIST_SORT,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        )));
+        $allowed = Source\ListSort::allowed();
+        if ($sort === '' || !in_array($sort, $allowed, true)) {
+            return Source\ListSort::NEWEST;
+        }
+        return $sort;
     }
 
     public function getListMetaTitle(?int $storeId = null): string

@@ -32,6 +32,7 @@ interface PostRepositoryInterface
      * @param string|null $author Author display name or URL slug
      * @param int|null $year Archive year (published_at / creation_time)
      * @param int|null $month Archive month 1–12
+     * @param string|null $sort newest|oldest|title_asc|title_desc|most_viewed
      * @return \ThirdParty\BlogArticle\Api\Data\PostInterface[]
      */
     public function getList(
@@ -42,7 +43,8 @@ interface PostRepositoryInterface
         $tagId = null,
         $author = null,
         $year = null,
-        $month = null
+        $month = null,
+        $sort = null
     );
 
     /**

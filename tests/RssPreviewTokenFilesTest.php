@@ -57,9 +57,9 @@ class RssPreviewTokenFilesTest extends TestCase
         $this->assertStringContainsString('Preview draft', $editTpl);
 
         $module = file_get_contents($root . '/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.31.0"', $module);
+        $this->assertStringContainsString('setup_version="2.32.0"', $module);
 
         $composer = file_get_contents(dirname(__DIR__) . '/composer.json');
-        $this->assertStringContainsString('"version": "2.31.0"', $composer);
+        $this->assertStringContainsString('"version": "2.32.0"', $composer);
     }
 }

@@ -45,10 +45,38 @@ $searchQuery = $block->getSearchQuery();
         <?php elseif ($block->getTagIdFilter()): ?>
             <input type="hidden" name="tag_id" value="<?= (int) $block->getTagIdFilter() ?>"/>
         <?php endif; ?>
+        <?php if ($block->getYearFilter() !== null): ?>
+            <input type="hidden" name="year" value="<?= (int) $block->getYearFilter() ?>"/>
+            <?php if ($block->getMonthFilter() !== null): ?>
+                <input type="hidden" name="month" value="<?= (int) $block->getMonthFilter() ?>"/>
+            <?php endif; ?>
+        <?php endif; ?>
+        <label for="blog-sort" class="label">
+            <span><?= $block->escapeHtml(__('Sort')) ?></span>
+        </label>
+        <select id="blog-sort" name="sort" class="select" style="max-width:12rem;">
+            <?php
+            $sortOptions = [
+                'newest' => __('Newest first'),
+                'oldest' => __('Oldest first'),
+                'title_asc' => __('Title A–Z'),
+                'title_desc' => __('Title Z–A'),
+                'most_viewed' => __('Most viewed'),
+            ];
+            $currentSort = $block->getListSort();
+            foreach ($sortOptions as $value => $label):
+                ?>
+                <option value="<?= $block->escapeHtmlAttr($value) ?>"
+                    <?= $currentSort === $value ? ' selected="selected"' : '' ?>>
+                    <?= $block->escapeHtml($label) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
         <button type="submit" class="action primary">
             <span><?= $block->escapeHtml(__('Search')) ?></span>
         </button>
-        <?php if ($searchQuery !== '' || $block->getCategoryIdFilter() || $block->getTagIdFilter()): ?>
+        <?php if ($searchQuery !== '' || $block->getCategoryIdFilter() || $block->getTagIdFilter()
+            || $block->getYearFilter() !== null || $block->getAuthorKeyFilter() !== ''): ?>
             <a href="<?= $block->escapeUrl($block->getUrl('blog/index/index')) ?>">
                 <?= $block->escapeHtml(__('Clear')) ?>
             </a>

@@ -123,9 +123,10 @@ type Query {
         author: String
         year: Int
         month: Int
+        sort: String
     ): BlogPostList
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Posts")
-    @doc(description: "List posts. Optional author is display name or URL slug (spaces as hyphens). year/month filter by publish date.")
+    @doc(description: "List posts. Optional author is display name or URL slug. year/month archive filters. sort: newest|oldest|title_asc|title_desc|most_viewed.")
 
     blogPost(id: Int, url_key: String): BlogPost
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Post")

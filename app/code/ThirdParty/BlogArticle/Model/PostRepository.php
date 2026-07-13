@@ -22,6 +22,7 @@ class PostRepository implements PostRepositoryInterface
     private $postTagLink;
     private $tagFactory;
     private $storeManager;
+    private $config;
 
     public function __construct(
         PostFactory $postFactory,
@@ -32,7 +33,8 @@ class PostRepository implements PostRepositoryInterface
         CategoryFactory $categoryFactory,
         PostTagLink $postTagLink,
         TagFactory $tagFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        Config $config
     ) {
         $this->postFactory = $postFactory;
         $this->collectionFactory = $collectionFactory;
@@ -43,6 +45,7 @@ class PostRepository implements PostRepositoryInterface
         $this->postTagLink = $postTagLink;
         $this->tagFactory = $tagFactory;
         $this->storeManager = $storeManager;
+        $this->config = $config;
     }
 
     public function getById($postId, $activeOnly = true)
@@ -76,7 +79,8 @@ class PostRepository implements PostRepositoryInterface
         $tagId = null,
         $author = null,
         $year = null,
-        $month = null
+        $month = null,
+        $sort = null
     ) {
         $page = max(1, (int) $page);
         $pageSize = max(1, min(100, (int) $pageSize));
@@ -85,6 +89,7 @@ class PostRepository implements PostRepositoryInterface
         $author = $author !== null && $author !== '' ? (string) $author : null;
         $year = $year !== null && $year !== '' ? (int) $year : null;
         $month = $month !== null && $month !== '' ? (int) $month : null;
+        $sort = $sort !== null && $sort !== '' ? (string) $sort : null;
 
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
@@ -95,7 +100,10 @@ class PostRepository implements PostRepositoryInterface
         $this->postFilter->applyTagId($collection, $tagId);
         $this->postFilter->applyAuthorKey($collection, $author);
         $this->postFilter->applyYearMonth($collection, $year, $month);
-        $this->postFilter->applyDefaultSort($collection);
+        if ($sort === null || $sort === '') {
+            $sort = $this->config->getDefaultListSort();
+        }
+        $this->postFilter->applySort($collection, $sort);
         $collection->setPageSize($pageSize);
         $collection->setCurPage($page);
 

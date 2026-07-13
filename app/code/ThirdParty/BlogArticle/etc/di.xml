@@ -126,6 +126,9 @@
                 <item name="blogarticle_post_duplicate" xsi:type="object">
                     ThirdParty\BlogArticle\Console\Command\PostDuplicateCommand
                 </item>
+                <item name="blogarticle_post_preview_url" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\PostPreviewUrlCommand
+                </item>
                 <item name="blogarticle_category_list" xsi:type="object">
                     ThirdParty\BlogArticle\Console\Command\CategoryListCommand
                 </item>
