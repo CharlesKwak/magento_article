@@ -1,5 +1,27 @@
 # Release Notes
 
+## 2.12.0 - 2026-07-13
+
+### Added
+- **WordPress CSV import format**: `blogarticle:post:import file.csv --format=wordpress` maps `post_title`, `post_content`, `post_name`, `post_status`, Yoast-style meta columns, etc.
+- Sample: `docs/samples/wordpress_posts_import_sample.csv`
+- **Declarative schema**: `etc/db_schema.xml` + `db_schema_whitelist.json` for all core tables (including `view_count`, `post_product`, comment `parent_id`)
+- **Packagist / Composer guide**: [docs/PACKAGIST.md](./PACKAGIST.md) (VCS, path, Packagist publish, ZIP modes)
+- `scripts/package_module.sh` reads version from `composer.json`; supports `--module-root` flattened ZIP
+
+### Changed
+- Module / package version **2.12.0**
+- `PostCsvImporter` accepts `format` argument (`native` | `wordpress`)
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+```
+No new runtime tables beyond 2.11; declarative schema documents current DB state for Magento schema tools.
+
+---
+
 ## 2.11.0 - 2026-07-13
 
 ### Added

@@ -5,6 +5,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Csv;
 use ThirdParty\BlogArticle\Api\Data\PostInterfaceFactory;
 use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
+use ThirdParty\BlogArticle\Model\Import\WordPressCsvMapper;
 
 /**
  * Imports blog posts from a CSV file.
@@ -15,39 +16,56 @@ use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
  *
  * status: enabled|disabled|1|0 (default enabled)
  * tag_ids: comma-separated integers
+ *
+ * format=wordpress maps common WP export headers (post_title, post_content, …).
  */
 class PostCsvImporter
 {
     public const REQUIRED = ['title', 'content'];
+    public const FORMAT_NATIVE = 'native';
+    public const FORMAT_WORDPRESS = 'wordpress';
 
     private $csv;
     private $postRepository;
     private $postFactory;
     private $postModelFactory;
+    private $wordPressCsvMapper;
 
     public function __construct(
         Csv $csv,
         PostRepositoryInterface $postRepository,
         PostInterfaceFactory $postFactory,
-        PostFactory $postModelFactory
+        PostFactory $postModelFactory,
+        WordPressCsvMapper $wordPressCsvMapper
     ) {
         $this->csv = $csv;
         $this->postRepository = $postRepository;
         $this->postFactory = $postFactory;
         $this->postModelFactory = $postModelFactory;
+        $this->wordPressCsvMapper = $wordPressCsvMapper;
     }
 
     /**
      * @param string $filePath Absolute path to CSV
      * @param bool $dryRun Validate only; do not save
      * @param bool $update Existing posts matched by url_key are updated
+     * @param string $format native|wordpress
      * @return array{created:int,updated:int,skipped:int,errors:string[]}
      * @throws LocalizedException
      */
-    public function import(string $filePath, bool $dryRun = false, bool $update = false): array
-    {
+    public function import(
+        string $filePath,
+        bool $dryRun = false,
+        bool $update = false,
+        string $format = self::FORMAT_NATIVE
+    ): array {
         if (!is_readable($filePath)) {
             throw new LocalizedException(__('CSV file is not readable: %1', $filePath));
+        }
+
+        $format = strtolower(trim($format));
+        if (!in_array($format, [self::FORMAT_NATIVE, self::FORMAT_WORDPRESS], true)) {
+            throw new LocalizedException(__('Unknown import format "%1". Use native or wordpress.', $format));
         }
 
         $this->csv->setDelimiter(',');
@@ -60,10 +78,19 @@ class PostCsvImporter
         $header = array_map(static function ($h) {
             return strtolower(trim((string) $h));
         }, $rows[0]);
+        if ($format === self::FORMAT_WORDPRESS) {
+            $header = $this->wordPressCsvMapper->mapHeaders($header);
+        }
 
         foreach (self::REQUIRED as $required) {
             if (!in_array($required, $header, true)) {
-                throw new LocalizedException(__('CSV is missing required column: %1', $required));
+                throw new LocalizedException(
+                    __(
+                        'CSV is missing required column: %1 (format=%2).',
+                        $required,
+                        $format
+                    )
+                );
             }
         }
 
@@ -87,7 +114,11 @@ class PostCsvImporter
                 if ($colName === '') {
                     continue;
                 }
+                // Later columns with the same mapped name win (e.g. post_date_gmt after post_date).
                 $data[$colName] = isset($raw[$colIndex]) ? trim((string) $raw[$colIndex]) : '';
+            }
+            if ($format === self::FORMAT_WORDPRESS) {
+                $data = $this->wordPressCsvMapper->normalizeRow($data);
             }
 
             try {

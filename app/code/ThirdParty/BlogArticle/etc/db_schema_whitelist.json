@@ -1,0 +1,103 @@
+{
+    "thirdparty_blogarticle_category": {
+        "column": {
+            "category_id": true,
+            "name": true,
+            "url_key": true,
+            "is_active": true,
+            "creation_time": true,
+            "update_time": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "THIRDPARTY_BLOGARTICLE_CATEGORY_URL_KEY": true
+        }
+    },
+    "thirdparty_blogarticle_tag": {
+        "column": {
+            "tag_id": true,
+            "name": true,
+            "url_key": true,
+            "is_active": true,
+            "creation_time": true,
+            "update_time": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "THIRDPARTY_BLOGARTICLE_TAG_URL_KEY": true
+        }
+    },
+    "thirdparty_blogarticle_post": {
+        "column": {
+            "post_id": true,
+            "title": true,
+            "author": true,
+            "url_key": true,
+            "content": true,
+            "excerpt": true,
+            "featured_image": true,
+            "meta_title": true,
+            "meta_description": true,
+            "is_active": true,
+            "view_count": true,
+            "category_id": true,
+            "store_id": true,
+            "creation_time": true,
+            "update_time": true,
+            "published_at": true
+        },
+        "index": {
+            "THIRDPARTY_BLOGARTICLE_POST_CATEGORY_ID": true,
+            "THIRDPARTY_BLOGARTICLE_POST_STORE_ID": true,
+            "THIRDPARTY_BLOGARTICLE_POST_VIEW_COUNT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "THIRDPARTY_BLOGARTICLE_POST_URL_KEY": true
+        }
+    },
+    "thirdparty_blogarticle_post_tag": {
+        "column": {
+            "post_id": true,
+            "tag_id": true
+        },
+        "index": {
+            "THIRDPARTY_BLOGARTICLE_POST_TAG_TAG_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "thirdparty_blogarticle_comment": {
+        "column": {
+            "comment_id": true,
+            "post_id": true,
+            "parent_id": true,
+            "author_name": true,
+            "author_email": true,
+            "content": true,
+            "is_approved": true,
+            "creation_time": true
+        },
+        "index": {
+            "THIRDPARTY_BLOGARTICLE_COMMENT_POST_ID": true,
+            "THIRDPARTY_BLOGARTICLE_COMMENT_IS_APPROVED": true,
+            "THIRDPARTY_BLOGARTICLE_COMMENT_PARENT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "thirdparty_blogarticle_post_product": {
+        "column": {
+            "post_id": true,
+            "product_id": true
+        },
+        "index": {
+            "THIRDPARTY_BLOGARTICLE_POST_PRODUCT_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

@@ -2,7 +2,7 @@
 
 This guide explains how to move blog content **into** `ThirdParty_BlogArticle` using the built-in **CSV import** (`blogarticle:post:import`). It is intentionally lightweight: no proprietary WordPress plugin dependency.
 
-Module version: **2.11.0**
+Module version: **2.12.0**
 
 ---
 
@@ -25,6 +25,19 @@ Optional:
 See [samples/posts_import_sample.csv](./samples/posts_import_sample.csv).
 
 ### Import commands
+
+```bash
+# Native Blog Article columns
+php bin/magento blogarticle:post:import /path/to/posts.csv --dry-run
+
+# WordPress-style column names (post_title, post_content, post_name, …)
+php bin/magento blogarticle:post:import /path/to/wp-export.csv --format=wordpress --dry-run
+php bin/magento blogarticle:post:import /path/to/wp-export.csv --format=wordpress --update
+```
+
+Sample WP-style CSV: [samples/wordpress_posts_import_sample.csv](./samples/wordpress_posts_import_sample.csv).
+
+### Import commands (detail)
 
 ```bash
 # Dry run (validate only)

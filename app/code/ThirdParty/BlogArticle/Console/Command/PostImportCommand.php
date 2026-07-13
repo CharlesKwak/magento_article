@@ -25,7 +25,7 @@ class PostImportCommand extends Command
     protected function configure()
     {
         $this->setName('blogarticle:post:import')
-            ->setDescription('Import blog posts from a CSV file')
+            ->setDescription('Import blog posts from a CSV file (native or WordPress column names)')
             ->addArgument('file', InputArgument::REQUIRED, 'Absolute or relative path to CSV')
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Validate only; do not write')
             ->addOption(
@@ -33,6 +33,13 @@ class PostImportCommand extends Command
                 'u',
                 InputOption::VALUE_NONE,
                 'Update existing posts matched by url_key instead of failing'
+            )
+            ->addOption(
+                'format',
+                'f',
+                InputOption::VALUE_REQUIRED,
+                'CSV column format: native|wordpress',
+                'native'
             );
         parent::configure();
     }
@@ -51,13 +58,15 @@ class PostImportCommand extends Command
 
         $dryRun = (bool) $input->getOption('dry-run');
         $update = (bool) $input->getOption('update');
+        $format = (string) $input->getOption('format');
 
         if ($dryRun) {
             $output->writeln('<comment>Dry-run mode: no changes will be saved.</comment>');
         }
+        $output->writeln(sprintf('<comment>Import format: %s</comment>', $format));
 
         try {
-            $result = $this->importer->import($file, $dryRun, $update);
+            $result = $this->importer->import($file, $dryRun, $update, $format);
         } catch (LocalizedException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             return Command::FAILURE;
