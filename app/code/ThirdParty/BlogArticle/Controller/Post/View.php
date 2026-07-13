@@ -7,6 +7,7 @@ use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use ThirdParty\BlogArticle\Model\PostFactory;
+use ThirdParty\BlogArticle\Model\PostViewCounter;
 
 class View extends Action
 {
@@ -25,19 +26,22 @@ class View extends Action
      */
     private $postFactory;
     private $storeManager;
+    private $postViewCounter;
 
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
         PostFactory $postFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        PostViewCounter $postViewCounter
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->postFactory = $postFactory;
         $this->storeManager = $storeManager;
+        $this->postViewCounter = $postViewCounter;
     }
 
     /**
@@ -73,6 +77,12 @@ class View extends Action
         if ($postStore > 0 && $postStore !== $currentStore) {
             $resultForward = $this->resultForwardFactory->create();
             return $resultForward->forward('noroute');
+        }
+
+        try {
+            $this->postViewCounter->increment((int) $post->getId());
+        } catch (\Throwable $e) {
+            // never block storefront rendering on counter errors
         }
 
         $resultPage = $this->resultPageFactory->create();

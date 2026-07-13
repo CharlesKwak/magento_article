@@ -28,7 +28,16 @@ $related = $block->getRelatedPosts();
             <h1><?= $block->escapeHtml($post->getTitle()) ?></h1>
             <p class="blog-meta">
                 <?php if ($block->getAuthorName() !== ''): ?>
-                    <span class="blog-author"><?= $block->escapeHtml(__('By %1', $block->getAuthorName())) ?></span>
+                    <span class="blog-author">
+                        <?php if ($block->getAuthorUrl() !== ''): ?>
+                            <?= $block->escapeHtml(__('By')) ?>
+                            <a href="<?= $block->escapeUrl($block->getAuthorUrl()) ?>">
+                                <?= $block->escapeHtml($block->getAuthorName()) ?>
+                            </a>
+                        <?php else: ?>
+                            <?= $block->escapeHtml(__('By %1', $block->getAuthorName())) ?>
+                        <?php endif; ?>
+                    </span>
                     &middot;
                 <?php endif; ?>
                 <?php if ($categoryName !== '' && $categoryUrl !== ''): ?>
@@ -125,6 +134,24 @@ $related = $block->getRelatedPosts();
                     <?php endif; ?>
                 </div>
             </nav>
+        <?php endif; ?>
+
+        <?php
+        $relatedProducts = $block->getRelatedProducts();
+        if ($relatedProducts):
+            ?>
+            <section class="blog-related-products" style="margin-top:2rem;">
+                <h2><?= $block->escapeHtml(__('Related products')) ?></h2>
+                <ul class="blog-related-products-list">
+                    <?php foreach ($relatedProducts as $product): ?>
+                        <li>
+                            <a href="<?= $block->escapeUrl($product['url']) ?>">
+                                <?= $block->escapeHtml($product['name']) ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </section>
         <?php endif; ?>
 
         <?php if ($related): ?>

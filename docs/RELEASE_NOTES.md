@@ -1,5 +1,29 @@
 # Release Notes
 
+## 2.11.0 - 2026-07-13
+
+### Added
+- **Most viewed** posts: `view_count` column + storefront counter on post open + sidebar block
+- **Product ↔ post** links: Admin “Related Product SKUs”, post detail related products, product page related posts
+- **Author landing** URLs: `/blog/author/{slug}` (filter list by author)
+- **Migration guide**: [docs/MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) (WordPress / CSV / Magento blogs)
+- Config: sidebar most-viewed toggle/count; catalog related-posts toggle/limit
+- Schema patch `AddViewCountAndProductLink`
+
+### Changed
+- Module / package version **2.11.0**
+- Module sequence includes `Magento_Catalog`
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+Adds `view_count` on `thirdparty_blogarticle_post` and table `thirdparty_blogarticle_post_product`.
+
+---
+
 ## 2.10.0 - 2026-07-13
 
 ### Added

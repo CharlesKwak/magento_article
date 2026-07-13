@@ -16,6 +16,10 @@ class Config
     public const XML_PATH_SIDEBAR_ENABLED = 'blogarticle/sidebar/enabled';
     public const XML_PATH_SIDEBAR_RECENT_COUNT = 'blogarticle/sidebar/recent_count';
     public const XML_PATH_SIDEBAR_SHOW_SEARCH = 'blogarticle/sidebar/show_search';
+    public const XML_PATH_SIDEBAR_MOST_VIEWED = 'blogarticle/sidebar/show_most_viewed';
+    public const XML_PATH_SIDEBAR_MOST_VIEWED_COUNT = 'blogarticle/sidebar/most_viewed_count';
+    public const XML_PATH_PRODUCT_RELATED_ENABLED = 'blogarticle/catalog/show_related_posts';
+    public const XML_PATH_PRODUCT_RELATED_LIMIT = 'blogarticle/catalog/related_posts_limit';
     public const XML_PATH_COMMENTS_ENABLED = 'blogarticle/comments/enabled';
     public const XML_PATH_COMMENTS_AUTO_APPROVE = 'blogarticle/comments/auto_approve';
     public const XML_PATH_COMMENTS_SPAM = 'blogarticle/comments/spam_protection';
@@ -127,6 +131,50 @@ class Config
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
+    }
+
+    public function isMostViewedEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SIDEBAR_MOST_VIEWED,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    public function getMostViewedCount(?int $storeId = null): int
+    {
+        $n = (int) $this->scopeConfig->getValue(
+            self::XML_PATH_SIDEBAR_MOST_VIEWED_COUNT,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        if ($n < 1) {
+            return 5;
+        }
+        return min(20, $n);
+    }
+
+    public function isProductRelatedPostsEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_PRODUCT_RELATED_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    public function getProductRelatedPostsLimit(?int $storeId = null): int
+    {
+        $n = (int) $this->scopeConfig->getValue(
+            self::XML_PATH_PRODUCT_RELATED_LIMIT,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        if ($n < 1) {
+            return 5;
+        }
+        return min(20, $n);
     }
 
     public function isCommentsEnabled(?int $storeId = null): bool

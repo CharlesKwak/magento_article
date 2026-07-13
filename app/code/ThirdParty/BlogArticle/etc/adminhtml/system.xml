@@ -78,6 +78,43 @@
                         <field id="enabled">1</field>
                     </depends>
                 </field>
+                <field id="show_most_viewed" translate="label comment" type="select" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Most Viewed</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Requires storefront view tracking (enabled automatically on post open).</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="most_viewed_count" translate="label comment" type="text" sortOrder="50"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Number of Most Viewed Posts</label>
+                    <comment>1–20. Default: 5.</comment>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                    <depends>
+                        <field id="enabled">1</field>
+                        <field id="show_most_viewed">1</field>
+                    </depends>
+                </field>
+            </group>
+
+            <group id="catalog" translate="label" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Catalog Integration</label>
+                <field id="show_related_posts" translate="label comment" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Related Posts on Product Page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>When a product is linked on a blog post, show those posts on the product page.</comment>
+                </field>
+                <field id="related_posts_limit" translate="label" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Related Posts Limit</label>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                    <depends>
+                        <field id="show_related_posts">1</field>
+                    </depends>
+                </field>
             </group>
 
             <group id="comments" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">

@@ -26,6 +26,7 @@ class Router implements RouterInterface
         'post',
         'category',
         'tag',
+        'author',
         'comment',
         'rss',
         'robots.txt',
@@ -98,6 +99,20 @@ class Router implements RouterInterface
                 ->setControllerName('index')
                 ->setActionName('index')
                 ->setParam('tag', $urlKey)
+                ->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
+            return $this->actionFactory->create(Forward::class);
+        }
+
+        // /blog/author/{slug}  (slug ≈ lowercase author with spaces as hyphens)
+        if (preg_match('#^blog/author/([^/]+)/?$#', $identifier, $matches)) {
+            $authorKey = rawurldecode($matches[1]);
+            if ($authorKey === '') {
+                return null;
+            }
+            $request->setModuleName('blog')
+                ->setControllerName('index')
+                ->setActionName('index')
+                ->setParam('author', $authorKey)
                 ->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
             return $this->actionFactory->create(Forward::class);
         }

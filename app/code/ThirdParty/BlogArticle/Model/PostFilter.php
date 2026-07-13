@@ -127,4 +127,28 @@ class PostFilter
             $storeId
         );
     }
+
+    /**
+     * Filter by author display name or URL slug (spaces/underscores ↔ hyphens, case-insensitive).
+     *
+     * @param Collection $collection
+     * @param string|null $authorKey
+     * @return void
+     */
+    public function applyAuthorKey(Collection $collection, ?string $authorKey): void
+    {
+        $authorKey = trim((string) $authorKey);
+        if ($authorKey === '') {
+            return;
+        }
+        $normalized = strtolower(preg_replace('/[\s_]+/', '-', $authorKey) ?? $authorKey);
+        $normalized = trim($normalized, '-');
+        if ($normalized === '') {
+            return;
+        }
+        $collection->getSelect()->where(
+            "LOWER(REPLACE(REPLACE(TRIM(IFNULL(main_table.author, '')), ' ', '-'), '_', '-')) = ?",
+            $normalized
+        );
+    }
 }

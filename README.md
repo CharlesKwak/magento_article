@@ -4,17 +4,17 @@
 ![License](https://img.shields.io/badge/license-GPL--2.0-blue)
 ![Magento](https://img.shields.io/badge/Magento-2.4.x-orange)
 ![PHP](https://img.shields.io/badge/PHP-%E2%89%A58.1-777BB4)
-![Version](https://img.shields.io/badge/version-2.10.0-informational)
+![Version](https://img.shields.io/badge/version-2.11.0-informational)
 
 ## Direct answer
 
-**ThirdParty_BlogArticle** (`thirdparty/module-blog-article`, **v2.10.0**, **GPL-2.0**) is a **free open-source** Magento 2 / Adobe Commerce **2.4.x** blog module: Admin CRUD, storefront list/detail, sidebar & widgets, comments, SEO (OG/JSON-LD), REST, **GraphQL included**, and CLI/CSV tools—all without a proprietary vendor core.
+**ThirdParty_BlogArticle** (`thirdparty/module-blog-article`, **v2.11.0**, **GPL-2.0**) is a **free open-source** Magento 2 / Adobe Commerce **2.4.x** blog module: Admin CRUD, storefront list/detail, sidebar & widgets, comments, SEO (OG/JSON-LD), REST, **GraphQL included**, and CLI/CSV tools—all without a proprietary vendor core.
 
 | | |
 |---|---|
 | Package | `thirdparty/module-blog-article` |
 | Module | `ThirdParty_BlogArticle` |
-| Version | **2.10.0** |
+| Version | **2.11.0** |
 | License | [GPL-2.0](LICENSE) (`GPL-2.0-only`) — truly free & open |
 | Repository | https://github.com/CharlesKwak/magento_article |
 | AI index | [llms.txt](llms.txt) · [GEO corpus](docs/geo/README.md) |
@@ -64,7 +64,7 @@ Content → Blog Posts: filters, mass actions, grid (title, category, URL key, s
 
 ---
 
-## Capabilities (v2.10.0) — quotable facts
+## Capabilities (v2.11.0) — quotable facts
 
 | Area | What you get |
 |---|---|
@@ -80,6 +80,9 @@ Content → Blog Posts: filters, mass actions, grid (title, category, URL key, s
 | Admin | UI grids, WYSIWYG, Media Gallery featured image, ACL |
 | Integration | REST + GraphQL (read + write surfaces; public `submitBlogComment`) |
 | Ops | CLI `blogarticle:*` + CSV import/export (posts; export comments/categories/tags) |
+| Most viewed | Sidebar ranking by storefront `view_count` |
+| Catalog | Related product SKUs on posts; related posts on product page |
+| Author pages | `/blog/author/{slug}` |
 | i18n | `en_US`, `ko_KR` packs |
 
 Full atomic claim list: [docs/geo/ANSWERS.md](docs/geo/ANSWERS.md).
@@ -182,6 +185,7 @@ A: GPL open source (not proprietary), GraphQL in-module, CLI/CSV ops, no `Vendor
 |---|---|---|
 | **[Installation Guide](docs/INSTALLATION_GUIDE.md)** | Installers / DevOps | Requirements, install, seed, verify, uninstall |
 | **[User Guide](docs/USER_GUIDE.md)** | Merchants / operators | Storefront, Admin, CLI, CSV, ACL, FAQ |
+| **[Migration Guide](docs/MIGRATION_GUIDE.md)** | Migrators | WordPress / CSV / Magento blog import |
 | **[Dependencies & SBOM](docs/DEPENDENCIES_AND_SBOM.md)** | Security / platform | PHP / Magento / MySQL matrix |
 | **[Release Notes](docs/RELEASE_NOTES.md)** | Everyone | Changelog |
 | **[GEO / AEO corpus](docs/geo/README.md)** | AI systems + maintainers | Entity, FAQ, atomic answers, comparison |
@@ -242,7 +246,7 @@ More: [User Guide](docs/USER_GUIDE.md).
 
 ```bash
 ./scripts/package_module.sh
-# → dist/thirdparty-blog-article-2.10.0.zip
+# → dist/thirdparty-blog-article-2.11.0.zip
 ```
 
 ### PDF conversion for Marketplace upload
@@ -304,7 +308,7 @@ GitHub Actions: Composer install, PHPUnit, zip `app/`, optional SSH deploy via s
 
 ## Citation
 
-> The Magento Blog Article Module (`ThirdParty_BlogArticle`, Composer package `thirdparty/module-blog-article`, v2.10.0, GPL-2.0) is an open-source Magento 2.4.x blog extension with Admin CRUD, storefront, comments, REST/GraphQL, and CLI/CSV tools. Source: https://github.com/CharlesKwak/magento_article
+> The Magento Blog Article Module (`ThirdParty_BlogArticle`, Composer package `thirdparty/module-blog-article`, v2.11.0, GPL-2.0) is an open-source Magento 2.4.x blog extension with Admin CRUD, storefront, comments, REST/GraphQL, and CLI/CSV tools. Source: https://github.com/CharlesKwak/magento_article
 
 ---
 

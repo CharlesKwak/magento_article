@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **2.10.0**
+Version covered: **2.11.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -26,7 +26,7 @@ This module provides a **database-backed blog post list** with Admin management:
 | GraphQL | `/graphql` (`blogPosts`, `blogPost`) | Public read + search |
 | Widget | **Content → Widgets** | “Blog Article — Recent Posts” |
 
-### What you can do in v2.10.0
+### What you can do in v2.11.0
 
 - Search and page through the storefront blog list; open clean post/category/tag URLs.
 - Post detail: breadcrumbs, reading time, share/copy link, prev/next, clickable tags/category.
@@ -285,7 +285,7 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v2.10.0 |
+| Topic | Behavior in v2.11.0 |
 |---|---|
 | Multi-website / store view | Posts may target a store via `store_id` (0/NULL = all views) |
 | Translation of post content | Not supported; store raw title/content per row only |
@@ -388,3 +388,14 @@ Create blocks under **Content → Blocks** using these **identifiers** (empty bl
 | `blogarticle_sidebar_under_recent` | Sidebar, under recent posts |
 
 Use for promotions, newsletters, or product banners without editing module templates.
+
+---
+
+## Catalog & traffic (v2.11)
+
+- On each post edit form, **Related Product SKUs** accepts comma-separated SKUs or product IDs.
+- Linked products appear on the post detail page; linked posts appear on the product page (config under **Catalog Integration**).
+- Opening a post increments **view_count**. Sidebar **Most Viewed** ranks by this counter.
+- Author archive: `/blog/author/{slug}` where slug is the author name with spaces as hyphens (case-insensitive).
+
+See also [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md).

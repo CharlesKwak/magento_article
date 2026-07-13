@@ -175,6 +175,7 @@ class Article extends Template implements IdentityInterface
             $this->postFilter->applySearch($collection, $this->getSearchQuery());
             $this->postFilter->applyCategoryId($collection, $this->getCategoryIdFilter());
             $this->postFilter->applyTagId($collection, $this->getTagIdFilter());
+            $this->postFilter->applyAuthorKey($collection, $this->getAuthorKeyFilter());
             $this->postFilter->applyDefaultSort($collection);
             $collection->setPageSize($this->getPageSize());
             $collection->setCurPage($this->getCurrentPage());
@@ -252,6 +253,14 @@ class Article extends Template implements IdentityInterface
     public function getTagKeyFilter(): string
     {
         return trim((string) $this->getRequest()->getParam('tag', ''));
+    }
+
+    /**
+     * Author slug or name from /blog/author/{slug} or ?author=
+     */
+    public function getAuthorKeyFilter(): string
+    {
+        return trim((string) $this->getRequest()->getParam('author', ''));
     }
 
     /**
@@ -428,6 +437,11 @@ class Article extends Template implements IdentityInterface
             if ($tag->getId()) {
                 return (string) __('Tag: %1', $tag->getName());
             }
+        }
+        $authorKey = $this->getAuthorKeyFilter();
+        if ($authorKey !== '') {
+            $label = str_replace('-', ' ', $authorKey);
+            return (string) __('Author: %1', $label);
         }
         return '';
     }

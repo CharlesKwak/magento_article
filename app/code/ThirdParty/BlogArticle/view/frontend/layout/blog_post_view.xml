@@ -51,6 +51,9 @@
             <block class="ThirdParty\BlogArticle\Block\Sidebar\Recent"
                    name="blog.sidebar.recent"
                    template="ThirdParty_BlogArticle::sidebar/recent.phtml"/>
+            <block class="ThirdParty\BlogArticle\Block\Sidebar\MostViewed"
+                   name="blog.sidebar.mostviewed"
+                   template="ThirdParty_BlogArticle::sidebar/mostviewed.phtml"/>
             <block class="Magento\Cms\Block\Block"
                    name="blogarticle.sidebar.under.recent">
                 <arguments>

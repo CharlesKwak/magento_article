@@ -163,6 +163,23 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
             </div>
 
             <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="product_skus">
+                    <span><?= $block->escapeHtml(__('Related Product SKUs')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <input class="admin__control-text"
+                           type="text"
+                           id="product_skus"
+                           name="product_skus"
+                           style="width:100%; max-width:640px;"
+                           value="<?= $block->escapeHtmlAttr($block->getProductSkusInput()) ?>"/>
+                    <p class="admin__field-note">
+                        <?= $block->escapeHtml(__('Comma-separated catalog product SKUs or IDs. Shown on the post detail page and (reciprocally) on those product pages.')) ?>
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
                 <label class="admin__field-label" for="excerpt">
                     <span><?= $block->escapeHtml(__('Excerpt')) ?></span>
                 </label>

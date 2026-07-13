@@ -1,6 +1,7 @@
 <?php
 namespace ThirdParty\BlogArticle\Block\Post;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
@@ -16,6 +17,7 @@ use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFactory;
 use ThirdParty\BlogArticle\Model\PostFilter;
+use ThirdParty\BlogArticle\Model\PostProductLink;
 use ThirdParty\BlogArticle\Model\PostTagLink;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory as PostCollectionFactory;
 use ThirdParty\BlogArticle\Model\TagFactory;
@@ -25,6 +27,8 @@ class View extends Template implements IdentityInterface
     private $postFactory;
     private $postRepository;
     private $postTagLink;
+    private $postProductLink;
+    private $productRepository;
     private $tagFactory;
     private $categoryFactory;
     private $imageUploader;
@@ -37,6 +41,7 @@ class View extends Template implements IdentityInterface
     private $storeManager;
     private $post;
     private $related;
+    private $relatedProducts;
     private $neighbors;
     private $tagNameCache = [];
     private $tagMetaCache = [];
@@ -46,6 +51,8 @@ class View extends Template implements IdentityInterface
         PostFactory $postFactory,
         PostRepositoryInterface $postRepository,
         PostTagLink $postTagLink,
+        PostProductLink $postProductLink,
+        ProductRepositoryInterface $productRepository,
         TagFactory $tagFactory,
         CategoryFactory $categoryFactory,
         FeaturedImageUploader $imageUploader,
@@ -61,6 +68,8 @@ class View extends Template implements IdentityInterface
         $this->postFactory = $postFactory;
         $this->postRepository = $postRepository;
         $this->postTagLink = $postTagLink;
+        $this->postProductLink = $postProductLink;
+        $this->productRepository = $productRepository;
         $this->tagFactory = $tagFactory;
         $this->categoryFactory = $categoryFactory;
         $this->imageUploader = $imageUploader;
@@ -467,6 +476,57 @@ class View extends Template implements IdentityInterface
             return '';
         }
         return trim((string) $post->getAuthor());
+    }
+
+    public function getAuthorUrl(): string
+    {
+        $name = $this->getAuthorName();
+        if ($name === '') {
+            return '';
+        }
+        $slug = strtolower(preg_replace('/[\s_]+/', '-', $name) ?? $name);
+        $slug = trim((string) $slug, '-');
+        if ($slug === '') {
+            return '';
+        }
+        return $this->getUrl('', ['_direct' => 'blog/author/' . rawurlencode($slug)]);
+    }
+
+    /**
+     * Linked catalog products for this post (name + URL).
+     *
+     * @return array<int, array{name:string,url:string,sku:string}>
+     */
+    public function getRelatedProducts(): array
+    {
+        if ($this->relatedProducts !== null) {
+            return $this->relatedProducts;
+        }
+        $this->relatedProducts = [];
+        $post = $this->getPost();
+        if (!$post || !$post->getId()) {
+            return $this->relatedProducts;
+        }
+        foreach ($this->postProductLink->getProductIdsForPost((int) $post->getId()) as $productId) {
+            try {
+                $product = $this->productRepository->getById(
+                    $productId,
+                    false,
+                    (int) $this->storeManager->getStore()->getId()
+                );
+                if (!(int) $product->getStatus()) {
+                    continue;
+                }
+                $this->relatedProducts[] = [
+                    'name' => (string) $product->getName(),
+                    'url' => (string) $product->getProductUrl(),
+                    'sku' => (string) $product->getSku(),
+                ];
+            } catch (\Throwable $e) {
+                continue;
+            }
+        }
+        return $this->relatedProducts;
     }
 
     /**

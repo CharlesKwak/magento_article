@@ -7,6 +7,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
 use ThirdParty\BlogArticle\Model\PostFactory;
+use ThirdParty\BlogArticle\Model\PostProductLink;
 use ThirdParty\BlogArticle\Model\PostTagLink;
 use ThirdParty\BlogArticle\Model\UrlKeyGenerator;
 
@@ -18,6 +19,7 @@ class Save extends Action
     private $dataPersistor;
     private $urlKeyGenerator;
     private $postTagLink;
+    private $postProductLink;
     private $imageUploader;
 
     public function __construct(
@@ -26,6 +28,7 @@ class Save extends Action
         DataPersistorInterface $dataPersistor,
         UrlKeyGenerator $urlKeyGenerator,
         PostTagLink $postTagLink,
+        PostProductLink $postProductLink,
         FeaturedImageUploader $imageUploader
     ) {
         parent::__construct($context);
@@ -33,6 +36,7 @@ class Save extends Action
         $this->dataPersistor = $dataPersistor;
         $this->urlKeyGenerator = $urlKeyGenerator;
         $this->postTagLink = $postTagLink;
+        $this->postProductLink = $postProductLink;
         $this->imageUploader = $imageUploader;
     }
 
@@ -115,6 +119,8 @@ class Save extends Action
         try {
             $post->save();
             $this->postTagLink->setTagsForPost((int) $post->getId(), $tagIds);
+            $productSkus = isset($data['product_skus']) ? (string) $data['product_skus'] : '';
+            $this->postProductLink->setProductsFromInput((int) $post->getId(), $productSkus);
             $this->messageManager->addSuccessMessage(__('The blog post has been saved.'));
             $this->dataPersistor->clear('blogarticle_post');
 

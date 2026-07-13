@@ -1,0 +1,29 @@
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Sidebar\MostViewed $block */
+$posts = $block->getPosts();
+?>
+<div class="block block-blogarticle-mostviewed">
+    <div class="block-title">
+        <strong><?= $block->escapeHtml($block->getBlockTitle()) ?></strong>
+    </div>
+    <div class="block-content">
+        <?php if (!$posts || !$posts->getSize()): ?>
+            <p><?= $block->escapeHtml(__('No posts yet.')) ?></p>
+        <?php else: ?>
+            <ul class="blogarticle-mostviewed-list">
+                <?php foreach ($posts as $post): ?>
+                    <li>
+                        <a href="<?= $block->escapeUrl($block->getPostUrl($post)) ?>">
+                            <?= $block->escapeHtml((string) $post->getTitle()) ?>
+                        </a>
+                        <?php if ((int) $post->getViewCount() > 0): ?>
+                            <span class="blogarticle-view-count">
+                                (<?= $block->escapeHtml((string) (int) $post->getViewCount()) ?>)
+                            </span>
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    </div>
+</div>

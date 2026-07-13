@@ -47,7 +47,7 @@ class WysiwygAndTaxonomyCliFilesTest extends TestCase
 
         $module = file_get_contents($root . '/etc/module.xml');
         $this->assertStringContainsString('Magento_Cms', $module);
-        $this->assertStringContainsString('setup_version="2.10.0"', $module);
+        $this->assertStringContainsString('setup_version="2.11.0"', $module);
 
         $di = file_get_contents($root . '/etc/di.xml');
         $this->assertStringContainsString('CategoryListCommand', $di);
@@ -67,6 +67,6 @@ class WysiwygAndTaxonomyCliFilesTest extends TestCase
     public function testModuleVersionIs290(): void
     {
         $composer = file_get_contents(dirname(__DIR__) . '/composer.json');
-        $this->assertStringContainsString('"version": "2.10.0"', $composer);
+        $this->assertStringContainsString('"version": "2.11.0"', $composer);
     }
 }

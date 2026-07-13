@@ -10,6 +10,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\System\Store as SystemStore;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFactory;
+use ThirdParty\BlogArticle\Model\PostProductLink;
 use ThirdParty\BlogArticle\Model\PostTagLink;
 use ThirdParty\BlogArticle\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use ThirdParty\BlogArticle\Model\ResourceModel\Tag\CollectionFactory as TagCollectionFactory;
@@ -22,6 +23,7 @@ class Edit extends Template
     private $categoryCollectionFactory;
     private $tagCollectionFactory;
     private $postTagLink;
+    private $postProductLink;
     private $systemStore;
     private $wysiwygConfig;
     private $json;
@@ -35,6 +37,7 @@ class Edit extends Template
         CategoryCollectionFactory $categoryCollectionFactory,
         TagCollectionFactory $tagCollectionFactory,
         PostTagLink $postTagLink,
+        PostProductLink $postProductLink,
         SystemStore $systemStore,
         WysiwygConfig $wysiwygConfig,
         Json $json,
@@ -46,6 +49,7 @@ class Edit extends Template
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->tagCollectionFactory = $tagCollectionFactory;
         $this->postTagLink = $postTagLink;
+        $this->postProductLink = $postProductLink;
         $this->systemStore = $systemStore;
         $this->wysiwygConfig = $wysiwygConfig;
         $this->json = $json;
@@ -121,6 +125,22 @@ class Edit extends Template
             return $this->postTagLink->getTagIdsForPost((int) $post->getId());
         }
         return [];
+    }
+
+    /**
+     * Comma-separated product SKUs (or IDs) for the admin form.
+     */
+    public function getProductSkusInput(): string
+    {
+        $post = $this->getPost();
+        $persisted = $post->getData('product_skus');
+        if (is_string($persisted) && $persisted !== '') {
+            return $persisted;
+        }
+        if ($post->getId()) {
+            return implode(', ', $this->postProductLink->getProductSkusForPost((int) $post->getId()));
+        }
+        return '';
     }
 
     public function getFormKey()
