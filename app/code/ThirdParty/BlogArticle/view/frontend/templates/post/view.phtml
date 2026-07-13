@@ -80,7 +80,11 @@ $related = $block->getRelatedPosts();
                 <p class="blog-featured-image">
                     <img src="<?= $block->escapeUrl($block->getFeaturedImageUrl()) ?>"
                          alt="<?= $block->escapeHtmlAttr((string) $post->getTitle()) ?>"
-                         style="max-width:100%;height:auto;"/>
+                         style="max-width:100%;height:auto;"
+                         <?php if ($block->isLazyLoadImagesEnabled()): ?>
+                         loading="lazy" decoding="async"
+                         <?php endif; ?>
+                    />
                 </p>
             <?php endif; ?>
             <div class="content">

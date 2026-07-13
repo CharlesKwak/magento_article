@@ -44,6 +44,10 @@ class WordPressCsvMapper
         'meta_description' => 'meta_description',
         'seo_description' => 'meta_description',
         '_yoast_wpseo_metadesc' => 'meta_description',
+        'meta_robots' => 'meta_robots',
+        'robots' => 'meta_robots',
+        '_yoast_wpseo_meta-robots-noindex' => 'yoast_noindex',
+        '_yoast_wpseo_meta-robots-nofollow' => 'yoast_nofollow',
         'featured_image' => 'featured_image',
         'image' => 'featured_image',
         'thumbnail' => 'featured_image',
@@ -105,8 +109,17 @@ class WordPressCsvMapper
             }
         }
 
+        // Derive robots from Yoast noindex/nofollow flags when meta_robots empty.
+        if (empty($row['meta_robots'])) {
+            $noindex = isset($row['yoast_noindex']) && in_array(strtolower((string) $row['yoast_noindex']), ['1', 'true', 'yes'], true);
+            $nofollow = isset($row['yoast_nofollow']) && in_array(strtolower((string) $row['yoast_nofollow']), ['1', 'true', 'yes'], true);
+            if ($noindex || $nofollow) {
+                $row['meta_robots'] = ($noindex ? 'NOINDEX' : 'INDEX') . ',' . ($nofollow ? 'NOFOLLOW' : 'FOLLOW');
+            }
+        }
+
         // category_names / tag_names are hints only (IDs still preferred); leave for future use.
-        unset($row['category_names'], $row['tag_names']);
+        unset($row['category_names'], $row['tag_names'], $row['yoast_noindex'], $row['yoast_nofollow']);
 
         return $row;
     }

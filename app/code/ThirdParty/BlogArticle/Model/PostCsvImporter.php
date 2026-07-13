@@ -13,7 +13,7 @@ use ThirdParty\BlogArticle\Model\PostProductLink;
  *
  * Expected header columns (case-insensitive):
  * title*, content*, url_key, author, status, excerpt, category_id, tag_ids,
- * store_id, published_at, meta_title, meta_description, featured_image, product_skus
+ * store_id, published_at, meta_title, meta_description, meta_robots, featured_image, product_skus
  *
  * status: enabled|disabled|1|0 (default enabled)
  * tag_ids: comma-separated integers
@@ -230,6 +230,9 @@ class PostCsvImporter
         }
         if (array_key_exists('meta_description', $data)) {
             $post->setMetaDescription($data['meta_description'] !== '' ? $data['meta_description'] : null);
+        }
+        if (array_key_exists('meta_robots', $data)) {
+            $post->setMetaRobots($data['meta_robots'] !== '' ? strtoupper($data['meta_robots']) : null);
         }
         if (array_key_exists('featured_image', $data)) {
             $post->setFeaturedImage($data['featured_image'] !== '' ? $data['featured_image'] : null);

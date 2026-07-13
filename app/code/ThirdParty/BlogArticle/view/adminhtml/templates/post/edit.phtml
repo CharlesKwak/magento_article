@@ -326,6 +326,29 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
             </div>
 
             <div class="admin__field" style="margin-bottom: 1rem;">
+                <label class="admin__field-label" for="meta_robots">
+                    <span><?= $block->escapeHtml(__('Meta Robots')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <?php $robots = strtoupper(trim((string) $post->getData('meta_robots'))); ?>
+                    <select class="admin__control-select" id="meta_robots" name="meta_robots" style="max-width:320px;">
+                        <option value="" <?= $robots === '' ? 'selected="selected"' : '' ?>>
+                            <?= $block->escapeHtml(__('INDEX, FOLLOW (default)')) ?>
+                        </option>
+                        <?php foreach (['INDEX,FOLLOW', 'NOINDEX,FOLLOW', 'INDEX,NOFOLLOW', 'NOINDEX,NOFOLLOW'] as $opt): ?>
+                            <option value="<?= $block->escapeHtmlAttr($opt) ?>"
+                                <?= $robots === $opt ? 'selected="selected"' : '' ?>>
+                                <?= $block->escapeHtml($opt) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <p class="admin__field-note">
+                        <?= $block->escapeHtml(__('Controls the robots meta tag on the post detail page.')) ?>
+                    </p>
+                </div>
+            </div>
+
+            <div class="admin__field" style="margin-bottom: 1rem;">
                 <label class="admin__field-label" for="content">
                     <span><?= $block->escapeHtml(__('Content')) ?> *</span>
                 </label>

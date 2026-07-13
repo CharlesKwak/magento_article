@@ -1,5 +1,26 @@
 # Release Notes
 
+## 2.19.0 - 2026-07-14
+
+### Added
+- **Per-post Meta Robots** (`meta_robots` column + Admin select + page robots meta)
+- **Lazy-load featured images** on list/post (config Display → Lazy-load Featured Images)
+- **Optional amphtml link hint** on post detail (SEO → amphtml pattern with `{base_url}`, `{url_key}`, `{post_id}`)
+- GraphQL / CSV / WordPress mapper support for `meta_robots`
+
+### Changed
+- Module / package version **2.19.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+Adds nullable column `meta_robots` on `thirdparty_blogarticle_post`.
+
+---
+
 ## 2.18.0 - 2026-07-13
 
 ### Added

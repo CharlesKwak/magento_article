@@ -39,6 +39,7 @@ type BlogPost {
     featured_image: String
     meta_title: String
     meta_description: String
+    meta_robots: String
     is_active: Int
     view_count: Int
     category_id: Int
@@ -81,6 +82,7 @@ input BlogPostInput {
     featured_image: String
     meta_title: String
     meta_description: String
+    meta_robots: String
     is_active: Int
     category_id: Int
     store_id: Int

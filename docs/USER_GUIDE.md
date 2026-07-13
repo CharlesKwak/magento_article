@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **2.18.0**
+Version covered: **2.19.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -26,7 +26,7 @@ This module provides a **database-backed blog post list** with Admin management:
 | GraphQL | `/graphql` (`blogPosts`, `blogPost`) | Public read + search |
 | Widget | **Content → Widgets** | “Blog Article — Recent Posts” |
 
-### What you can do in v2.18.0
+### What you can do in v2.19.0
 
 - Search and page through the storefront blog list; open clean post/category/tag URLs.
 - Post detail: breadcrumbs, reading time, share/copy link, prev/next, clickable tags/category.
@@ -285,7 +285,7 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v2.18.0 |
+| Topic | Behavior in v2.19.0 |
 |---|---|
 | Multi-website / store view | Posts may target a store via `store_id` (0/NULL = all views) |
 | Translation of post content | Not supported; store raw title/content per row only |
@@ -539,3 +539,24 @@ Store-specific posts (`store_id` set) only list that store’s alternate.
 ### Reading mode
 On a post, open **Reading mode** (or append `?reading=1`) for a 1-column, sidebar-free view. Use **Exit reading mode** to return.
 Disable the link under **Display → Show Reading Mode Link**.
+
+
+---
+
+## Robots, lazy images & amphtml (v2.19)
+
+### Meta robots
+On **Content → Blog Posts → Edit**, set **Meta Robots**:
+- INDEX,FOLLOW (default when empty)
+- NOINDEX,FOLLOW / INDEX,NOFOLLOW / NOINDEX,NOFOLLOW
+
+### Lazy-load images
+**Display → Lazy-load Featured Images** (default Yes) adds `loading="lazy"` to featured images.
+
+### amphtml hint
+This module does **not** render AMP HTML. When you host AMP pages elsewhere:
+
+1. Enable **SEO → Emit amphtml Link Hint**
+2. Set pattern, e.g. `{base_url}amp/blog/{url_key}`
+
+Post pages then emit `<link rel="amphtml" href="…">`.

@@ -185,6 +185,9 @@ class PostRepository implements PostRepositoryInterface
         if ($post->getMetaDescription() !== null) {
             $model->setMetaDescription(trim((string) $post->getMetaDescription()) ?: null);
         }
+        if ($post->getMetaRobots() !== null) {
+            $model->setData('meta_robots', trim((string) $post->getMetaRobots()) ?: null);
+        }
         if ($post->getExcerpt() !== null) {
             $model->setExcerpt(trim((string) $post->getExcerpt()) ?: null);
         }
@@ -291,6 +294,7 @@ class PostRepository implements PostRepositoryInterface
         $data->setFeaturedImage($post->getFeaturedImage() ? (string) $post->getFeaturedImage() : null);
         $data->setMetaTitle($post->getMetaTitle() ? (string) $post->getMetaTitle() : null);
         $data->setMetaDescription($post->getMetaDescription() ? (string) $post->getMetaDescription() : null);
+        $data->setMetaRobots($post->getData('meta_robots') ? (string) $post->getData('meta_robots') : null);
         $data->setIsActive((int) $post->getIsActive());
         $data->setViewCount((int) $post->getData('view_count'));
         $data->setCategoryId($post->getCategoryId() ? (int) $post->getCategoryId() : null);

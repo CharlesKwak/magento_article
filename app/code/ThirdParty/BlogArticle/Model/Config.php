@@ -14,7 +14,10 @@ class Config
     public const XML_PATH_LIST_META_TITLE = 'blogarticle/seo/list_meta_title';
     public const XML_PATH_LIST_META_DESCRIPTION = 'blogarticle/seo/list_meta_description';
     public const XML_PATH_SEO_HREFLANG = 'blogarticle/seo/hreflang_enabled';
+    public const XML_PATH_SEO_AMPHTML = 'blogarticle/seo/amphtml_enabled';
+    public const XML_PATH_SEO_AMPHTML_PATTERN = 'blogarticle/seo/amphtml_url_pattern';
     public const XML_PATH_READING_MODE = 'blogarticle/display/reading_mode_link';
+    public const XML_PATH_LAZY_LOAD = 'blogarticle/display/lazy_load_images';
     public const XML_PATH_SIDEBAR_ENABLED = 'blogarticle/sidebar/enabled';
     public const XML_PATH_SIDEBAR_RECENT_COUNT = 'blogarticle/sidebar/recent_count';
     public const XML_PATH_SIDEBAR_SHOW_SEARCH = 'blogarticle/sidebar/show_search';
@@ -120,6 +123,36 @@ class Config
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
+    }
+
+    public function isLazyLoadImagesEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_LAZY_LOAD,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    public function isAmpHtmlEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SEO_AMPHTML,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Pattern may include {url_key} and {base_url}. Empty disables amphtml output.
+     */
+    public function getAmpHtmlUrlPattern(?int $storeId = null): string
+    {
+        return trim((string) $this->scopeConfig->getValue(
+            self::XML_PATH_SEO_AMPHTML_PATTERN,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        ));
     }
 
     public function isSidebarEnabled(?int $storeId = null): bool

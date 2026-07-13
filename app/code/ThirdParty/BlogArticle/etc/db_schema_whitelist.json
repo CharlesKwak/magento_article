@@ -38,6 +38,7 @@
             "featured_image": true,
             "meta_title": true,
             "meta_description": true,
+            "meta_robots": true,
             "is_active": true,
             "view_count": true,
             "category_id": true,

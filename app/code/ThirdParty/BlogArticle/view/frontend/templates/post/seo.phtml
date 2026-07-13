@@ -20,6 +20,12 @@ foreach ($block->getHreflangLinks() as $alt):
 <link rel="alternate" hreflang="<?= $block->escapeHtmlAttr($alt['hreflang']) ?>" href="<?= $block->escapeUrl($alt['href']) ?>"/>
     <?php
 endforeach;
+$ampHtml = $block->getAmpHtmlUrl();
+if ($ampHtml !== ''):
+    ?>
+<link rel="amphtml" href="<?= $block->escapeUrl($ampHtml) ?>"/>
+    <?php
+endif;
 $jsonLd = $block->getJsonLd();
 if ($jsonLd !== ''):
     ?>

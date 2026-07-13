@@ -74,6 +74,7 @@ class Save extends Action
         $featuredImage = isset($data['featured_image']) ? trim((string) $data['featured_image']) : '';
         $metaTitle = isset($data['meta_title']) ? trim((string) $data['meta_title']) : '';
         $metaDescription = isset($data['meta_description']) ? trim((string) $data['meta_description']) : '';
+        $metaRobots = isset($data['meta_robots']) ? trim((string) $data['meta_robots']) : '';
         $excerpt = isset($data['excerpt']) ? trim((string) $data['excerpt']) : '';
         $publishedAt = isset($data['published_at']) ? trim((string) $data['published_at']) : '';
         $storeId = isset($data['store_id']) && $data['store_id'] !== ''
@@ -111,6 +112,7 @@ class Save extends Action
         $post->setFeaturedImage($featuredImage !== '' ? $featuredImage : null);
         $post->setMetaTitle($metaTitle !== '' ? $metaTitle : null);
         $post->setMetaDescription($metaDescription !== '' ? $metaDescription : null);
+        $post->setData('meta_robots', $metaRobots !== '' ? $metaRobots : null);
         $post->setPublishedAt($publishedAt !== '' ? $publishedAt : null);
         $post->setIsActive($isActive);
         $post->setCategoryId($categoryId);

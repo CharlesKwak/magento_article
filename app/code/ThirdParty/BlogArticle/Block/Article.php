@@ -587,6 +587,11 @@ class Article extends Template implements IdentityInterface
         return $this->hreflangBuilder->buildForPath($this->getHreflangPath(), null);
     }
 
+    public function isLazyLoadImagesEnabled(): bool
+    {
+        return $this->config->isLazyLoadImagesEnabled();
+    }
+
     public function getListPageTitle(): string
     {
         $heading = $this->getFilterHeading();

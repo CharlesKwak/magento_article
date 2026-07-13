@@ -46,6 +46,7 @@
         <column xsi:type="varchar" name="featured_image" nullable="true" length="512" comment="Featured image URL or media path"/>
         <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta title"/>
         <column xsi:type="varchar" name="meta_description" nullable="true" length="512" comment="Meta description"/>
+        <column xsi:type="varchar" name="meta_robots" nullable="true" length="32" comment="Robots meta (INDEX,FOLLOW etc). Empty = INDEX,FOLLOW"/>
         <column xsi:type="smallint" name="is_active" unsigned="true" nullable="false" default="1" comment="Is Active"/>
         <column xsi:type="int" name="view_count" unsigned="true" nullable="false" default="0" comment="Storefront view counter"/>
         <column xsi:type="int" name="category_id" unsigned="true" nullable="true" comment="Category ID"/>

@@ -15,9 +15,12 @@
                 <list_meta_title></list_meta_title>
                 <list_meta_description></list_meta_description>
                 <hreflang_enabled>1</hreflang_enabled>
+                <amphtml_enabled>0</amphtml_enabled>
+                <amphtml_url_pattern></amphtml_url_pattern>
             </seo>
             <display>
                 <reading_mode_link>1</reading_mode_link>
+                <lazy_load_images>1</lazy_load_images>
             </display>
             <sidebar>
                 <enabled>1</enabled>

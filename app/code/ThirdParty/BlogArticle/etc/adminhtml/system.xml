@@ -57,6 +57,20 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Adds link rel=alternate hreflang for other store views when multi-store is used.</comment>
                 </field>
+                <field id="amphtml_enabled" translate="label comment" type="select" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Emit amphtml Link Hint</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Adds &lt;link rel="amphtml"&gt; on post detail when a URL pattern is set. This module does not render AMP pages.</comment>
+                </field>
+                <field id="amphtml_url_pattern" translate="label comment" type="text" sortOrder="50"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>amphtml URL Pattern</label>
+                    <comment>Example: {base_url}amp/blog/{url_key} or https://cdn.example.com/amp/{url_key}. Tokens: {base_url}, {url_key}, {post_id}.</comment>
+                    <depends>
+                        <field id="amphtml_enabled">1</field>
+                    </depends>
+                </field>
             </group>
 
             <group id="display" translate="label" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -66,6 +80,12 @@
                     <label>Show Reading Mode Link</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>On post detail, offer a distraction-free 1-column reading view (?reading=1).</comment>
+                </field>
+                <field id="lazy_load_images" translate="label comment" type="select" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Lazy-load Featured Images</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Adds loading="lazy" and decoding="async" to featured images on list and post pages.</comment>
                 </field>
             </group>
 

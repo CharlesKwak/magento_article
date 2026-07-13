@@ -102,7 +102,58 @@ class View extends Template implements IdentityInterface
                 ['attributes' => ['rel' => 'canonical']]
             );
         }
+        $robots = $this->getRobotsContent();
+        if ($robots !== '') {
+            $this->pageConfig->setRobots($robots);
+        }
         return $this;
+    }
+
+    /**
+     * Robots meta content for the post (default INDEX,FOLLOW).
+     */
+    public function getRobotsContent(): string
+    {
+        $post = $this->getPost();
+        if (!$post) {
+            return '';
+        }
+        $robots = strtoupper(trim((string) $post->getData('meta_robots')));
+        if ($robots === '') {
+            return 'INDEX,FOLLOW';
+        }
+        return $robots;
+    }
+
+    public function isLazyLoadImagesEnabled(): bool
+    {
+        return $this->config->isLazyLoadImagesEnabled();
+    }
+
+    /**
+     * Optional amphtml URL for discovery (external AMP layer). Empty when disabled.
+     */
+    public function getAmpHtmlUrl(): string
+    {
+        if (!$this->config->isAmpHtmlEnabled()) {
+            return '';
+        }
+        $pattern = $this->config->getAmpHtmlUrlPattern();
+        if ($pattern === '') {
+            return '';
+        }
+        $post = $this->getPost();
+        if (!$post) {
+            return '';
+        }
+        $urlKey = trim((string) $post->getUrlKey());
+        $baseUrl = rtrim($this->getBaseUrl(), '/') . '/';
+        $url = str_replace(
+            ['{base_url}', '{url_key}', '{post_id}'],
+            [$baseUrl, $urlKey, (string) (int) $post->getId()],
+            $pattern
+        );
+        return trim($url);
     }
 
     private function addBreadcrumbs(): void

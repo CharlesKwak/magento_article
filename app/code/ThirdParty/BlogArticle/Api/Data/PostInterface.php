@@ -15,6 +15,7 @@ interface PostInterface
     public const FEATURED_IMAGE = 'featured_image';
     public const META_TITLE = 'meta_title';
     public const META_DESCRIPTION = 'meta_description';
+    public const META_ROBOTS = 'meta_robots';
     public const IS_ACTIVE = 'is_active';
     public const VIEW_COUNT = 'view_count';
     public const CATEGORY_ID = 'category_id';
@@ -60,6 +61,10 @@ interface PostInterface
     public function getMetaDescription();
     /** @param string|null $metaDescription @return $this */
     public function setMetaDescription($metaDescription);
+    /** @return string|null */
+    public function getMetaRobots();
+    /** @param string|null $metaRobots @return $this */
+    public function setMetaRobots($metaRobots);
     /** @return int|null */
     public function getIsActive();
     /** @param int $isActive @return $this */

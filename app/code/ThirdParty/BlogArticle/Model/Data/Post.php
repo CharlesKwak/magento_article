@@ -96,6 +96,16 @@ class Post extends DataObject implements PostInterface
         return $this->setData(self::META_DESCRIPTION, $metaDescription);
     }
 
+    public function getMetaRobots()
+    {
+        return $this->getData(self::META_ROBOTS);
+    }
+
+    public function setMetaRobots($metaRobots)
+    {
+        return $this->setData(self::META_ROBOTS, $metaRobots);
+    }
+
     public function getIsActive()
     {
         return $this->getData(self::IS_ACTIVE) !== null ? (int) $this->getData(self::IS_ACTIVE) : null;

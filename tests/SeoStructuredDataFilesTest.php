@@ -34,8 +34,8 @@ class SeoStructuredDataFilesTest extends TestCase
         $this->assertStringContainsString('min(20', $related);
 
         $module = file_get_contents($root . '/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.18.0"', $module);
+        $this->assertStringContainsString('setup_version="2.19.0"', $module);
         $composer = file_get_contents(dirname(__DIR__) . '/composer.json');
-        $this->assertStringContainsString('"version": "2.18.0"', $composer);
+        $this->assertStringContainsString('"version": "2.19.0"', $composer);
     }
 }

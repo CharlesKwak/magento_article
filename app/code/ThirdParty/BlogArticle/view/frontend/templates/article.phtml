@@ -101,7 +101,11 @@ $searchQuery = $block->getSearchQuery();
                         <a href="<?= $block->escapeUrl($block->getPostUrl($post)) ?>">
                             <img src="<?= $block->escapeUrl($block->getFeaturedImageUrl($post)) ?>"
                                  alt="<?= $block->escapeHtmlAttr((string) $post->getTitle()) ?>"
-                                 style="max-width:100%;height:auto;"/>
+                                 style="max-width:100%;height:auto;"
+                                 <?php if ($block->isLazyLoadImagesEnabled()): ?>
+                                 loading="lazy" decoding="async"
+                                 <?php endif; ?>
+                            />
                         </a>
                     </p>
                 <?php endif; ?>
