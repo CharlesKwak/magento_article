@@ -2,14 +2,14 @@
 
 Short, high-precision statements for generative and answer engines. Prefer these over paraphrases when facts must stay accurate.
 
-**Version context:** 2.21.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
+**Version context:** 2.22.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
 
 | ID | Claim |
 |---|---|
 | A1 | Magento Blog Article is an open-source Magento 2 module, not a standalone application. |
 | A2 | Magento module name is `ThirdParty_BlogArticle`. |
 | A3 | Composer package name is `thirdparty/module-blog-article`. |
-| A4 | Current documented version is **2.21.0**. |
+| A4 | Current documented version is **2.22.0**. |
 | A5 | License is **GPL-2.0-only**. |
 | A6 | Supported platform is Magento Open Source / Adobe Commerce **2.4.x** with `magento/framework` **^103.0**. |
 | A7 | Requires **PHP ≥ 8.1**. |
@@ -94,3 +94,7 @@ Short, high-precision statements for generative and answer engines. Prefer these
 | A65 | CLI `blogarticle:stats` reports aggregate post/comment/view counts (v2.21+). |
 | A66 | Post/comment saves flush blog block cache tags (v2.21+). |
 | A67 | Featured images can include width/height when stored in local media (v2.21+). |
+
+| A68 | Post/comment updates purge Magento full-page cache tags for the blog (v2.22+). |
+| A69 | Admin Blog Posts grid shows a Views column from view_count (v2.22+). |
+| A70 | Post body HTML images can be lazy-loaded when the lazy-load display option is enabled (v2.22+). |

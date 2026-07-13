@@ -1,5 +1,27 @@
 # Release Notes
 
+## 2.22.0 - 2026-07-14
+
+### Added
+- **Full Page Cache** tag purge via `Magento\PageCache\Model\Cache\Type` when posts/comments change
+- **Admin post grid** column **Views** (`view_count`, sortable/filterable)
+- **Body content lazy images**: `getPreparedContentHtml()` adds `loading="lazy"` to `<img>` in post HTML (when lazy-load config is on)
+- Allowed content tags now include `img`, `figure`, `figcaption`, `blockquote`, `code`, `pre`
+
+### Changed
+- Module / package version **2.22.0**
+- Module sequence includes `Magento_PageCache`
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.22.0.
+
+---
+
 ## 2.21.0 - 2026-07-14
 
 ### Added

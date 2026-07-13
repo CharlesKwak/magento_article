@@ -1,7 +1,6 @@
 <?php
 /** @var \ThirdParty\BlogArticle\Block\Post\View $block */
 $post = $block->getPost();
-$allowedTags = $block->getAllowedContentTags();
 $related = $block->getRelatedPosts();
 ?>
 <div class="blog-post-view<?= $block->isReadingMode() ? ' blog-post-view--reading' : '' ?>">
@@ -91,7 +90,7 @@ $related = $block->getRelatedPosts();
                 </p>
             <?php endif; ?>
             <div class="content">
-                <?= /* @noEscape */ $block->escapeHtml((string) $post->getContent(), $allowedTags) ?>
+                <?= /* @noEscape */ $block->getPreparedContentHtml() ?>
             </div>
         </article>
 

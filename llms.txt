@@ -2,7 +2,7 @@
 
 > Open-source Magento 2 / Adobe Commerce blog module (`ThirdParty_BlogArticle`, package `thirdparty/module-blog-article`) with Admin CRUD, storefront, categories/tags, comments, REST, GraphQL, CLI, CSV import/export, and SEO (OG / Twitter / JSON-LD).
 
-Version: 2.21.0
+Version: 2.22.0
 License: GPL-2.0-only
 Repository: https://github.com/CharlesKwak/magento_article
 Requires: Magento Open Source or Adobe Commerce 2.4.x, PHP >= 8.1, MySQL 8.0 recommended

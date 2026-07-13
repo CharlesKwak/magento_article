@@ -4,20 +4,32 @@ namespace ThirdParty\BlogArticle\Observer;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\PageCache\Model\Cache\Type as PageCacheType;
 use ThirdParty\BlogArticle\Model\Comment;
 use ThirdParty\BlogArticle\Model\Post;
 
 /**
- * Invalidate blog block cache tags when posts or comments change.
+ * Invalidate blog block + full-page cache tags when posts or comments change.
  * Ignores all other models (model_save_after is global).
  */
 class FlushBlogCache implements ObserverInterface
 {
+    /**
+     * @var CacheInterface
+     */
     private $cache;
 
-    public function __construct(CacheInterface $cache)
-    {
+    /**
+     * @var PageCacheType
+     */
+    private $pageCache;
+
+    public function __construct(
+        CacheInterface $cache,
+        PageCacheType $pageCache
+    ) {
         $this->cache = $cache;
+        $this->pageCache = $pageCache;
     }
 
     public function execute(Observer $observer)
@@ -38,6 +50,9 @@ class FlushBlogCache implements ObserverInterface
             $tags[] = Post::CACHE_TAG . '_' . (int) $object->getPostId();
         }
 
+        // Default cache frontend (block HTML etc.)
         $this->cache->clean($tags);
+        // Full Page Cache (built-in FPC) — tag-based purge
+        $this->pageCache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
     }
 }

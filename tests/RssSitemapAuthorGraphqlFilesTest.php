@@ -48,8 +48,8 @@ class RssSitemapAuthorGraphqlFilesTest extends TestCase
         $this->assertStringContainsString("params['author']", $article);
 
         $module = file_get_contents($root . '/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.21.0"', $module);
+        $this->assertStringContainsString('setup_version="2.22.0"', $module);
         $composer = file_get_contents(dirname(__DIR__) . '/composer.json');
-        $this->assertStringContainsString('"version": "2.21.0"', $composer);
+        $this->assertStringContainsString('"version": "2.22.0"', $composer);
     }
 }

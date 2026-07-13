@@ -501,7 +501,37 @@ class View extends Template implements IdentityInterface
 
     public function getAllowedContentTags(): array
     {
-        return ['p', 'br', 'em', 'strong', 'b', 'i', 'ul', 'ol', 'li', 'a', 'h2', 'h3', 'h4'];
+        return [
+            'p', 'br', 'em', 'strong', 'b', 'i', 'ul', 'ol', 'li', 'a',
+            'h2', 'h3', 'h4', 'blockquote', 'code', 'pre', 'img', 'figure', 'figcaption',
+        ];
+    }
+
+    /**
+     * Escaped post HTML with optional lazy-loading applied to <img> tags.
+     */
+    public function getPreparedContentHtml(): string
+    {
+        $post = $this->getPost();
+        if (!$post) {
+            return '';
+        }
+        $html = $this->escapeHtml((string) $post->getContent(), $this->getAllowedContentTags());
+        if (!$this->isLazyLoadImagesEnabled() || $html === '') {
+            return $html;
+        }
+        return (string) preg_replace_callback(
+            '/<img\b([^>]*?)>/i',
+            static function (array $matches): string {
+                $attrs = $matches[1];
+                if (preg_match('/\bloading\s*=/i', $attrs)) {
+                    return '<img' . $attrs . '>';
+                }
+                $extra = ' loading="lazy" decoding="async"';
+                return '<img' . $extra . $attrs . '>';
+            },
+            $html
+        );
     }
 
     public function getFeaturedImageUrl(): string
