@@ -7,7 +7,7 @@
                 <item name="blogarticle" xsi:type="array">
                     <item name="class" xsi:type="string">ThirdParty\BlogArticle\Controller\Router</item>
                     <item name="disable" xsi:type="boolean">false</item>
-                    <item name="sortOrder" xsi:type="string">22</item>
+                    <item name="sortOrder" xsi:type="string">70</item>
                 </item>
             </argument>
         </arguments>
