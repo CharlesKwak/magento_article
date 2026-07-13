@@ -47,8 +47,9 @@ type BlogPost {
     creation_time: String
     update_time: String
     published_at: String
-    related_posts: [BlogPost]
+    related_posts(limit: Int = 3): [BlogPost]
         @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\RelatedPosts")
+        @doc(description: "Related posts. limit 1–20 (default 3). Nested related_posts are not expanded server-side beyond this call.")
     comments: [BlogComment]
         @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\PostComments")
 }

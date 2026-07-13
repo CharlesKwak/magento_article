@@ -524,6 +524,139 @@ class Article extends Template implements IdentityInterface
     }
 
     /**
+     * Canonical URL for the current list/filter view.
+     */
+    public function getCanonicalUrl(): string
+    {
+        $cat = $this->getCategoryKeyFilter();
+        if ($cat !== '') {
+            return $this->getUrl('', ['_direct' => 'blog/category/' . $cat]);
+        }
+        $tag = $this->getTagKeyFilter();
+        if ($tag !== '') {
+            return $this->getUrl('', ['_direct' => 'blog/tag/' . $tag]);
+        }
+        $author = $this->getAuthorKeyFilter();
+        if ($author !== '') {
+            return $this->getUrl('', ['_direct' => 'blog/author/' . $author]);
+        }
+        return $this->getUrl('blog/index/index');
+    }
+
+    public function getListPageTitle(): string
+    {
+        $heading = $this->getFilterHeading();
+        if ($heading !== '') {
+            return $heading;
+        }
+        $metaTitle = $this->config->getListMetaTitle();
+        if ($metaTitle !== '') {
+            return $metaTitle;
+        }
+        return $this->config->getBlogName();
+    }
+
+    public function getListPageDescription(): string
+    {
+        $metaDescription = $this->config->getListMetaDescription();
+        if ($metaDescription !== '') {
+            return $metaDescription;
+        }
+        $heading = $this->getFilterHeading();
+        if ($heading !== '') {
+            return (string) __('Browse %1 on %2', $heading, $this->config->getBlogName());
+        }
+        return (string) __('Latest posts from %1', $this->config->getBlogName());
+    }
+
+    /**
+     * Open Graph / Twitter meta for the blog list / filter pages.
+     *
+     * @return array<int, array{property?:string,name?:string,content:string}>
+     */
+    public function getSocialMetaTags(): array
+    {
+        $title = $this->getListPageTitle();
+        $description = $this->getListPageDescription();
+        $url = $this->getCanonicalUrl();
+        $tags = [
+            ['property' => 'og:type', 'content' => 'website'],
+            ['property' => 'og:title', 'content' => $title],
+            ['property' => 'og:description', 'content' => $description],
+            ['property' => 'og:url', 'content' => $url],
+            ['property' => 'og:site_name', 'content' => $this->config->getBlogName()],
+            ['name' => 'twitter:card', 'content' => 'summary'],
+            ['name' => 'twitter:title', 'content' => $title],
+            ['name' => 'twitter:description', 'content' => $description],
+        ];
+        // First post featured image as list preview when available.
+        foreach ($this->getPosts() as $post) {
+            $image = $this->getFeaturedImageUrl($post);
+            if ($image !== '') {
+                $tags[] = ['property' => 'og:image', 'content' => $image];
+                $tags[] = ['name' => 'twitter:image', 'content' => $image];
+                break;
+            }
+        }
+        return $tags;
+    }
+
+    /**
+     * JSON-LD: CollectionPage + BreadcrumbList for list/filter views.
+     */
+    public function getJsonLd(): string
+    {
+        $blogName = $this->config->getBlogName();
+        $listUrl = $this->getUrl('blog/index/index');
+        $pageUrl = $this->getCanonicalUrl();
+        $breadcrumb = [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                [
+                    '@type' => 'ListItem',
+                    'position' => 1,
+                    'name' => (string) __('Home'),
+                    'item' => $this->getBaseUrl(),
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 2,
+                    'name' => $blogName,
+                    'item' => $listUrl,
+                ],
+            ],
+        ];
+        $heading = $this->getFilterHeading();
+        if ($heading !== '') {
+            $breadcrumb['itemListElement'][] = [
+                '@type' => 'ListItem',
+                'position' => 3,
+                'name' => $heading,
+                'item' => $pageUrl,
+            ];
+        }
+
+        $data = [
+            '@context' => 'https://schema.org',
+            '@graph' => [
+                [
+                    '@type' => 'CollectionPage',
+                    'name' => $this->getListPageTitle(),
+                    'description' => $this->getListPageDescription(),
+                    'url' => $pageUrl,
+                    'isPartOf' => [
+                        '@type' => 'Blog',
+                        'name' => $blogName,
+                        'url' => $listUrl,
+                    ],
+                ],
+                $breadcrumb,
+            ],
+        ];
+        return (string) json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getIdentities()

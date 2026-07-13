@@ -575,7 +575,38 @@ class View extends Template implements IdentityInterface
         if ($image !== '') {
             $data['image'] = [$image];
         }
-        return (string) json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        $blogName = $this->config->getBlogName();
+        $listUrl = $this->getListUrl();
+        $breadcrumb = [
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                [
+                    '@type' => 'ListItem',
+                    'position' => 1,
+                    'name' => (string) __('Home'),
+                    'item' => $this->getBaseUrl(),
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 2,
+                    'name' => $blogName,
+                    'item' => $listUrl,
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 3,
+                    'name' => (string) $post->getTitle(),
+                    'item' => $this->getCanonicalUrl(),
+                ],
+            ],
+        ];
+
+        $graph = [
+            '@context' => 'https://schema.org',
+            '@graph' => [$data, $breadcrumb],
+        ];
+        return (string) json_encode($graph, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
     /**

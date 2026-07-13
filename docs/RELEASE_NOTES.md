@@ -1,5 +1,25 @@
 # Release Notes
 
+## 2.17.0 - 2026-07-13
+
+### Added
+- **List / filter page SEO**: Open Graph + Twitter cards + JSON-LD `CollectionPage` and `BreadcrumbList` (`list/seo.phtml`)
+- **Post detail JSON-LD**: Article + `BreadcrumbList` in `@graph`
+- **GraphQL** `related_posts(limit: Int = 3)` with max 20; uses shared PostMapper
+
+### Changed
+- Module / package version **2.17.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.17.0.
+
+---
+
 ## 2.16.0 - 2026-07-13
 
 ### Added
