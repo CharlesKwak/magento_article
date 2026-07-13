@@ -43,6 +43,12 @@ class PostCreateCommand extends Command
             ->addOption('published-at', null, InputOption::VALUE_REQUIRED, 'Published at YYYY-MM-DD HH:MM:SS')
             ->addOption('meta-title', null, InputOption::VALUE_REQUIRED, 'Meta title')
             ->addOption('meta-description', null, InputOption::VALUE_REQUIRED, 'Meta description')
+            ->addOption(
+                'meta-robots',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Robots: INDEX,FOLLOW | NOINDEX,FOLLOW | INDEX,NOFOLLOW | NOINDEX,NOFOLLOW'
+            )
             ->addOption('featured-image', null, InputOption::VALUE_REQUIRED, 'Featured image URL or media path');
         parent::configure();
     }
@@ -104,6 +110,15 @@ class PostCreateCommand extends Command
         $metaDescription = trim((string) $input->getOption('meta-description'));
         if ($metaDescription !== '') {
             $post->setMetaDescription($metaDescription);
+        }
+        $metaRobots = strtoupper(trim((string) $input->getOption('meta-robots')));
+        if ($metaRobots !== '') {
+            $allowed = ['INDEX,FOLLOW', 'NOINDEX,FOLLOW', 'INDEX,NOFOLLOW', 'NOINDEX,NOFOLLOW'];
+            if (!in_array($metaRobots, $allowed, true)) {
+                $output->writeln('<error>Invalid --meta-robots value.</error>');
+                return Command::FAILURE;
+            }
+            $post->setMetaRobots($metaRobots);
         }
         $featured = trim((string) $input->getOption('featured-image'));
         if ($featured !== '') {

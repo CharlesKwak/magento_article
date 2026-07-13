@@ -17,6 +17,6 @@ class SpamNotifyFilesTest extends TestCase
     public function testModuleVersionIs220(): void
     {
         $c = file_get_contents(dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.19.0"', $c);
+        $this->assertStringContainsString('setup_version="2.20.0"', $c);
     }
 }

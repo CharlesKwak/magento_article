@@ -77,6 +77,7 @@ class PostShowCommand extends Command
             'featured_image' => (string) $post->getFeaturedImage(),
             'meta_title' => (string) $post->getMetaTitle(),
             'meta_description' => (string) $post->getMetaDescription(),
+            'meta_robots' => (string) $post->getData('meta_robots'),
         ];
 
         foreach ($lines as $key => $value) {

@@ -17,6 +17,8 @@
                 <hreflang_enabled>1</hreflang_enabled>
                 <amphtml_enabled>0</amphtml_enabled>
                 <amphtml_url_pattern></amphtml_url_pattern>
+                <list_faq_schema_enabled>0</list_faq_schema_enabled>
+                <list_faq_schema_json></list_faq_schema_json>
             </seo>
             <display>
                 <reading_mode_link>1</reading_mode_link>

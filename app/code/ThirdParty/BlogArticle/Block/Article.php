@@ -145,6 +145,7 @@ class Article extends Template implements IdentityInterface
                 ['attributes' => ['rel' => 'canonical']]
             );
         }
+        $this->addPaginationLinkRels();
 
         $breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
         if ($breadcrumbs) {
@@ -592,6 +593,83 @@ class Article extends Template implements IdentityInterface
         return $this->config->isLazyLoadImagesEnabled();
     }
 
+    /**
+     * rel=prev / rel=next for multi-page list views.
+     *
+     * @return array<int, array{rel:string,href:string}>
+     */
+    public function getPaginationLinkRels(): array
+    {
+        if (!$this->hasPager()) {
+            return [];
+        }
+        $links = [];
+        $current = $this->getCurrentPage();
+        $last = $this->getLastPageNumber();
+        if ($current > 1) {
+            $links[] = [
+                'rel' => 'prev',
+                'href' => $this->getPageUrl($current - 1),
+            ];
+        }
+        if ($current < $last) {
+            $links[] = [
+                'rel' => 'next',
+                'href' => $this->getPageUrl($current + 1),
+            ];
+        }
+        return $links;
+    }
+
+    private function addPaginationLinkRels(): void
+    {
+        foreach ($this->getPaginationLinkRels() as $link) {
+            $this->pageConfig->addRemotePageAsset(
+                $link['href'],
+                'link_rel',
+                ['attributes' => ['rel' => $link['rel']]]
+            );
+        }
+    }
+
+    /**
+     * Optional FAQPage JSON-LD items for the list page.
+     *
+     * @return array<int, array{question:string,answer:string}>
+     */
+    public function getFaqItems(): array
+    {
+        if (!$this->config->isListFaqSchemaEnabled()) {
+            return [];
+        }
+        $items = $this->config->getListFaqSchemaItems();
+        if ($items) {
+            return $items;
+        }
+        $blog = $this->config->getBlogName();
+        return [
+            [
+                'question' => (string) __('What is this blog?'),
+                'answer' => (string) __(
+                    '%1 is the store blog with articles, categories, and tags.',
+                    $blog
+                ),
+            ],
+            [
+                'question' => (string) __('How do I find older posts?'),
+                'answer' => (string) __(
+                    'Use the pagination links at the bottom of the list, or filter by category, tag, or search.'
+                ),
+            ],
+            [
+                'question' => (string) __('Is there an RSS feed?'),
+                'answer' => (string) __(
+                    'Yes. Open the RSS feed link on the blog list page, or visit /blog/rss/feed/.'
+                ),
+            ],
+        ];
+    }
+
     public function getListPageTitle(): string
     {
         $heading = $this->getFilterHeading();
@@ -685,22 +763,50 @@ class Article extends Template implements IdentityInterface
             ];
         }
 
+        $graph = [
+            [
+                '@type' => 'CollectionPage',
+                'name' => $this->getListPageTitle(),
+                'description' => $this->getListPageDescription(),
+                'url' => $pageUrl,
+                'isPartOf' => [
+                    '@type' => 'Blog',
+                    'name' => $blogName,
+                    'url' => $listUrl,
+                ],
+            ],
+            $breadcrumb,
+        ];
+
+        $faqItems = $this->getFaqItems();
+        if ($faqItems) {
+            $entities = [];
+            foreach ($faqItems as $item) {
+                $q = trim((string) ($item['question'] ?? ''));
+                $a = trim((string) ($item['answer'] ?? ''));
+                if ($q === '' || $a === '') {
+                    continue;
+                }
+                $entities[] = [
+                    '@type' => 'Question',
+                    'name' => $q,
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => $a,
+                    ],
+                ];
+            }
+            if ($entities) {
+                $graph[] = [
+                    '@type' => 'FAQPage',
+                    'mainEntity' => $entities,
+                ];
+            }
+        }
+
         $data = [
             '@context' => 'https://schema.org',
-            '@graph' => [
-                [
-                    '@type' => 'CollectionPage',
-                    'name' => $this->getListPageTitle(),
-                    'description' => $this->getListPageDescription(),
-                    'url' => $pageUrl,
-                    'isPartOf' => [
-                        '@type' => 'Blog',
-                        'name' => $blogName,
-                        'url' => $listUrl,
-                    ],
-                ],
-                $breadcrumb,
-            ],
+            '@graph' => $graph,
         ];
         return (string) json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }

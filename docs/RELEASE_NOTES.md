@@ -1,5 +1,28 @@
 # Release Notes
 
+## 2.20.0 - 2026-07-14
+
+### Added
+- **Pagination link rels**: `rel=prev` / `rel=next` on multi-page blog list (head + pageConfig)
+- **FAQPage JSON-LD** on blog list (optional): built-in Q&A or custom JSON in config
+- **CLI**
+  - `blogarticle:post:create --meta-robots=…`
+  - `blogarticle:post:update --id=… --meta-robots=…` (and other fields)
+- CSV **export** includes `meta_robots`; `post:show` prints it
+
+### Changed
+- Module / package version **2.20.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.20.0 (uses `meta_robots` from 2.19).
+
+---
+
 ## 2.19.0 - 2026-07-14
 
 ### Added

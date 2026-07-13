@@ -71,6 +71,20 @@
                         <field id="amphtml_enabled">1</field>
                     </depends>
                 </field>
+                <field id="list_faq_schema_enabled" translate="label comment" type="select" sortOrder="60"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Emit FAQPage Schema on Blog List</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Adds JSON-LD FAQPage on the blog list (built-in Q&amp;A or custom JSON below).</comment>
+                </field>
+                <field id="list_faq_schema_json" translate="label comment" type="textarea" sortOrder="70"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Custom FAQ JSON</label>
+                    <comment>Optional. JSON array: [{"question":"…","answer":"…"}]. Leave empty to use built-in defaults.</comment>
+                    <depends>
+                        <field id="list_faq_schema_enabled">1</field>
+                    </depends>
+                </field>
             </group>
 
             <group id="display" translate="label" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">

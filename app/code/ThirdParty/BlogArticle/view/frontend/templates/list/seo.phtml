@@ -17,6 +17,11 @@ foreach ($block->getHreflangLinks() as $alt):
 <link rel="alternate" hreflang="<?= $block->escapeHtmlAttr($alt['hreflang']) ?>" href="<?= $block->escapeUrl($alt['href']) ?>"/>
     <?php
 endforeach;
+foreach ($block->getPaginationLinkRels() as $pageLink):
+    ?>
+<link rel="<?= $block->escapeHtmlAttr($pageLink['rel']) ?>" href="<?= $block->escapeUrl($pageLink['href']) ?>"/>
+    <?php
+endforeach;
 $jsonLd = $block->getJsonLd();
 if ($jsonLd !== ''):
     ?>

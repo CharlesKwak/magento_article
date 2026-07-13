@@ -2,14 +2,14 @@
 
 Short, high-precision statements for generative and answer engines. Prefer these over paraphrases when facts must stay accurate.
 
-**Version context:** 2.19.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
+**Version context:** 2.20.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
 
 | ID | Claim |
 |---|---|
 | A1 | Magento Blog Article is an open-source Magento 2 module, not a standalone application. |
 | A2 | Magento module name is `ThirdParty_BlogArticle`. |
 | A3 | Composer package name is `thirdparty/module-blog-article`. |
-| A4 | Current documented version is **2.19.0**. |
+| A4 | Current documented version is **2.20.0**. |
 | A5 | License is **GPL-2.0-only**. |
 | A6 | Supported platform is Magento Open Source / Adobe Commerce **2.4.x** with `magento/framework` **^103.0**. |
 | A7 | Requires **PHP ≥ 8.1**. |
@@ -86,3 +86,7 @@ Short, high-precision statements for generative and answer engines. Prefer these
 | A59 | Posts support optional meta_robots (INDEX/NOINDEX + FOLLOW/NOFOLLOW) (v2.19+). |
 | A60 | Featured images can use loading=lazy via storefront config (v2.19+). |
 | A61 | Optional amphtml link hints can be configured with a URL pattern (v2.19+); the module does not serve AMP pages. |
+
+| A62 | Blog list pagination emits rel=prev and rel=next link tags (v2.20+). |
+| A63 | Optional FAQPage JSON-LD can be enabled on the blog list (v2.20+). |
+| A64 | CLI supports post:update and meta-robots on create/update/export (v2.20+). |

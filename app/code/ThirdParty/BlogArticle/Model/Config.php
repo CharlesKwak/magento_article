@@ -16,6 +16,8 @@ class Config
     public const XML_PATH_SEO_HREFLANG = 'blogarticle/seo/hreflang_enabled';
     public const XML_PATH_SEO_AMPHTML = 'blogarticle/seo/amphtml_enabled';
     public const XML_PATH_SEO_AMPHTML_PATTERN = 'blogarticle/seo/amphtml_url_pattern';
+    public const XML_PATH_SEO_FAQ_ENABLED = 'blogarticle/seo/list_faq_schema_enabled';
+    public const XML_PATH_SEO_FAQ_JSON = 'blogarticle/seo/list_faq_schema_json';
     public const XML_PATH_READING_MODE = 'blogarticle/display/reading_mode_link';
     public const XML_PATH_LAZY_LOAD = 'blogarticle/display/lazy_load_images';
     public const XML_PATH_SIDEBAR_ENABLED = 'blogarticle/sidebar/enabled';
@@ -153,6 +155,49 @@ class Config
             ScopeInterface::SCOPE_STORE,
             $storeId
         ));
+    }
+
+    public function isListFaqSchemaEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SEO_FAQ_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Optional custom FAQ entries as JSON array: [{"question":"...","answer":"..."}]
+     *
+     * @return array<int, array{question:string,answer:string}>
+     */
+    public function getListFaqSchemaItems(?int $storeId = null): array
+    {
+        $raw = trim((string) $this->scopeConfig->getValue(
+            self::XML_PATH_SEO_FAQ_JSON,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        ));
+        if ($raw === '') {
+            return [];
+        }
+        $decoded = json_decode($raw, true);
+        if (!is_array($decoded)) {
+            return [];
+        }
+        $items = [];
+        foreach ($decoded as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            $q = trim((string) ($row['question'] ?? $row['q'] ?? ''));
+            $a = trim((string) ($row['answer'] ?? $row['a'] ?? ''));
+            if ($q === '' || $a === '') {
+                continue;
+            }
+            $items[] = ['question' => $q, 'answer' => $a];
+        }
+        return $items;
     }
 
     public function isSidebarEnabled(?int $storeId = null): bool

@@ -107,6 +107,9 @@
                 <item name="blogarticle_post_create" xsi:type="object">
                     ThirdParty\BlogArticle\Console\Command\PostCreateCommand
                 </item>
+                <item name="blogarticle_post_update" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\PostUpdateCommand
+                </item>
                 <item name="blogarticle_post_delete" xsi:type="object">
                     ThirdParty\BlogArticle\Console\Command\PostDeleteCommand
                 </item>
