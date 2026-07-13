@@ -183,6 +183,18 @@ class View extends Template implements IdentityInterface
                 'link' => $this->getListUrl(),
             ]
         );
+        $categoryName = $this->getCategoryName();
+        $categoryUrl = $this->getCategoryUrl();
+        if ($categoryName !== '' && $categoryUrl !== '') {
+            $breadcrumbs->addCrumb(
+                'category',
+                [
+                    'label' => $categoryName,
+                    'title' => $categoryName,
+                    'link' => $categoryUrl,
+                ]
+            );
+        }
         $post = $this->getPost();
         if ($post) {
             $breadcrumbs->addCrumb(
@@ -829,28 +841,41 @@ class View extends Template implements IdentityInterface
 
         $blogName = $this->config->getBlogName();
         $listUrl = $this->getListUrl();
+        $items = [
+            [
+                '@type' => 'ListItem',
+                'position' => 1,
+                'name' => (string) __('Home'),
+                'item' => $this->getBaseUrl(),
+            ],
+            [
+                '@type' => 'ListItem',
+                'position' => 2,
+                'name' => $blogName,
+                'item' => $listUrl,
+            ],
+        ];
+        $categoryName = $this->getCategoryName();
+        $categoryUrl = $this->getCategoryUrl();
+        $position = 3;
+        if ($categoryName !== '' && $categoryUrl !== '') {
+            $items[] = [
+                '@type' => 'ListItem',
+                'position' => $position,
+                'name' => $categoryName,
+                'item' => $categoryUrl,
+            ];
+            $position++;
+        }
+        $items[] = [
+            '@type' => 'ListItem',
+            'position' => $position,
+            'name' => (string) $post->getTitle(),
+            'item' => $this->getCanonicalUrl(),
+        ];
         $breadcrumb = [
             '@type' => 'BreadcrumbList',
-            'itemListElement' => [
-                [
-                    '@type' => 'ListItem',
-                    'position' => 1,
-                    'name' => (string) __('Home'),
-                    'item' => $this->getBaseUrl(),
-                ],
-                [
-                    '@type' => 'ListItem',
-                    'position' => 2,
-                    'name' => $blogName,
-                    'item' => $listUrl,
-                ],
-                [
-                    '@type' => 'ListItem',
-                    'position' => 3,
-                    'name' => (string) $post->getTitle(),
-                    'item' => $this->getCanonicalUrl(),
-                ],
-            ],
+            'itemListElement' => $items,
         ];
 
         $graph = [

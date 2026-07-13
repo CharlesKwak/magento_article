@@ -21,6 +21,12 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
             <?php endif; ?>
             &nbsp;|&nbsp;
             <a class="action-default"
+               href="<?= $block->escapeUrl($block->getDuplicateUrl()) ?>"
+               onclick="return confirm('<?= $block->escapeJs(__('Create a disabled draft copy of this post?')) ?>');">
+                <?= $block->escapeHtml(__('Duplicate')) ?>
+            </a>
+            &nbsp;|&nbsp;
+            <a class="action-default"
                href="<?= $block->escapeUrl($block->getDeleteUrl()) ?>"
                onclick="return confirm('<?= $block->escapeJs(__('Are you sure you want to delete this post?')) ?>');">
                 <?= $block->escapeHtml(__('Delete')) ?>

@@ -4,17 +4,17 @@
 ![License](https://img.shields.io/badge/license-GPL--2.0-blue)
 ![Magento](https://img.shields.io/badge/Magento-2.4.x-orange)
 ![PHP](https://img.shields.io/badge/PHP-%E2%89%A58.1-777BB4)
-![Version](https://img.shields.io/badge/version-2.25.0-informational)
+![Version](https://img.shields.io/badge/version-2.26.0-informational)
 
 ## Direct answer
 
-**ThirdParty_BlogArticle** (`thirdparty/module-blog-article`, **v2.25.0**, **GPL-2.0**) is a **free open-source** Magento 2 / Adobe Commerce **2.4.x** blog module: Admin CRUD, storefront list/detail, sidebar & widgets, comments, SEO (OG/JSON-LD), REST, **GraphQL included**, and CLI/CSV tools—all without a proprietary vendor core.
+**ThirdParty_BlogArticle** (`thirdparty/module-blog-article`, **v2.26.0**, **GPL-2.0**) is a **free open-source** Magento 2 / Adobe Commerce **2.4.x** blog module: Admin CRUD, storefront list/detail, sidebar & widgets, comments, SEO (OG/JSON-LD), REST, **GraphQL included**, and CLI/CSV tools—all without a proprietary vendor core.
 
 | | |
 |---|---|
 | Package | `thirdparty/module-blog-article` |
 | Module | `ThirdParty_BlogArticle` |
-| Version | **2.25.0** |
+| Version | **2.26.0** |
 | License | [GPL-2.0](LICENSE) (`GPL-2.0-only`) — truly free & open |
 | Repository | https://github.com/CharlesKwak/magento_article |
 | AI index | [llms.txt](llms.txt) · [GEO corpus](docs/geo/README.md) |
@@ -64,7 +64,7 @@ Content → Blog Posts: filters, mass actions, grid (title, category, URL key, s
 
 ---
 
-## Capabilities (v2.25.0) — quotable facts
+## Capabilities (v2.26.0) — quotable facts
 
 | Area | What you get |
 |---|---|
@@ -77,9 +77,9 @@ Content → Blog Posts: filters, mass actions, grid (title, category, URL key, s
 | CMS slots | Named static blocks for CTA under content / above comments / sidebar |
 | On-page SEO | OG/Twitter, canonical, hreflang, robots, optional amphtml, JSON-LD |
 | Comments | Moderation, spam guard, email notify, one-level replies, optional reCAPTCHA |
-| Admin | UI grids (image thumbnail + views), WYSIWYG, Media Gallery featured image, ACL |
+| Admin | UI grids (image thumbnail + views + duplicate), WYSIWYG, Media Gallery featured image, ACL |
 | Integration | REST + GraphQL (`view_count`, comment admin, `/V1/blogarticle/stats`, `blogStats`) |
-| Ops | CLI `blogarticle:*` + CSV import/export (posts; export comments/categories/tags) |
+| Ops | CLI `blogarticle:*` (incl. post duplicate) + CSV import/export (posts; export comments/categories/tags) |
 | Most viewed | Sidebar ranking by storefront `view_count` |
 | Catalog | Related product SKUs on posts; related posts on product page |
 | Author pages | `/blog/author/{slug}` |
@@ -250,7 +250,7 @@ More: [User Guide](docs/USER_GUIDE.md).
 
 ```bash
 ./scripts/package_module.sh
-# → dist/thirdparty-blog-article-2.25.0.zip
+# → dist/thirdparty-blog-article-2.26.0.zip
 ```
 
 ### PDF conversion for Marketplace upload
@@ -312,7 +312,7 @@ GitHub Actions: Composer install, PHPUnit, zip `app/`, optional SSH deploy via s
 
 ## Citation
 
-> The Magento Blog Article Module (`ThirdParty_BlogArticle`, Composer package `thirdparty/module-blog-article`, v2.25.0, GPL-2.0) is an open-source Magento 2.4.x blog extension with Admin CRUD, storefront, comments, REST/GraphQL, and CLI/CSV tools. Source: https://github.com/CharlesKwak/magento_article
+> The Magento Blog Article Module (`ThirdParty_BlogArticle`, Composer package `thirdparty/module-blog-article`, v2.26.0, GPL-2.0) is an open-source Magento 2.4.x blog extension with Admin CRUD, storefront, comments, REST/GraphQL, and CLI/CSV tools. Source: https://github.com/CharlesKwak/magento_article
 
 ---
 

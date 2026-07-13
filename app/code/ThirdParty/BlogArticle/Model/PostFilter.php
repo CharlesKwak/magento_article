@@ -24,8 +24,11 @@ class PostFilter
         $like = '%' . $escaped . '%';
 
         $collection->addFieldToFilter(
-            ['title', 'content', 'url_key'],
+            ['title', 'content', 'url_key', 'excerpt', 'author', 'meta_title'],
             [
+                ['like' => $like],
+                ['like' => $like],
+                ['like' => $like],
                 ['like' => $like],
                 ['like' => $like],
                 ['like' => $like],

@@ -11,6 +11,7 @@ class PostActions extends Column
 {
     public const URL_PATH_EDIT = 'blogarticle/post/edit';
     public const URL_PATH_DELETE = 'blogarticle/post/delete';
+    public const URL_PATH_DUPLICATE = 'blogarticle/post/duplicate';
 
     private $urlBuilder;
     private $storeManager;
@@ -50,6 +51,17 @@ class PostActions extends Column
                     'target' => '_blank',
                 ];
             }
+            $item[$name]['duplicate'] = [
+                'href' => $this->urlBuilder->getUrl(
+                    self::URL_PATH_DUPLICATE,
+                    ['post_id' => $item['post_id']]
+                ),
+                'label' => __('Duplicate'),
+                'confirm' => [
+                    'title' => __('Duplicate post'),
+                    'message' => __('Create a disabled draft copy of this post?'),
+                ],
+            ];
             $item[$name]['delete'] = [
                 'href' => $this->urlBuilder->getUrl(self::URL_PATH_DELETE, ['post_id' => $item['post_id']]),
                 'label' => __('Delete'),

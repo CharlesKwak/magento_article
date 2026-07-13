@@ -116,6 +116,9 @@
                 <item name="blogarticle_post_delete" xsi:type="object">
                     ThirdParty\BlogArticle\Console\Command\PostDeleteCommand
                 </item>
+                <item name="blogarticle_post_duplicate" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\PostDuplicateCommand
+                </item>
                 <item name="blogarticle_category_list" xsi:type="object">
                     ThirdParty\BlogArticle\Console\Command\CategoryListCommand
                 </item>

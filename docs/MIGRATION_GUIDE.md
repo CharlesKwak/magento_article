@@ -2,7 +2,7 @@
 
 This guide explains how to move blog content **into** `ThirdParty_BlogArticle` using the built-in **CSV import** (`blogarticle:post:import`). It is intentionally lightweight: no proprietary WordPress plugin dependency.
 
-Module version: **2.25.0**
+Module version: **2.26.0**
 
 ---
 

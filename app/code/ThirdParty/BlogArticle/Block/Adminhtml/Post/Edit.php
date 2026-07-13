@@ -174,6 +174,21 @@ class Edit extends Template
         );
     }
 
+    public function getDuplicateUrl(): string
+    {
+        $post = $this->getPost();
+        if (!$post->getId()) {
+            return '';
+        }
+        return $this->getUrl(
+            'blogarticle/post/duplicate',
+            [
+                'post_id' => (int) $post->getId(),
+                'form_key' => $this->getFormKey(),
+            ]
+        );
+    }
+
     public function isExistingPost()
     {
         return (bool) $this->getPost()->getId();

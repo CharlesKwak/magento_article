@@ -1,5 +1,26 @@
 # Release Notes
 
+## 2.26.0 - 2026-07-14
+
+### Added
+- **Admin Duplicate** post (grid + edit) → disabled draft with unique `url_key`, tags & product links copied
+- **CLI** `blogarticle:post:duplicate --id=N` (optional `--keep-status`)
+- **Search** matches `excerpt`, `author`, and `meta_title` (in addition to title/content/url_key)
+- **Post breadcrumbs / JSON-LD BreadcrumbList** include category when set
+
+### Changed
+- Module / package version **2.26.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.26.0.
+
+---
+
 ## 2.25.0 - 2026-07-14
 
 ### Added
@@ -19,7 +40,6 @@ php bin/magento setup:di:compile
 No new DB columns in 2.25.0.
 
 ---
-
 ## 2.24.0 - 2026-07-14
 
 ### Added
