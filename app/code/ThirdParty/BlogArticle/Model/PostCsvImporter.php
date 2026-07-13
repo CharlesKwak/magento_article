@@ -6,16 +6,18 @@ use Magento\Framework\File\Csv;
 use ThirdParty\BlogArticle\Api\Data\PostInterfaceFactory;
 use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
 use ThirdParty\BlogArticle\Model\Import\WordPressCsvMapper;
+use ThirdParty\BlogArticle\Model\PostProductLink;
 
 /**
  * Imports blog posts from a CSV file.
  *
  * Expected header columns (case-insensitive):
  * title*, content*, url_key, author, status, excerpt, category_id, tag_ids,
- * store_id, published_at, meta_title, meta_description, featured_image
+ * store_id, published_at, meta_title, meta_description, featured_image, product_skus
  *
  * status: enabled|disabled|1|0 (default enabled)
  * tag_ids: comma-separated integers
+ * product_skus: comma-separated catalog SKUs or product IDs
  *
  * format=wordpress maps common WP export headers (post_title, post_content, …).
  */
@@ -30,19 +32,22 @@ class PostCsvImporter
     private $postFactory;
     private $postModelFactory;
     private $wordPressCsvMapper;
+    private $postProductLink;
 
     public function __construct(
         Csv $csv,
         PostRepositoryInterface $postRepository,
         PostInterfaceFactory $postFactory,
         PostFactory $postModelFactory,
-        WordPressCsvMapper $wordPressCsvMapper
+        WordPressCsvMapper $wordPressCsvMapper,
+        PostProductLink $postProductLink
     ) {
         $this->csv = $csv;
         $this->postRepository = $postRepository;
         $this->postFactory = $postFactory;
         $this->postModelFactory = $postModelFactory;
         $this->wordPressCsvMapper = $wordPressCsvMapper;
+        $this->postProductLink = $postProductLink;
     }
 
     /**
@@ -231,6 +236,14 @@ class PostCsvImporter
         }
 
         $this->postRepository->save($post);
+
+        if (array_key_exists('product_skus', $data) && !$dryRun) {
+            $savedId = (int) ($post->getPostId() ?: $post->getId());
+            if ($savedId > 0) {
+                $this->postProductLink->setProductsFromInput($savedId, (string) $data['product_skus']);
+            }
+        }
+
         if ($existingId) {
             $result['updated']++;
         } else {

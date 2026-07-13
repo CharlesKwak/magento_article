@@ -2,7 +2,7 @@
 
 This guide explains how to move blog content **into** `ThirdParty_BlogArticle` using the built-in **CSV import** (`blogarticle:post:import`). It is intentionally lightweight: no proprietary WordPress plugin dependency.
 
-Module version: **2.12.0**
+Module version: **2.13.0**
 
 ---
 
@@ -115,3 +115,17 @@ Product-to-post links live in `thirdparty_blogarticle_post_product` (post_id, pr
 - Mageplaza Topics / post attributes / traffic history  
 
 Use CSV + Admin for those, or open a contribution if you need a dedicated importer class.
+
+
+---
+
+## Comment import (v2.13+)
+
+```bash
+php bin/magento blogarticle:comment:import /path/to/comments.csv --dry-run
+```
+
+Required columns: `author_name`, `content`, and either `post_id` or `post_url_key`.  
+Optional: `is_approved`, `parent_id`, `author_email`, `comment_id` (with `--update`).
+
+Sample: [samples/comments_import_sample.csv](./samples/comments_import_sample.csv).

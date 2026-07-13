@@ -1,0 +1,3 @@
+post_url_key,author_name,author_email,content,is_approved,parent_id
+csv-welcome,Alice,alice@example.com,"Great first post!",1,
+csv-welcome,Bob,bob@example.com,"Thanks for writing this.",0,

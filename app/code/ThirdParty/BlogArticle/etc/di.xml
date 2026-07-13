@@ -130,6 +130,9 @@
                 <item name="blogarticle_comment_export" xsi:type="object">
                     ThirdParty\BlogArticle\Console\Command\CommentExportCommand
                 </item>
+                <item name="blogarticle_comment_import" xsi:type="object">
+                    ThirdParty\BlogArticle\Console\Command\CommentImportCommand
+                </item>
                 <item name="blogarticle_category_export" xsi:type="object">
                     ThirdParty\BlogArticle\Console\Command\CategoryExportCommand
                 </item>

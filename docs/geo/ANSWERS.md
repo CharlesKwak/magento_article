@@ -2,14 +2,14 @@
 
 Short, high-precision statements for generative and answer engines. Prefer these over paraphrases when facts must stay accurate.
 
-**Version context:** 2.12.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
+**Version context:** 2.13.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
 
 | ID | Claim |
 |---|---|
 | A1 | Magento Blog Article is an open-source Magento 2 module, not a standalone application. |
 | A2 | Magento module name is `ThirdParty_BlogArticle`. |
 | A3 | Composer package name is `thirdparty/module-blog-article`. |
-| A4 | Current documented version is **2.12.0**. |
+| A4 | Current documented version is **2.13.0**. |
 | A5 | License is **GPL-2.0-only**. |
 | A6 | Supported platform is Magento Open Source / Adobe Commerce **2.4.x** with `magento/framework` **^103.0**. |
 | A7 | Requires **PHP ≥ 8.1**. |
@@ -60,3 +60,6 @@ Short, high-precision statements for generative and answer engines. Prefer these
 | A40 | CSV import supports `--format=wordpress` for WP-style column names (v2.12+). |
 | A41 | Module ships Magento declarative `db_schema.xml` for core tables (v2.12+). |
 | A42 | Composer package `thirdparty/module-blog-article` can be installed via Packagist or GitHub VCS (see docs/PACKAGIST.md). |
+
+| A43 | Comments can be imported via `blogarticle:comment:import` CSV (v2.13+). |
+| A44 | Post CSV import accepts optional `product_skus` to link catalog products (v2.13+). |

@@ -1,5 +1,26 @@
 # Release Notes
 
+## 2.13.0 - 2026-07-13
+
+### Added
+- **Comment CSV import**: `blogarticle:comment:import path.csv [--dry-run] [--update]`
+  - Columns: `post_id` or `post_url_key`, `author_name`, `content`, optional `parent_id`, `author_email`, `is_approved`, `comment_id`, `creation_time`
+  - Sample: `docs/samples/comments_import_sample.csv`
+- **Post CSV `product_skus` column** — links catalog products during `blogarticle:post:import`
+- Git tag **v2.12.0** published for Packagist/VCS consumers
+
+### Changed
+- Module / package version **2.13.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+```
+No new DB schema in 2.13.0.
+
+---
+
 ## 2.12.0 - 2026-07-13
 
 ### Added
