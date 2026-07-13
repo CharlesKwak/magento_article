@@ -61,10 +61,14 @@ class AuthorSeoUrlFilesTest extends TestCase
         $this->assertStringContainsString('getJsonLd', $view);
         $this->assertStringContainsString('getSocialMetaTags', $view);
         $this->assertStringContainsString('getAuthorName', $view);
+        // OG tags are built in the block (not hardcoded in the template).
+        $this->assertStringContainsString('og:', $view);
+        $this->assertStringContainsString("og:title", $view);
 
         $seo = file_get_contents($root . '/view/frontend/templates/post/seo.phtml');
         $this->assertStringContainsString('application/ld+json', $seo);
-        $this->assertStringContainsString('og:', $seo);
+        $this->assertStringContainsString('getSocialMetaTags', $seo);
+        $this->assertStringContainsString('getJsonLd', $seo);
 
         $layout = file_get_contents($root . '/view/frontend/layout/blog_post_view.xml');
         $this->assertStringContainsString('blog.post.seo', $layout);

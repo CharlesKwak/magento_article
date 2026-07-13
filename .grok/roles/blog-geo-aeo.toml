@@ -1,0 +1,3 @@
+description = "GEO/AEO documentation role for Magento Blog Article"
+default_capability_mode = "all"
+reasoning_effort = "medium"

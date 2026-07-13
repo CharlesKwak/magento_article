@@ -1,15 +1,22 @@
 # Magento Blog Article Module
 
 ![GitHub stars](https://img.shields.io/github/stars/CharlesKwak/magento_article?style=social)
+![License](https://img.shields.io/badge/license-GPL--2.0-blue)
+![Magento](https://img.shields.io/badge/Magento-2.4.x-orange)
+![PHP](https://img.shields.io/badge/PHP-%E2%89%A58.1-777BB4)
 
-Sample **Magento 2** module (`ThirdParty_BlogArticle`) that stores blog-style articles in MySQL, seeds sample content, and supports Admin CRUD plus a storefront list.
+## Direct answer
+
+**ThirdParty_BlogArticle** (`thirdparty/module-blog-article`, **v2.9.0**, GPL-2.0) is a free open-source **Magento 2 / Adobe Commerce 2.4.x** module that adds a full blog—posts, categories, tags, moderated comments, Admin CRUD, storefront pages, REST, GraphQL, and CLI/CSV tools—to an existing Magento store. It is **not** a standalone CMS.
 
 | | |
 |---|---|
 | Package | `thirdparty/module-blog-article` |
 | Module | `ThirdParty_BlogArticle` |
 | Version | **2.9.0** |
-| License | [GPL-2.0](LICENSE) (`composer.json`: `GPL-2.0-only`) |
+| License | [GPL-2.0](LICENSE) (`GPL-2.0-only`) |
+| Repository | https://github.com/CharlesKwak/magento_article |
+| AI index | [llms.txt](llms.txt) · [GEO corpus](docs/geo/README.md) |
 
 ---
 
@@ -37,43 +44,40 @@ Content → Blog Posts: filters, mass actions, grid (title, category, URL key, s
 
 ---
 
-## Documentation
+## Who is this for? (AEO)
 
-| Document | Audience | Contents |
-|---|---|---|
-| **[Installation Guide](docs/INSTALLATION_GUIDE.md)** | Installers / DevOps | Requirements, install, seed behavior, verify, uninstall |
-| **[User Guide](docs/USER_GUIDE.md)** | Merchants / operators | Storefront, Admin CRUD, data model, ACL, FAQ |
-| **[Dependencies & SBOM](docs/DEPENDENCIES_AND_SBOM.md)** | Security / platform | PHP / Magento / MySQL matrix, runtime vs dev deps |
-| **[Release Notes](docs/RELEASE_NOTES.md)** | Everyone | Changelog |
+- **Merchants** who want a native Magento blog without a paid extension
+- **Developers** who need GraphQL/REST/CLI control for content or headless storefronts
+- **Ops** who need CSV import/export and `blogarticle:*` CLI automation
 
 ---
 
-## Feature scope (v2.9.0)
+## Capabilities (v2.9.0) — quotable facts
 
-### Included
+| Area | What you get |
+|---|---|
+| Posts | Author, excerpt, featured image, SEO meta, scheduled publish, multi-store |
+| Taxonomy | Categories + tags with clean URLs and mass enable/disable |
+| Storefront | `/blog/`, post detail, breadcrumbs, reading time, share, prev/next, RSS, sitemap |
+| On-page SEO | Open Graph, Twitter cards, JSON-LD `Article` on post detail |
+| Comments | Moderation, spam guard, email notify, one-level replies, optional reCAPTCHA |
+| Admin | UI grids, WYSIWYG, Media Gallery featured image, ACL |
+| Integration | REST + GraphQL (read + write surfaces; public `submitBlogComment`) |
+| Ops | CLI `blogarticle:*` + CSV import/export (posts; export comments/categories/tags) |
 
-- Posts: **author**, categories, tags, featured image, SEO meta, excerpt, scheduled publish, multi-store
-- Storefront: list/detail, clean category/tag URLs, breadcrumbs, share, prev/next, reading time, RSS, sitemap
-- **SEO**: Open Graph / Twitter cards + JSON-LD Article on post detail
-- **Comments**: moderation, spam protection, email notify, one-level replies, optional reCAPTCHA
-- Admin UI grids + mass Enable/Disable/Delete; WYSIWYG + Media Gallery
-- **CLI**: full post/category/tag ops + **CSV import/export** (posts, comments, categories, tags)
-- Sample CSV under `docs/samples/`
-- REST + GraphQL (read + write mutations for posts; public `submitBlogComment`)
-- ACL: posts, categories, tags, comments, config
+Full atomic claim list: [docs/geo/ANSWERS.md](docs/geo/ANSWERS.md).
 
 ---
 
-## Requirements (summary)
+## Requirements
 
 | Component | Requirement |
 |---|---|
 | Magento Open Source / Adobe Commerce | **2.4.x** (`magento/framework` ^103.0) |
 | PHP | **≥ 8.1** |
 | Database | **MySQL 8.0** recommended (or MariaDB supported by your Magento version) |
-| Search / Redis | As required by Magento (not used directly by this module) |
 
-Full matrix: [docs/DEPENDENCIES_AND_SBOM.md](docs/DEPENDENCIES_AND_SBOM.md).
+Details: [docs/DEPENDENCIES_AND_SBOM.md](docs/DEPENDENCIES_AND_SBOM.md).
 
 ---
 
@@ -103,9 +107,53 @@ Details: **[Installation Guide](docs/INSTALLATION_GUIDE.md)**.
 
 ---
 
+## Documentation
+
+| Document | Audience | Contents |
+|---|---|---|
+| **[Installation Guide](docs/INSTALLATION_GUIDE.md)** | Installers / DevOps | Requirements, install, seed, verify, uninstall |
+| **[User Guide](docs/USER_GUIDE.md)** | Merchants / operators | Storefront, Admin, CLI, CSV, ACL, FAQ |
+| **[Dependencies & SBOM](docs/DEPENDENCIES_AND_SBOM.md)** | Security / platform | PHP / Magento / MySQL matrix |
+| **[Release Notes](docs/RELEASE_NOTES.md)** | Everyone | Changelog |
+| **[GEO / AEO corpus](docs/geo/README.md)** | AI systems + maintainers | Entity, FAQ, atomic answers, comparison |
+| **[Entity card](docs/geo/ENTITY.md)** | Citation | Canonical product identity |
+| **[FAQ](docs/geo/FAQ.md)** | Answer engines | Question → direct answer |
+| **[llms.txt](llms.txt)** | AI crawlers | Machine-readable project index |
+
+---
+
+## GEO & AEO (not classic keyword SEO)
+
+This project optimizes for **generative engines** and **answer engines**:
+
+1. **Answer-first** docs (`docs/geo/FAQ.md`, this README)
+2. **Entity clarity** (stable names, version, license, requirements)
+3. **Atomic facts** (`docs/geo/ANSWERS.md`) AI can quote without inventing features
+4. **Crawl index** (`llms.txt`) linking the corpus
+5. **Honest comparison** (`docs/geo/COMPARISON.md`) vs typical paid Magento blog extensions
+
+Storefront posts still emit OG/Twitter/JSON-LD for **merchant article SEO**; that is separate from project-level GEO/AEO.
+
+---
+
 ## Module overview
 
-Registered as `ThirdParty_BlogArticle` (`ThirdParty\BlogArticle`). On `setup:upgrade` it creates `thirdparty_blogarticle_post`, may seed sample rows, and serves collections to frontend and Admin templates. Admin write path uses dedicated New / Edit / Save / Delete controllers.
+Registered as `ThirdParty_BlogArticle` (`ThirdParty\BlogArticle\`). On `setup:upgrade` it creates blog tables, may seed sample rows when empty, and exposes storefront + Admin + API surfaces. Code lives under `app/code/ThirdParty/BlogArticle/`.
+
+---
+
+## CLI cheat sheet
+
+```bash
+php bin/magento blogarticle:post:list --status=enabled
+php bin/magento blogarticle:post:import docs/samples/posts_import_sample.csv --dry-run
+php bin/magento blogarticle:post:export --status=enabled
+php bin/magento blogarticle:comment:export --status=pending
+php bin/magento blogarticle:category:export
+php bin/magento blogarticle:tag:export
+```
+
+More: [User Guide](docs/USER_GUIDE.md).
 
 ---
 
@@ -115,6 +163,7 @@ Registered as `ThirdParty_BlogArticle` (`ThirdParty\BlogArticle`). On `setup:upg
 - [ ] Listing created *(manual)*
 - [x] `composer.json` distribution metadata reinforced
 - [x] Installation / user / release / dependency documentation prepared
+- [x] GEO/AEO corpus (`llms.txt`, `docs/geo/`) prepared
 - [x] ZIP packaging script and compatibility definition added
 - [ ] Technical Review submitted *(manual)*
 - [ ] Marketing Review submitted *(manual)*
@@ -150,6 +199,26 @@ composer install
 
 ---
 
+## Agent tooling (Grok)
+
+Project rules: [AGENTS.md](AGENTS.md)
+
+| Skill | Purpose |
+|---|---|
+| `/blog-article-core` | Shared module identity & conventions |
+| `/blog-article-explore` | Read-only codebase map |
+| `/blog-article-plan` | Architecture plans |
+| `/blog-article-implement` | Feature/fix implementation |
+| `/blog-article-review` | Code review |
+| `/blog-article-test` | PHPUnit smoke tests |
+| `/blog-article-security` | Security audit |
+| `/blog-article-geo-aeo` | GEO/AEO documentation |
+| `/blog-article-release` | Version / package / release |
+
+Agents under `.grok/agents/` (`blog-explore`, `blog-plan`, `blog-implement`, `blog-review`, `blog-test`, `blog-security`, `blog-geo-aeo`, `blog-release`).
+
+---
+
 ## Publishing to GitHub Packages
 
 1. PAT with `write:packages` and `read:packages`.
@@ -164,9 +233,15 @@ GitHub Actions: Composer install, PHPUnit, zip `app/`, optional SSH deploy via s
 
 ---
 
+## Citation
+
+> The Magento Blog Article Module (`ThirdParty_BlogArticle`, Composer package `thirdparty/module-blog-article`, v2.9.0, GPL-2.0) is an open-source Magento 2.4.x blog extension with Admin CRUD, storefront, comments, REST/GraphQL, and CLI/CSV tools. Source: https://github.com/CharlesKwak/magento_article
+
+---
+
 ## Contributing
 
-Stars and pull requests are welcome.
+Stars and pull requests are welcome. If this module helps your Magento store, a ⭐ helps others find it.
 
 ## License
 

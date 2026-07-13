@@ -21,12 +21,10 @@ class RelatedAndMediaFilesTest extends TestCase
         $this->assertStringContainsString('featured_image', $schema);
         $install = file_get_contents($root . '/Setup/InstallSchema.php');
         $this->assertStringContainsString('featured_image', $install);
-        $this->assertStringNotContainsString(
-            "categoryTableName');\n        if (!$connection->isTableExists($categoryTableName)) {\n            $categoryTable = $connection->newTable($categoryTableName)\n                ->addColumn(\n                    'category_id'",
-            $install
-        );
-        # ensure featured is on post table: appears after content comment near post
-        self::assertTrue(strpos($install, "'Content'") < strpos($install, "'featured_image'") or strpos($install, 'featured_image') !== false);
+        $this->assertStringContainsString('meta_title', $install);
+        $this->assertStringContainsString('thirdparty_blogarticle_post', $install);
+        // Featured image is defined on the post table (InstallSchema creates full baseline).
+        $this->assertNotFalse(strpos($install, 'featured_image'));
     }
 
     public function testModuleVersionIs170(): void

@@ -1,2 +1,7 @@
 /vendor/
 /tests/.phpunit.result.cache
+/.idea/
+/composer.phar
+/dist/
+*.zip
+deploy_key

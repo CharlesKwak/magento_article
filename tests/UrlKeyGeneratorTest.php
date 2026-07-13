@@ -14,7 +14,7 @@ class UrlKeyGeneratorTest extends TestCase
         $generator = new UrlKeyGenerator($collectionFactory);
 
         $method = new ReflectionMethod(UrlKeyGenerator::class, 'slugify');
-        $method->setAccessible(true);
+        // ReflectionMethod::setAccessible() is a no-op since PHP 8.1; omit for 8.5+.
 
         $this->assertSame('welcome-to-the-blog', $method->invoke($generator, 'Welcome to the blog'));
         $this->assertSame('hello-world', $method->invoke($generator, '  Hello___World!! '));
