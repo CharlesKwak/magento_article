@@ -1,0 +1,26 @@
+<?php
+/** @var \ThirdParty\BlogArticle\Block\Adminhtml\Dashboard\Stats $block */
+?>
+<div class="dashboard-container blogarticle-dashboard-stats" style="margin:1.5rem 0;">
+    <div class="dashboard-item" style="border:1px solid #e3e3e3;padding:1rem 1.25rem;background:#fff;">
+        <strong style="font-size:1.1rem;"><?= $block->escapeHtml(__('Blog Article')) ?></strong>
+        <ul style="margin:0.75rem 0 0;padding-left:1.25rem;line-height:1.6;">
+            <li>
+                <?= $block->escapeHtml(__('Posts: %1 enabled / %2 total', $block->getPostsEnabled(), $block->getPostsTotal())) ?>
+            </li>
+            <li>
+                <?= $block->escapeHtml(__('Pending comments: %1', $block->getCommentsPending())) ?>
+            </li>
+            <li>
+                <?= $block->escapeHtml(__('Total views: %1', $block->getViewsTotal())) ?>
+            </li>
+        </ul>
+        <p style="margin:0.75rem 0 0;">
+            <a href="<?= $block->escapeUrl($block->getPostsUrl()) ?>"><?= $block->escapeHtml(__('Manage posts')) ?></a>
+            &nbsp;|&nbsp;
+            <a href="<?= $block->escapeUrl($block->getCommentsUrl()) ?>"><?= $block->escapeHtml(__('Moderate comments')) ?></a>
+            &nbsp;|&nbsp;
+            <a href="<?= $block->escapeUrl($block->getConfigUrl()) ?>"><?= $block->escapeHtml(__('Configuration')) ?></a>
+        </p>
+    </div>
+</div>

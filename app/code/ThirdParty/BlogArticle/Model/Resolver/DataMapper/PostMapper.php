@@ -63,6 +63,7 @@ class PostMapper
             'meta_title' => $item->getMetaTitle(),
             'meta_description' => $item->getMetaDescription(),
             'is_active' => $item->getIsActive(),
+            'view_count' => method_exists($item, 'getViewCount') ? (int) $item->getViewCount() : 0,
             'category_id' => $item->getCategoryId(),
             'store_id' => $item->getStoreId(),
             'tag_ids' => $item->getTagIds() ?: [],

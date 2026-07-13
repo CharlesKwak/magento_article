@@ -16,6 +16,7 @@ interface PostInterface
     public const META_TITLE = 'meta_title';
     public const META_DESCRIPTION = 'meta_description';
     public const IS_ACTIVE = 'is_active';
+    public const VIEW_COUNT = 'view_count';
     public const CATEGORY_ID = 'category_id';
     public const STORE_ID = 'store_id';
     public const TAG_IDS = 'tag_ids';
@@ -63,6 +64,10 @@ interface PostInterface
     public function getIsActive();
     /** @param int $isActive @return $this */
     public function setIsActive($isActive);
+    /** @return int|null */
+    public function getViewCount();
+    /** @param int $viewCount @return $this */
+    public function setViewCount($viewCount);
     /** @return int|null */
     public function getCategoryId();
     /** @param int|null $categoryId @return $this */

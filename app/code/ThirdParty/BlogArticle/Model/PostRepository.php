@@ -288,6 +288,7 @@ class PostRepository implements PostRepositoryInterface
         $data->setMetaTitle($post->getMetaTitle() ? (string) $post->getMetaTitle() : null);
         $data->setMetaDescription($post->getMetaDescription() ? (string) $post->getMetaDescription() : null);
         $data->setIsActive((int) $post->getIsActive());
+        $data->setViewCount((int) $post->getData('view_count'));
         $data->setCategoryId($post->getCategoryId() ? (int) $post->getCategoryId() : null);
         $data->setStoreId($post->getStoreId() ? (int) $post->getStoreId() : null);
         $data->setTagIds($this->postTagLink->getTagIdsForPost((int) $post->getId()));

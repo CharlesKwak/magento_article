@@ -1,5 +1,29 @@
 # Release Notes
 
+## 2.14.0 - 2026-07-13
+
+### Added
+- **GraphQL**
+  - `BlogPost.view_count`
+  - `approveBlogComment(comment_id)` / `deleteBlogComment(comment_id)` (admin/integration)
+  - `blogStats` query (posts, comments, categories, tags, views) for admin/integration
+- **Admin dashboard** block: posts enabled/total, pending comments, total views + quick links
+- **PostInterface `view_count`** exposed via repository / GraphQL mapper
+- Packagist maintainer checklist in [PACKAGIST.md](./PACKAGIST.md)
+
+### Changed
+- Module / package version **2.14.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.14.0.
+
+---
+
 ## 2.13.0 - 2026-07-13
 
 ### Added

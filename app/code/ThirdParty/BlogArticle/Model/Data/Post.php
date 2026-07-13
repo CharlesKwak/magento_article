@@ -106,6 +106,16 @@ class Post extends DataObject implements PostInterface
         return $this->setData(self::IS_ACTIVE, $isActive);
     }
 
+    public function getViewCount()
+    {
+        return $this->getData(self::VIEW_COUNT) !== null ? (int) $this->getData(self::VIEW_COUNT) : 0;
+    }
+
+    public function setViewCount($viewCount)
+    {
+        return $this->setData(self::VIEW_COUNT, (int) $viewCount);
+    }
+
     public function getCategoryId()
     {
         return $this->getData(self::CATEGORY_ID) !== null && $this->getData(self::CATEGORY_ID) !== ''

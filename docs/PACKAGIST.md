@@ -1,19 +1,31 @@
 # Packagist / Composer install
 
+## Maintainer checklist
+
+- [ ] `composer.json` name/version/license/autoload correct
+- [ ] Public GitHub repo
+- [ ] Git tag `vX.Y.Z` pushed (matches composer version)
+- [ ] Submit on packagist.org
+- [ ] Enable auto-update webhook
+- [ ] Verify `composer require thirdparty/module-blog-article`
+- [ ] GitHub Topics set
+- [ ] Optional Marketplace ZIP: `./scripts/package_module.sh`
+
+
 Package: **`thirdparty/module-blog-article`**  
 Repository: https://github.com/CharlesKwak/magento_article  
-Current version: **2.13.0**
+Current version: **2.14.0**
 
 ## 1. Publish on Packagist (maintainer)
 
 1. Log in at [packagist.org](https://packagist.org).
 2. **Submit** → paste `https://github.com/CharlesKwak/magento_article`.
 3. Enable GitHub Service Hook / auto-update so tags sync.
-4. Create a Git tag for releases, e.g. `v2.13.0`:
+4. Create a Git tag for releases, e.g. `v2.14.0`:
 
 ```bash
-git tag -a v2.13.0 -m "2.13.0"
-git push origin v2.13.0
+git tag -a v2.14.0 -m "2.14.0"
+git push origin v2.14.0
 ```
 
 `composer.json` at the repo root already declares:
@@ -81,9 +93,9 @@ composer require thirdparty/module-blog-article:@dev
 
 ```bash
 ./scripts/package_module.sh
-# → dist/thirdparty-blog-article-2.13.0.zip  (module under app/code + docs)
+# → dist/thirdparty-blog-article-2.14.0.zip  (module under app/code + docs)
 ./scripts/package_module.sh --module-root
-# → dist/thirdparty-blog-article-module-2.13.0.zip  (Composer-style module root)
+# → dist/thirdparty-blog-article-module-2.14.0.zip  (Composer-style module root)
 ```
 
 ## 4. GitHub topics (discoverability)

@@ -3,7 +3,7 @@
 How to use **ThirdParty_BlogArticle** after it is installed on Magento 2.
 
 Module: `ThirdParty_BlogArticle`  
-Version covered: **2.13.0**
+Version covered: **2.14.0**
 
 For install steps, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md).  
 For runtime dependencies and SBOM-style inventory, see [DEPENDENCIES_AND_SBOM.md](./DEPENDENCIES_AND_SBOM.md).
@@ -26,7 +26,7 @@ This module provides a **database-backed blog post list** with Admin management:
 | GraphQL | `/graphql` (`blogPosts`, `blogPost`) | Public read + search |
 | Widget | **Content → Widgets** | “Blog Article — Recent Posts” |
 
-### What you can do in v2.13.0
+### What you can do in v2.14.0
 
 - Search and page through the storefront blog list; open clean post/category/tag URLs.
 - Post detail: breadcrumbs, reading time, share/copy link, prev/next, clickable tags/category.
@@ -285,7 +285,7 @@ Prefer the Admin UI for day-to-day work.
 
 ## 6. Multi-store / localization notes
 
-| Topic | Behavior in v2.13.0 |
+| Topic | Behavior in v2.14.0 |
 |---|---|
 | Multi-website / store view | Posts may target a store via `store_id` (0/NULL = all views) |
 | Translation of post content | Not supported; store raw title/content per row only |
@@ -416,3 +416,28 @@ Round-trip with export:
 php bin/magento blogarticle:comment:export
 php bin/magento blogarticle:comment:import var/export/blogarticle_comments_*.csv --update
 ```
+
+
+---
+
+## GraphQL admin helpers (v2.14)
+
+```graphql
+query {
+  blogStats {
+    posts_total
+    posts_enabled
+    comments_pending
+    views_total
+  }
+}
+
+mutation {
+  approveBlogComment(comment_id: 12) { comment_id is_approved }
+  deleteBlogComment(comment_id: 13)
+}
+```
+
+Requires admin or integration identity (same as createBlogPost). Public field: `blogPost { view_count }`.
+
+Admin **Dashboard** shows a Blog Article summary when the user has Blog Posts ACL.

@@ -40,6 +40,7 @@ type BlogPost {
     meta_title: String
     meta_description: String
     is_active: Int
+    view_count: Int
     category_id: Int
     store_id: Int
     tag_ids: [Int]
@@ -58,6 +59,16 @@ type BlogPostList {
     page_size: Int
     current_page: Int
     total_pages: Int
+}
+
+type BlogStats {
+    posts_total: Int
+    posts_enabled: Int
+    comments_total: Int
+    comments_pending: Int
+    categories_total: Int
+    tags_total: Int
+    views_total: Int
 }
 
 input BlogPostInput {
@@ -100,6 +111,10 @@ type Query {
 
     blogTag(id: Int, url_key: String): BlogTag
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Tag")
+
+    blogStats: BlogStats
+    @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\BlogStats")
+    @doc(description: "Blog metrics for admin/integration identity (posts, comments, views).")
 }
 
 type Mutation {
@@ -125,4 +140,12 @@ type Mutation {
     ): BlogComment
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\SubmitBlogComment")
     @doc(description: "Submit a storefront comment (public when comments enabled). Optional parent_id for one-level replies; recaptcha_token required when reCAPTCHA is enabled.")
+
+    approveBlogComment(comment_id: Int!): BlogComment
+    @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\ApproveBlogComment")
+    @doc(description: "Approve a comment (admin/integration identity required)")
+
+    deleteBlogComment(comment_id: Int!): Boolean
+    @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\DeleteBlogComment")
+    @doc(description: "Delete a comment (admin/integration identity required)")
 }
