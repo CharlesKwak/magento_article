@@ -41,6 +41,15 @@ $isActive = $category->getId() ? (int) $category->getIsActive() : 1;
             ><?= $block->escapeHtml((string) $category->getData('description')) ?></textarea>
         </div>
         <div style="margin-bottom:1rem;">
+            <label for="sort_order"><?= $block->escapeHtml(__('Sort Order')) ?></label><br/>
+            <input type="number" id="sort_order" name="sort_order" min="0" step="1"
+                   style="width:100%;max-width:160px;"
+                   value="<?= (int) $category->getData('sort_order') ?>"/>
+            <p class="note" style="margin-top:0.35rem;">
+                <?= $block->escapeHtml(__('Lower numbers appear first in storefront category lists.')) ?>
+            </p>
+        </div>
+        <div style="margin-bottom:1rem;">
             <label for="is_active"><?= $block->escapeHtml(__('Status')) ?></label><br/>
             <select id="is_active" name="is_active">
                 <option value="1" <?= $isActive ? 'selected="selected"' : '' ?>><?= $block->escapeHtml(__('Enabled')) ?></option>

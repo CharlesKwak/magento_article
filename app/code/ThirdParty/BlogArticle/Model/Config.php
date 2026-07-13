@@ -35,6 +35,7 @@ class Config
     public const XML_PATH_RELATED_POSTS_LIMIT = 'blogarticle/display/related_posts_limit';
     public const XML_PATH_READING_PROGRESS = 'blogarticle/display/reading_progress';
     public const XML_PATH_PREVIEW_TTL_HOURS = 'blogarticle/display/preview_token_ttl_hours';
+    public const XML_PATH_SHARE_LINKS = 'blogarticle/display/show_share_links';
     public const XML_PATH_PRODUCT_RELATED_ENABLED = 'blogarticle/catalog/show_related_posts';
     public const XML_PATH_PRODUCT_RELATED_LIMIT = 'blogarticle/catalog/related_posts_limit';
     public const XML_PATH_COMMENTS_ENABLED = 'blogarticle/comments/enabled';
@@ -389,6 +390,15 @@ class Config
         }
         $hours = min(168, $hours);
         return $hours * 3600;
+    }
+
+    public function isShareLinksEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SHARE_LINKS,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     public function isProductRelatedPostsEnabled(?int $storeId = null): bool

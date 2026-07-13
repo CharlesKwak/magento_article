@@ -33,7 +33,8 @@ class CategoryCreateCommand extends Command
             ->setDescription('Create a blog category')
             ->addOption('name', null, InputOption::VALUE_REQUIRED, 'Category name')
             ->addOption('url-key', null, InputOption::VALUE_REQUIRED, 'URL key (auto from name if omitted)')
-            ->addOption('status', null, InputOption::VALUE_REQUIRED, 'enabled or disabled', 'enabled');
+            ->addOption('status', null, InputOption::VALUE_REQUIRED, 'enabled or disabled', 'enabled')
+            ->addOption('sort-order', null, InputOption::VALUE_REQUIRED, 'Sort order (lower first)', '0');
         parent::configure();
     }
 
@@ -57,6 +58,8 @@ class CategoryCreateCommand extends Command
         if ($urlKey !== '') {
             $category->setUrlKey($urlKey);
         }
+        $sortOrder = max(0, (int) $input->getOption('sort-order'));
+        $category->setSortOrder($sortOrder);
 
         try {
             $saved = $this->categoryRepository->save($category);
@@ -69,10 +72,11 @@ class CategoryCreateCommand extends Command
         }
 
         $output->writeln(sprintf(
-            '<info>Created category #%d "%s" (url_key=%s).</info>',
+            '<info>Created category #%d "%s" (url_key=%s, sort_order=%d).</info>',
             (int) $saved->getCategoryId(),
             (string) $saved->getName(),
-            (string) $saved->getUrlKey()
+            (string) $saved->getUrlKey(),
+            (int) $saved->getSortOrder()
         ));
         return Command::SUCCESS;
     }

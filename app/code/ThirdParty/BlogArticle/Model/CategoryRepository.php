@@ -90,6 +90,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         if ($activeOnly) {
             $collection->addFieldToFilter('is_active', 1);
         }
+        $collection->setOrder('sort_order', 'ASC');
         $collection->setOrder('name', 'ASC');
         $items = [];
         foreach ($collection as $category) {
@@ -142,6 +143,8 @@ class CategoryRepository implements CategoryRepositoryInterface
                 : null
         );
         $model->setIsActive((int) $isActive ? 1 : 0);
+        $sortOrder = $category->getSortOrder();
+        $model->setData('sort_order', $sortOrder !== null ? max(0, (int) $sortOrder) : 0);
 
         try {
             $model->save();
@@ -192,6 +195,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $desc = $category->getData('description');
         $data->setDescription($desc !== null && (string) $desc !== '' ? (string) $desc : null);
         $data->setIsActive((int) $category->getIsActive());
+        $data->setSortOrder((int) $category->getData('sort_order'));
         $data->setCreationTime((string) $category->getCreationTime());
         $data->setUpdateTime((string) $category->getUpdateTime());
         return $data;

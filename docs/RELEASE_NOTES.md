@@ -1,5 +1,27 @@
 # Release Notes
 
+## 2.33.0 - 2026-07-14
+
+### Added
+- **Category sort order** (`sort_order` column, Admin edit/grid, storefront/API sort by order then name)
+- **Show Share Links on Post** config (disable X/Facebook/LinkedIn/Email/Copy block)
+- **Open Graph article meta**: `article:author` (name + profile URL), `article:published_time`, `article:modified_time`, `article:section`, `article:tag`, `og:site_name`
+- JSON-LD author `url`, `articleSection`, `keywords`
+
+### Changed
+- Module / package version **2.33.0**
+- Category CLI create supports `--sort-order`
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+Adds `sort_order` (unsigned int, default 0) on `thirdparty_blogarticle_category`.
+
+---
+
 ## 2.32.0 - 2026-07-14
 
 ### Added
@@ -21,7 +43,6 @@ php bin/magento setup:di:compile
 No new DB columns in 2.32.0.
 
 ---
-
 ## 2.31.0 - 2026-07-14
 
 ### Added

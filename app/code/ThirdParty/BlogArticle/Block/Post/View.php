@@ -417,13 +417,21 @@ class View extends Template implements IdentityInterface
         return max(1, (int) ceil($count / 200));
     }
 
+    public function isShareLinksEnabled(): bool
+    {
+        return $this->config->isShareLinksEnabled();
+    }
+
     /**
-     * Share links (X/Twitter, Facebook, LinkedIn, mailto).
+     * Share links (X/Twitter, Facebook, LinkedIn, mailto). Empty when disabled in config.
      *
      * @return array<string, string>
      */
     public function getShareLinks(): array
     {
+        if (!$this->isShareLinksEnabled()) {
+            return [];
+        }
         $url = rawurlencode($this->getCanonicalUrl());
         $title = rawurlencode($this->getPageTitle());
         return [
@@ -880,10 +888,23 @@ class View extends Template implements IdentityInterface
         ];
         $author = $this->getAuthorName();
         if ($author !== '') {
-            $data['author'] = [
+            $authorNode = [
                 '@type' => 'Person',
                 'name' => $author,
             ];
+            $authorUrl = $this->getAuthorUrl();
+            if ($authorUrl !== '') {
+                $authorNode['url'] = $authorUrl;
+            }
+            $data['author'] = $authorNode;
+        }
+        $section = $this->getCategoryName();
+        if ($section !== '') {
+            $data['articleSection'] = $section;
+        }
+        $tagNames = $this->getTagNames();
+        if ($tagNames) {
+            $data['keywords'] = implode(', ', $tagNames);
         }
         $image = $this->getFeaturedImageUrl();
         if ($image !== '') {
@@ -967,6 +988,7 @@ class View extends Template implements IdentityInterface
             ['property' => 'og:title', 'content' => $title],
             ['property' => 'og:description', 'content' => $description],
             ['property' => 'og:url', 'content' => $url],
+            ['property' => 'og:site_name', 'content' => $this->config->getBlogName()],
             ['name' => 'twitter:card', 'content' => $image !== '' ? 'summary_large_image' : 'summary'],
             ['name' => 'twitter:title', 'content' => $title],
             ['name' => 'twitter:description', 'content' => $description],
@@ -975,11 +997,64 @@ class View extends Template implements IdentityInterface
             $tags[] = ['property' => 'og:image', 'content' => $image];
             $tags[] = ['name' => 'twitter:image', 'content' => $image];
         }
+
         $author = $this->getAuthorName();
         if ($author !== '') {
+            // Plain-text author (widely supported)
             $tags[] = ['property' => 'article:author', 'content' => $author];
+            // Profile URL when author archive exists (Facebook accepts multiple article:author)
+            $authorUrl = $this->getAuthorUrl();
+            if ($authorUrl !== '') {
+                $tags[] = ['property' => 'article:author', 'content' => $authorUrl];
+            }
+            $tags[] = ['name' => 'author', 'content' => $author];
+            $tags[] = ['name' => 'twitter:label1', 'content' => (string) __('Written by')];
+            $tags[] = ['name' => 'twitter:data1', 'content' => $author];
         }
+
+        $published = $post->getPublishedAt() ?: $post->getCreationTime();
+        if ($published) {
+            $iso = $this->formatOpenGraphDate((string) $published);
+            if ($iso !== '') {
+                $tags[] = ['property' => 'article:published_time', 'content' => $iso];
+            }
+        }
+        $modified = $post->getUpdateTime();
+        if ($modified) {
+            $iso = $this->formatOpenGraphDate((string) $modified);
+            if ($iso !== '') {
+                $tags[] = ['property' => 'article:modified_time', 'content' => $iso];
+                $tags[] = ['property' => 'og:updated_time', 'content' => $iso];
+            }
+        }
+
+        $section = $this->getCategoryName();
+        if ($section !== '') {
+            $tags[] = ['property' => 'article:section', 'content' => $section];
+        }
+        foreach ($this->getTags() as $tagRow) {
+            if (!empty($tagRow['name'])) {
+                $tags[] = ['property' => 'article:tag', 'content' => (string) $tagRow['name']];
+            }
+        }
+
         return $tags;
+    }
+
+    /**
+     * Normalize DB datetime to ISO-8601 for Open Graph article times.
+     */
+    private function formatOpenGraphDate(string $value): string
+    {
+        $value = trim($value);
+        if ($value === '') {
+            return '';
+        }
+        $ts = strtotime($value);
+        if ($ts === false) {
+            return '';
+        }
+        return gmdate('c', $ts);
     }
 
     public function getRootComments(): array

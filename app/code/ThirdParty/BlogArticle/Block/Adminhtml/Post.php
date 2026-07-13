@@ -111,6 +111,7 @@ class Post extends Template
     public function getCategoryOptions()
     {
         $collection = $this->categoryCollectionFactory->create();
+        $collection->setOrder('sort_order', 'ASC');
         $collection->setOrder('name', 'ASC');
         return $collection;
     }

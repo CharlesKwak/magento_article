@@ -6,6 +6,7 @@ type BlogCategory {
     url_key: String
     description: String
     is_active: Int
+    sort_order: Int
     creation_time: String
     update_time: String
 }

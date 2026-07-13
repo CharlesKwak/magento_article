@@ -56,6 +56,16 @@ class Category extends DataObject implements CategoryInterface
         return $this->setData(self::IS_ACTIVE, $isActive);
     }
 
+    public function getSortOrder()
+    {
+        return $this->getData(self::SORT_ORDER) !== null ? (int) $this->getData(self::SORT_ORDER) : null;
+    }
+
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData(self::SORT_ORDER, (int) $sortOrder);
+    }
+
     public function getCreationTime()
     {
         return $this->getData(self::CREATION_TIME);

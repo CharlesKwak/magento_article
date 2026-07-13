@@ -63,6 +63,10 @@ class Save extends Action
         $name = isset($data['name']) ? trim((string) $data['name']) : '';
         $urlKeyInput = isset($data['url_key']) ? trim((string) $data['url_key']) : '';
         $description = isset($data['description']) ? trim((string) $data['description']) : '';
+        $sortOrder = isset($data['sort_order']) ? (int) $data['sort_order'] : 0;
+        if ($sortOrder < 0) {
+            $sortOrder = 0;
+        }
         $isActive = !empty($data['is_active']) ? 1 : 0;
 
         if ($name === '') {
@@ -80,6 +84,7 @@ class Save extends Action
         $category->setName($name);
         $category->setUrlKey($urlKey);
         $category->setData('description', $description !== '' ? $description : null);
+        $category->setData('sort_order', $sortOrder);
         $category->setIsActive($isActive);
 
         try {

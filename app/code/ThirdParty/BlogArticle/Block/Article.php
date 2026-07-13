@@ -328,6 +328,7 @@ class Article extends Template implements IdentityInterface
     {
         $collection = $this->categoryCollectionFactory->create();
         $collection->addFieldToFilter('is_active', 1);
+        $collection->setOrder('sort_order', 'ASC');
         $collection->setOrder('name', 'ASC');
         return $collection;
     }

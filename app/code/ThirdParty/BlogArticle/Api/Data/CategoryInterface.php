@@ -8,6 +8,7 @@ interface CategoryInterface
     public const URL_KEY = 'url_key';
     public const DESCRIPTION = 'description';
     public const IS_ACTIVE = 'is_active';
+    public const SORT_ORDER = 'sort_order';
     public const CREATION_TIME = 'creation_time';
     public const UPDATE_TIME = 'update_time';
 
@@ -65,6 +66,17 @@ interface CategoryInterface
      * @return $this
      */
     public function setIsActive($isActive);
+
+    /**
+     * @return int|null
+     */
+    public function getSortOrder();
+
+    /**
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder);
 
     /**
      * @return string|null

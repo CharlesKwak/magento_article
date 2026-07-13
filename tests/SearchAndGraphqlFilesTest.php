@@ -40,6 +40,6 @@ class SearchAndGraphqlFilesTest extends TestCase
             dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/etc/module.xml'
         );
         $this->assertNotFalse($content);
-        $this->assertStringContainsString('setup_version="2.32.0"', $content);
+        $this->assertStringContainsString('setup_version="2.33.0"', $content);
     }
 }

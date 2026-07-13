@@ -6,6 +6,7 @@
             "url_key": true,
             "description": true,
             "is_active": true,
+            "sort_order": true,
             "creation_time": true,
             "update_time": true
         },

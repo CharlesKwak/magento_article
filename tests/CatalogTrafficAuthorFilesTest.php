@@ -55,13 +55,13 @@ class CatalogTrafficAuthorFilesTest extends TestCase
 
         $module = file_get_contents($root . '/etc/module.xml');
         $this->assertStringContainsString('Magento_Catalog', $module);
-        $this->assertStringContainsString('setup_version="2.32.0"', $module);
+        $this->assertStringContainsString('setup_version="2.33.0"', $module);
 
         $config = file_get_contents($root . '/Model/Config.php');
         $this->assertStringContainsString('isMostViewedEnabled', $config);
         $this->assertStringContainsString('isProductRelatedPostsEnabled', $config);
 
         $composer = file_get_contents(dirname(__DIR__) . '/composer.json');
-        $this->assertStringContainsString('"version": "2.32.0"', $composer);
+        $this->assertStringContainsString('"version": "2.33.0"', $composer);
     }
 }

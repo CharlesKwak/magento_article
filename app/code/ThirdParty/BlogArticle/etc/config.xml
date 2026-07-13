@@ -29,6 +29,7 @@
                 <related_posts_limit>3</related_posts_limit>
                 <reading_progress>1</reading_progress>
                 <preview_token_ttl_hours>48</preview_token_ttl_hours>
+                <show_share_links>1</show_share_links>
             </display>
             <sidebar>
                 <enabled>1</enabled>

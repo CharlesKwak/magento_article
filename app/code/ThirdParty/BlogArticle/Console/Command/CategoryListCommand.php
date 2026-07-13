@@ -49,6 +49,7 @@ class CategoryListCommand extends Command
         } elseif ($status === 'disabled') {
             $collection->addFieldToFilter('is_active', 0);
         }
+        $collection->setOrder('sort_order', 'ASC');
         $collection->setOrder('name', 'ASC');
 
         $rows = [];

@@ -96,6 +96,13 @@
                 <label translate="true">URL Key</label>
             </settings>
         </column>
+        <column name="sort_order">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Sort Order</label>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
         <column name="is_active" component="Magento_Ui/js/grid/columns/select">
             <settings>
                 <options class="ThirdParty\BlogArticle\Model\Source\IsActive"/>

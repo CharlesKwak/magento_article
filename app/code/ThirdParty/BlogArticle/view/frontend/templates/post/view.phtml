@@ -146,6 +146,7 @@ $related = $block->getRelatedPosts();
             </div>
         </article>
 
+        <?php if ($share): ?>
         <section class="blog-share" style="margin-top:1.25rem;">
             <strong><?= $block->escapeHtml(__('Share')) ?>:</strong>
             <a href="<?= $block->escapeUrl($share['twitter']) ?>" target="_blank" rel="noopener noreferrer">
@@ -185,6 +186,7 @@ $related = $block->getRelatedPosts();
             })();
             </script>
         </section>
+        <?php endif; ?>
 
         <?php if ($prevPost || $nextPost): ?>
             <nav class="blog-post-nav" style="margin-top:1.5rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;">

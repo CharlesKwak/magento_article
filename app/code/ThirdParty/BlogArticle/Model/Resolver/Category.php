@@ -52,6 +52,7 @@ class Category implements ResolverInterface
             'url_key' => $category->getUrlKey(),
             'description' => $category->getDescription(),
             'is_active' => $category->getIsActive(),
+            'sort_order' => $category->getSortOrder(),
             'creation_time' => $category->getCreationTime(),
             'update_time' => $category->getUpdateTime(),
         ];

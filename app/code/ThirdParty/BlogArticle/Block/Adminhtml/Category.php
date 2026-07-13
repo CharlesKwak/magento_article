@@ -35,6 +35,7 @@ class Category extends Template
     public function getCategories()
     {
         $collection = $this->collectionFactory->create();
+        $collection->setOrder('sort_order', 'ASC');
         $collection->setOrder('name', 'ASC');
         return $collection;
     }
