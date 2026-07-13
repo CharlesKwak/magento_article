@@ -20,7 +20,7 @@ class Post extends Template
     /**
      * @var FormKey
      */
-    private $formKey;
+    protected $formKey;
 
     /**
      * @var UrlInterface

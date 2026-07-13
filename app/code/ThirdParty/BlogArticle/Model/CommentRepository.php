@@ -45,12 +45,13 @@ class CommentRepository implements CommentRepositoryInterface
         return $this->toDataModel($model);
     }
 
-    public function getListByPostId($postId)
+    public function getListByPostId($postId, $page = 0, $pageSize = 50)
     {
         $collection = $this->collectionFactory->create();
         $collection->addFieldToFilter('post_id', (int) $postId);
         $collection->addFieldToFilter('is_approved', 1);
         $collection->setOrder('creation_time', 'ASC');
+        $this->applyPagination($collection, $page, $pageSize);
         $items = [];
         foreach ($collection as $comment) {
             $items[] = $this->toDataModel($comment);
@@ -58,7 +59,59 @@ class CommentRepository implements CommentRepositoryInterface
         return $items;
     }
 
-    public function getList($status = 'all', $postId = null)
+    public function getListByPostIdTotalCount($postId)
+    {
+        $collection = $this->collectionFactory->create();
+        $collection->addFieldToFilter('post_id', (int) $postId);
+        $collection->addFieldToFilter('is_approved', 1);
+        return (int) $collection->getSize();
+    }
+
+    public function getList($status = 'all', $postId = null, $page = 0, $pageSize = 50)
+    {
+        $collection = $this->buildAdminListCollection($status, $postId);
+        $collection->setOrder('creation_time', 'DESC');
+        $this->applyPagination($collection, $page, $pageSize);
+        $items = [];
+        foreach ($collection as $comment) {
+            $items[] = $this->toDataModel($comment);
+        }
+        return $items;
+    }
+
+    public function getListTotalCount($status = 'all', $postId = null)
+    {
+        $collection = $this->buildAdminListCollection($status, $postId);
+        return (int) $collection->getSize();
+    }
+
+    /**
+     * @param \ThirdParty\BlogArticle\Model\ResourceModel\Comment\Collection $collection
+     * @param int|string $page
+     * @param int|string $pageSize
+     */
+    private function applyPagination($collection, $page, $pageSize): void
+    {
+        $page = (int) $page;
+        if ($page < 1) {
+            return;
+        }
+        $pageSize = (int) $pageSize;
+        if ($pageSize < 1) {
+            $pageSize = 50;
+        }
+        $pageSize = min(100, $pageSize);
+        $collection->setPageSize($pageSize);
+        $collection->setCurPage($page);
+    }
+
+    /**
+     * @param string $status
+     * @param int|null $postId
+     * @return \ThirdParty\BlogArticle\Model\ResourceModel\Comment\Collection
+     * @throws LocalizedException
+     */
+    private function buildAdminListCollection($status, $postId)
     {
         $status = strtolower(trim((string) $status));
         if ($status === '') {
@@ -77,12 +130,7 @@ class CommentRepository implements CommentRepositoryInterface
         if ($postId !== null && (int) $postId > 0) {
             $collection->addFieldToFilter('post_id', (int) $postId);
         }
-        $collection->setOrder('creation_time', 'DESC');
-        $items = [];
-        foreach ($collection as $comment) {
-            $items[] = $this->toDataModel($comment);
-        }
-        return $items;
+        return $collection;
     }
 
     public function submit(CommentInterface $comment)

@@ -16,7 +16,7 @@ class Tag extends Template
     /**
      * @var FormKey
      */
-    private $formKey;
+    protected $formKey;
 
     public function __construct(
         Context $context,

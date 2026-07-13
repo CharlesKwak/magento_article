@@ -92,6 +92,9 @@
                 <item name="blogarticle_tags" xsi:type="object">
                     ThirdParty\BlogArticle\Model\Sitemap\ItemProvider\Tags
                 </item>
+                <item name="blogarticle_archives" xsi:type="object">
+                    ThirdParty\BlogArticle\Model\Sitemap\ItemProvider\Archives
+                </item>
             </argument>
         </arguments>
     </type>

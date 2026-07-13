@@ -18,7 +18,7 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Tag\CollectionFactory as TagColle
 class Edit extends Template
 {
     private $postFactory;
-    private $formKey;
+    protected $formKey;
     private $dataPersistor;
     private $categoryCollectionFactory;
     private $tagCollectionFactory;

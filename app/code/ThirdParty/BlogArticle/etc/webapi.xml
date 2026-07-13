@@ -131,6 +131,10 @@
         <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="getListByPostId"/>
         <resources><resource ref="anonymous"/></resources>
     </route>
+    <route url="/V1/blogarticle/posts/:postId/comments/count" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="getListByPostIdTotalCount"/>
+        <resources><resource ref="anonymous"/></resources>
+    </route>
     <route url="/V1/blogarticle/comments" method="POST">
         <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="submit"/>
         <resources><resource ref="anonymous"/></resources>
@@ -139,6 +143,10 @@
     <!-- Comments (admin / integration) -->
     <route url="/V1/blogarticle/comments" method="GET">
         <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="getList"/>
+        <resources><resource ref="ThirdParty_BlogArticle::comments"/></resources>
+    </route>
+    <route url="/V1/blogarticle/comments/count" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="getListTotalCount"/>
         <resources><resource ref="ThirdParty_BlogArticle::comments"/></resources>
     </route>
     <route url="/V1/blogarticle/comments/:commentId" method="GET">

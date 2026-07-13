@@ -40,6 +40,14 @@ type BlogComment {
     creation_time: String
 }
 
+type BlogCommentList {
+    items: [BlogComment]!
+    total_count: Int
+    page_size: Int
+    current_page: Int
+    total_pages: Int
+}
+
 type BlogPost {
     post_id: Int
     title: String
@@ -62,8 +70,12 @@ type BlogPost {
     related_posts(limit: Int = 3): [BlogPost]
         @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\RelatedPosts")
         @doc(description: "Related posts. limit 1–20 (default 3). Nested related_posts are not expanded server-side beyond this call.")
-    comments: [BlogComment]
+    comments(pageSize: Int = 0, currentPage: Int = 1): [BlogComment]
         @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\PostComments")
+        @doc(description: "Approved comments. pageSize 0 returns all (legacy). When pageSize 1–100, results are paginated.")
+    commentsConnection(pageSize: Int = 20, currentPage: Int = 1): BlogCommentList
+        @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\PostCommentsConnection")
+        @doc(description: "Paginated approved comments with total_count (pageSize 1–100).")
 }
 
 type BlogPostList {

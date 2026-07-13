@@ -1,5 +1,27 @@
 # Release Notes
 
+## 2.30.0 - 2026-07-14
+
+### Added
+- **Sitemap** monthly archive URLs (`blog/archive/YYYY/MM`) via ItemProvider
+- **Comment pagination** on REST: optional `page` / `pageSize` for post comments and admin list
+- REST **counts**: `GET …/posts/:postId/comments/count`, `GET …/comments/count`
+- GraphQL **`comments(pageSize, currentPage)`** optional paging; **`commentsConnection`** with `total_count`
+
+### Changed
+- Module / package version **2.30.0**
+- Default GraphQL `comments` still returns all when `pageSize` is 0 (legacy)
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.30.0. Regenerate sitemap after deploy if needed.
+
+---
+
 ## 2.29.0 - 2026-07-14
 
 ### Added
@@ -19,7 +41,6 @@ php bin/magento setup:di:compile
 Adds nullable `description` on `thirdparty_blogarticle_tag`.
 
 ---
-
 ## 2.28.0 - 2026-07-14
 
 ### Added

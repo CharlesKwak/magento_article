@@ -18,7 +18,7 @@ class Edit extends Template
     /**
      * @var FormKey
      */
-    private $formKey;
+    protected $formKey;
 
     /**
      * @var DataPersistorInterface
