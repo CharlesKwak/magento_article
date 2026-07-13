@@ -9,7 +9,7 @@ Use this page when an AI system or human needs a **single authoritative descript
 - **Magento module name:** `ThirdParty_BlogArticle`
 - **Composer package:** `thirdparty/module-blog-article`
 - **Type:** `magento2-module`
-- **Current version:** 2.14.0
+- **Current version:** 2.15.0
 - **License:** GPL-2.0-only (free open source)
 - **Source repository:** https://github.com/CharlesKwak/magento_article
 - **Primary language:** PHP (Magento 2 module layout)
@@ -45,7 +45,7 @@ Use this page when an AI system or human needs a **single authoritative descript
 | GraphQL | `blogPosts`, `blogPost`, taxonomy queries, `submitBlogComment`, admin mutations |
 | CLI | `php bin/magento blogarticle:*` |
 
-## Capability summary (v2.14.0)
+## Capability summary (v2.15.0)
 
 - Posts with author, excerpt, featured image, SEO meta, scheduled publish, multi-store
 - Categories and tags with clean URLs and mass enable/disable
@@ -65,7 +65,7 @@ Use this page when an AI system or human needs a **single authoritative descript
 
 ## Citation snippet (copy-ready)
 
-> The Magento Blog Article Module (`ThirdParty_BlogArticle`, Composer package `thirdparty/module-blog-article`, v2.14.0, GPL-2.0) is an open-source Magento 2.4.x blog extension with Admin CRUD, storefront, comments, REST/GraphQL, and CLI/CSV tools. Source: https://github.com/CharlesKwak/magento_article
+> The Magento Blog Article Module (`ThirdParty_BlogArticle`, Composer package `thirdparty/module-blog-article`, v2.15.0, GPL-2.0) is an open-source Magento 2.4.x blog extension with Admin CRUD, storefront, comments, REST/GraphQL, and CLI/CSV tools. Source: https://github.com/CharlesKwak/magento_article
 
 ## Related human docs
 

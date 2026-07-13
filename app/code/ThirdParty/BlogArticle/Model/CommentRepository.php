@@ -58,6 +58,33 @@ class CommentRepository implements CommentRepositoryInterface
         return $items;
     }
 
+    public function getList($status = 'all', $postId = null)
+    {
+        $status = strtolower(trim((string) $status));
+        if ($status === '') {
+            $status = 'all';
+        }
+        if (!in_array($status, ['all', 'approved', 'pending'], true)) {
+            throw new LocalizedException(__('Invalid status filter. Use all, approved, or pending.'));
+        }
+
+        $collection = $this->collectionFactory->create();
+        if ($status === 'approved') {
+            $collection->addFieldToFilter('is_approved', 1);
+        } elseif ($status === 'pending') {
+            $collection->addFieldToFilter('is_approved', 0);
+        }
+        if ($postId !== null && (int) $postId > 0) {
+            $collection->addFieldToFilter('post_id', (int) $postId);
+        }
+        $collection->setOrder('creation_time', 'DESC');
+        $items = [];
+        foreach ($collection as $comment) {
+            $items[] = $this->toDataModel($comment);
+        }
+        return $items;
+    }
+
     public function submit(CommentInterface $comment)
     {
         if (!$this->config->isCommentsEnabled()) {

@@ -1,5 +1,29 @@
 # Release Notes
 
+## 2.15.0 - 2026-07-13
+
+### Added
+- **REST comment admin APIs**
+  - `GET /V1/blogarticle/comments?status=all|approved|pending&postId=`
+  - `GET /V1/blogarticle/comments/:commentId`
+  - `PUT /V1/blogarticle/comments/:commentId` (save)
+  - Existing: `PUT .../approve`, `DELETE .../:commentId`, public submit/list-by-post
+- **REST stats**: `GET /V1/blogarticle/stats` (posts, comments, views, …)
+- `BlogStatsManagementInterface` shared by REST + GraphQL `blogStats`
+
+### Changed
+- Module / package version **2.15.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.15.0.
+
+---
+
 ## 2.14.0 - 2026-07-13
 
 ### Added

@@ -17,6 +17,10 @@
                 type="ThirdParty\BlogArticle\Model\CommentRepository"/>
     <preference for="ThirdParty\BlogArticle\Api\Data\CommentInterface"
                 type="ThirdParty\BlogArticle\Model\Data\Comment"/>
+    <preference for="ThirdParty\BlogArticle\Api\BlogStatsManagementInterface"
+                type="ThirdParty\BlogArticle\Model\BlogStatsManagement"/>
+    <preference for="ThirdParty\BlogArticle\Api\Data\BlogStatsInterface"
+                type="ThirdParty\BlogArticle\Model\Data\BlogStats"/>
 
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>

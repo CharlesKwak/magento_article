@@ -23,6 +23,16 @@ interface CommentRepositoryInterface
     public function getListByPostId($postId);
 
     /**
+     * Admin list with optional status filter.
+     *
+     * @param string $status all|approved|pending
+     * @param int|null $postId Optional post filter
+     * @return \ThirdParty\BlogArticle\Api\Data\CommentInterface[]
+     * @throws LocalizedException
+     */
+    public function getList($status = 'all', $postId = null);
+
+    /**
      * Submit a new comment (storefront). May require moderation.
      *
      * @param \ThirdParty\BlogArticle\Api\Data\CommentInterface $comment

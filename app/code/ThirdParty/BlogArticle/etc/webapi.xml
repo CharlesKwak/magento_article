@@ -126,7 +126,7 @@
         <resources><resource ref="ThirdParty_BlogArticle::tags"/></resources>
     </route>
 
-    <!-- Comments -->
+    <!-- Comments (public read per post + submit) -->
     <route url="/V1/blogarticle/posts/:postId/comments" method="GET">
         <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="getListByPostId"/>
         <resources><resource ref="anonymous"/></resources>
@@ -134,6 +134,23 @@
     <route url="/V1/blogarticle/comments" method="POST">
         <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="submit"/>
         <resources><resource ref="anonymous"/></resources>
+    </route>
+
+    <!-- Comments (admin / integration) -->
+    <route url="/V1/blogarticle/comments" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="getList"/>
+        <resources><resource ref="ThirdParty_BlogArticle::comments"/></resources>
+    </route>
+    <route url="/V1/blogarticle/comments/:commentId" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="getById"/>
+        <resources><resource ref="ThirdParty_BlogArticle::comments"/></resources>
+    </route>
+    <route url="/V1/blogarticle/comments/:commentId" method="PUT">
+        <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="save"/>
+        <resources><resource ref="ThirdParty_BlogArticle::comments"/></resources>
+        <data>
+            <parameter name="comment.comment_id" force="true">%commentId%</parameter>
+        </data>
     </route>
     <route url="/V1/blogarticle/comments/:commentId/approve" method="PUT">
         <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="approve"/>
@@ -143,6 +160,13 @@
         <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="deleteById"/>
         <resources><resource ref="ThirdParty_BlogArticle::comments"/></resources>
     </route>
+
+    <!-- Stats (admin / integration) -->
+    <route url="/V1/blogarticle/stats" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\BlogStatsManagementInterface" method="get"/>
+        <resources><resource ref="ThirdParty_BlogArticle::posts"/></resources>
+    </route>
 </routes>
+
 
 
