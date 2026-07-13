@@ -96,6 +96,13 @@ class TagRepository implements TagRepositoryInterface
 
         $model->setName($name);
         $model->setUrlKey($urlKey);
+        $description = $tag->getDescription();
+        $model->setData(
+            'description',
+            $description !== null && trim((string) $description) !== ''
+                ? trim((string) $description)
+                : null
+        );
         $model->setIsActive((int) $isActive ? 1 : 0);
 
         try {
@@ -130,6 +137,8 @@ class TagRepository implements TagRepositoryInterface
         $data->setTagId((int) $tag->getId());
         $data->setName((string) $tag->getName());
         $data->setUrlKey((string) $tag->getUrlKey());
+        $desc = $tag->getData('description');
+        $data->setDescription($desc !== null && (string) $desc !== '' ? (string) $desc : null);
         $data->setIsActive((int) $tag->getIsActive());
         $data->setCreationTime((string) $tag->getCreationTime());
         $data->setUpdateTime((string) $tag->getUpdateTime());

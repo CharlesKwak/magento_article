@@ -62,6 +62,7 @@ class Save extends Action
 
         $name = isset($data['name']) ? trim((string) $data['name']) : '';
         $urlKeyInput = isset($data['url_key']) ? trim((string) $data['url_key']) : '';
+        $description = isset($data['description']) ? trim((string) $data['description']) : '';
         $isActive = !empty($data['is_active']) ? 1 : 0;
 
         if ($name === '') {
@@ -78,6 +79,7 @@ class Save extends Action
 
         $tag->setName($name);
         $tag->setUrlKey($urlKey);
+        $tag->setData('description', $description !== '' ? $description : null);
         $tag->setIsActive($isActive);
 
         try {

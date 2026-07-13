@@ -23,6 +23,7 @@ class Tags implements ResolverInterface
                 'tag_id' => $tag->getTagId(),
                 'name' => $tag->getName(),
                 'url_key' => $tag->getUrlKey(),
+                'description' => $tag->getDescription(),
                 'is_active' => $tag->getIsActive(),
                 'creation_time' => $tag->getCreationTime(),
                 'update_time' => $tag->getUpdateTime(),

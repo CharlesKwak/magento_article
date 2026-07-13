@@ -166,6 +166,12 @@
         <service class="ThirdParty\BlogArticle\Api\BlogStatsManagementInterface" method="get"/>
         <resources><resource ref="ThirdParty_BlogArticle::posts"/></resources>
     </route>
+
+    <!-- Public monthly archives -->
+    <route url="/V1/blogarticle/archives" method="GET">
+        <service class="ThirdParty\BlogArticle\Api\BlogArchiveManagementInterface" method="getList"/>
+        <resources><resource ref="anonymous"/></resources>
+    </route>
 </routes>
 
 

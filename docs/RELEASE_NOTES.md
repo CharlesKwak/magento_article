@@ -1,5 +1,25 @@
 # Release Notes
 
+## 2.29.0 - 2026-07-14
+
+### Added
+- **Tag description** (DB column + Admin edit + storefront tag list intro; GraphQL `BlogTag.description`)
+- **REST** `GET /V1/blogarticle/archives?limit=24` (public monthly archive buckets)
+- Filter intro helper `getFilterDescription()` (category or tag)
+
+### Changed
+- Module / package version **2.29.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+Adds nullable `description` on `thirdparty_blogarticle_tag`.
+
+---
+
 ## 2.28.0 - 2026-07-14
 
 ### Added
@@ -22,7 +42,6 @@ php bin/magento setup:di:compile
 Adds nullable `description` on `thirdparty_blogarticle_category`.
 
 ---
-
 ## 2.27.0 - 2026-07-14
 
 ### Added

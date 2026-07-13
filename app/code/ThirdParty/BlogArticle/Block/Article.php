@@ -469,6 +469,34 @@ class Article extends Template implements IdentityInterface
         return trim((string) $category->getData('description'));
     }
 
+    /**
+     * Optional tag description when the list is filtered by tag.
+     */
+    public function getTagDescription(): string
+    {
+        $tagId = $this->getTagIdFilter();
+        if (!$tagId) {
+            return '';
+        }
+        $tag = $this->tagFactory->create()->load($tagId);
+        if (!$tag->getId() || !(int) $tag->getIsActive()) {
+            return '';
+        }
+        return trim((string) $tag->getData('description'));
+    }
+
+    /**
+     * Active filter intro (category or tag description).
+     */
+    public function getFilterDescription(): string
+    {
+        $cat = $this->getCategoryDescription();
+        if ($cat !== '') {
+            return $cat;
+        }
+        return $this->getTagDescription();
+    }
+
     public function getFilterHeading(): string
     {
         $catKey = $this->getCategoryKeyFilter();

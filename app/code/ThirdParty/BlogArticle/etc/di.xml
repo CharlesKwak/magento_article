@@ -21,6 +21,10 @@
                 type="ThirdParty\BlogArticle\Model\BlogStatsManagement"/>
     <preference for="ThirdParty\BlogArticle\Api\Data\BlogStatsInterface"
                 type="ThirdParty\BlogArticle\Model\Data\BlogStats"/>
+    <preference for="ThirdParty\BlogArticle\Api\BlogArchiveManagementInterface"
+                type="ThirdParty\BlogArticle\Model\BlogArchiveManagement"/>
+    <preference for="ThirdParty\BlogArticle\Api\Data\BlogArchiveMonthInterface"
+                type="ThirdParty\BlogArticle\Model\Data\BlogArchiveMonth"/>
 
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>

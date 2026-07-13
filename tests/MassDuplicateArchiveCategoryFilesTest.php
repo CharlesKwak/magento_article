@@ -31,8 +31,8 @@ class MassDuplicateArchiveCategoryFilesTest extends TestCase
         $this->assertStringContainsString('getCategoryDescription', $article);
 
         $tpl = file_get_contents($root . '/view/frontend/templates/article.phtml');
-        $this->assertStringContainsString('getCategoryDescription', $tpl);
-        $this->assertStringContainsString('blog-category-description', $tpl);
+        $this->assertStringContainsString('getFilterDescription', $tpl);
+        $this->assertStringContainsString('blog-filter-description', $tpl);
 
         $catEdit = file_get_contents($root . '/view/adminhtml/templates/category/edit.phtml');
         $this->assertStringContainsString('name="description"', $catEdit);
@@ -55,9 +55,9 @@ class MassDuplicateArchiveCategoryFilesTest extends TestCase
         $this->assertStringContainsString('applyYearMonth', $repo);
 
         $module = file_get_contents($root . '/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.28.0"', $module);
+        $this->assertStringContainsString('setup_version="2.29.0"', $module);
 
         $composer = file_get_contents(dirname(__DIR__) . '/composer.json');
-        $this->assertStringContainsString('"version": "2.28.0"', $composer);
+        $this->assertStringContainsString('"version": "2.29.0"', $composer);
     }
 }

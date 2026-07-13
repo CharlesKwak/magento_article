@@ -11,10 +11,10 @@ $searchQuery = $block->getSearchQuery();
             <?= $block->escapeHtml($block->getFilterHeading()) ?>
         </h1>
     <?php endif; ?>
-    <?php if ($block->getCategoryDescription() !== ''): ?>
-        <div class="blog-category-description" style="margin-bottom:1rem;">
+    <?php if ($block->getFilterDescription() !== ''): ?>
+        <div class="blog-filter-description" style="margin-bottom:1rem;">
             <?= /* @noEscape */ $block->escapeHtml(
-                $block->getCategoryDescription(),
+                $block->getFilterDescription(),
                 ['p', 'br', 'em', 'strong', 'b', 'i', 'ul', 'ol', 'li', 'a']
             ) ?>
         </div>
