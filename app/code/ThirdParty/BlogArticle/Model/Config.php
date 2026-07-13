@@ -20,6 +20,8 @@ class Config
     public const XML_PATH_SEO_FAQ_JSON = 'blogarticle/seo/list_faq_schema_json';
     public const XML_PATH_READING_MODE = 'blogarticle/display/reading_mode_link';
     public const XML_PATH_LAZY_LOAD = 'blogarticle/display/lazy_load_images';
+    public const XML_PATH_TOC_ENABLED = 'blogarticle/display/toc_enabled';
+    public const XML_PATH_TOC_MIN_HEADINGS = 'blogarticle/display/toc_min_headings';
     public const XML_PATH_SIDEBAR_ENABLED = 'blogarticle/sidebar/enabled';
     public const XML_PATH_SIDEBAR_RECENT_COUNT = 'blogarticle/sidebar/recent_count';
     public const XML_PATH_SIDEBAR_SHOW_SEARCH = 'blogarticle/sidebar/show_search';
@@ -134,6 +136,31 @@ class Config
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
+    }
+
+    public function isTocEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_TOC_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Minimum heading count before the table of contents is shown (1–20).
+     */
+    public function getTocMinHeadings(?int $storeId = null): int
+    {
+        $n = (int) $this->scopeConfig->getValue(
+            self::XML_PATH_TOC_MIN_HEADINGS,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        if ($n < 1) {
+            return 2;
+        }
+        return min(20, $n);
     }
 
     public function isAmpHtmlEnabled(?int $storeId = null): bool

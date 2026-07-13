@@ -1,0 +1,49 @@
+/* Table of contents on post detail */
+.blog-toc {
+    margin: 1.25rem 0 1.5rem;
+    padding: 1rem 1.15rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background: #fafafa;
+}
+
+.blog-toc__title {
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+}
+
+.blog-toc__list {
+    margin: 0;
+    padding-left: 1.25rem;
+    list-style: decimal;
+}
+
+.blog-toc__item {
+    margin: 0.25rem 0;
+    line-height: 1.4;
+}
+
+.blog-toc__item--h3 {
+    margin-left: 0.75rem;
+    list-style-type: lower-alpha;
+}
+
+.blog-toc__item--h4 {
+    margin-left: 1.5rem;
+    list-style-type: lower-roman;
+}
+
+.blog-toc a {
+    text-decoration: none;
+}
+
+.blog-toc a:hover {
+    text-decoration: underline;
+}
+
+/* Anchor offset when sticky headers exist */
+.blog-post .content h2[id],
+.blog-post .content h3[id],
+.blog-post .content h4[id] {
+    scroll-margin-top: 5rem;
+}

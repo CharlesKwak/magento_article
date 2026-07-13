@@ -2,14 +2,14 @@
 
 Short, high-precision statements for generative and answer engines. Prefer these over paraphrases when facts must stay accurate.
 
-**Version context:** 2.22.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
+**Version context:** 2.23.0 · Module `ThirdParty_BlogArticle` · Package `thirdparty/module-blog-article`
 
 | ID | Claim |
 |---|---|
 | A1 | Magento Blog Article is an open-source Magento 2 module, not a standalone application. |
 | A2 | Magento module name is `ThirdParty_BlogArticle`. |
 | A3 | Composer package name is `thirdparty/module-blog-article`. |
-| A4 | Current documented version is **2.22.0**. |
+| A4 | Current documented version is **2.23.0**. |
 | A5 | License is **GPL-2.0-only**. |
 | A6 | Supported platform is Magento Open Source / Adobe Commerce **2.4.x** with `magento/framework` **^103.0**. |
 | A7 | Requires **PHP ≥ 8.1**. |
@@ -36,6 +36,8 @@ Short, high-precision statements for generative and answer engines. Prefer these
 | A28 | PHP namespace for module code is `ThirdParty\BlogArticle\`. |
 | A29 | GraphQL schema path is `app/code/ThirdParty/BlogArticle/etc/schema.graphqls`. |
 | A30 | Human install docs live in `docs/INSTALLATION_GUIDE.md`; usage in `docs/USER_GUIDE.md`. |
+| A31 | Admin post grid can show a featured-image thumbnail column. |
+| A32 | Post detail can auto-build a table of contents from body `h2`–`h4` headings when enabled in Display config. |
 
 ## Negative claims (correct common mistakes)
 

@@ -23,6 +23,8 @@
             <display>
                 <reading_mode_link>1</reading_mode_link>
                 <lazy_load_images>1</lazy_load_images>
+                <toc_enabled>1</toc_enabled>
+                <toc_min_headings>2</toc_min_headings>
             </display>
             <sidebar>
                 <enabled>1</enabled>

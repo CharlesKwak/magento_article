@@ -47,6 +47,10 @@ class View extends Template implements IdentityInterface
     private $tagNameCache = [];
     private $tagMetaCache = [];
     private $hreflangBuilder;
+    /** @var array<int, array{id:string,level:int,text:string}>|null */
+    private $tocItems;
+    /** @var string|null prepared body HTML cache */
+    private $preparedContentHtml;
 
     public function __construct(
         Context $context,
@@ -507,31 +511,144 @@ class View extends Template implements IdentityInterface
         ];
     }
 
+    public function isTocEnabled(): bool
+    {
+        return $this->config->isTocEnabled();
+    }
+
     /**
-     * Escaped post HTML with optional lazy-loading applied to <img> tags.
+     * Table of contents built from h2–h4 in the post body (empty when disabled or below threshold).
+     *
+     * @return array<int, array{id:string,level:int,text:string}>
+     */
+    public function getTocItems(): array
+    {
+        $this->getPreparedContentHtml();
+        if (!$this->isTocEnabled() || !is_array($this->tocItems)) {
+            return [];
+        }
+        $min = $this->config->getTocMinHeadings();
+        if (count($this->tocItems) < $min) {
+            return [];
+        }
+        return $this->tocItems;
+    }
+
+    /**
+     * Escaped post HTML with heading IDs (for TOC anchors) and optional lazy-load on &lt;img&gt;.
      */
     public function getPreparedContentHtml(): string
     {
+        if ($this->preparedContentHtml !== null) {
+            return $this->preparedContentHtml;
+        }
+
         $post = $this->getPost();
         if (!$post) {
+            $this->preparedContentHtml = '';
+            $this->tocItems = [];
             return '';
         }
+
         $html = $this->escapeHtml((string) $post->getContent(), $this->getAllowedContentTags());
-        if (!$this->isLazyLoadImagesEnabled() || $html === '') {
-            return $html;
+        $this->tocItems = [];
+
+        if ($html !== '') {
+            $html = $this->injectHeadingIdsAndBuildToc($html);
         }
-        return (string) preg_replace_callback(
-            '/<img\b([^>]*?)>/i',
-            static function (array $matches): string {
-                $attrs = $matches[1];
-                if (preg_match('/\bloading\s*=/i', $attrs)) {
-                    return '<img' . $attrs . '>';
+
+        if ($this->isLazyLoadImagesEnabled() && $html !== '') {
+            $html = (string) preg_replace_callback(
+                '/<img\b([^>]*?)>/i',
+                static function (array $matches): string {
+                    $attrs = $matches[1];
+                    if (preg_match('/\bloading\s*=/i', $attrs)) {
+                        return '<img' . $attrs . '>';
+                    }
+                    $extra = ' loading="lazy" decoding="async"';
+                    return '<img' . $extra . $attrs . '>';
+                },
+                $html
+            );
+        }
+
+        $this->preparedContentHtml = $html;
+        return $html;
+    }
+
+    /**
+     * Add stable id attributes to h2–h4 and collect TOC entries.
+     */
+    private function injectHeadingIdsAndBuildToc(string $html): string
+    {
+        $used = [];
+        $items = [];
+        $result = (string) preg_replace_callback(
+            '/<(h([2-4]))(\b[^>]*)>(.*?)<\/\1>/is',
+            function (array $m) use (&$used, &$items): string {
+                $tag = strtolower($m[1]);
+                $level = (int) $m[2];
+                $attrs = $m[3];
+                $inner = $m[4];
+                $text = trim(html_entity_decode(strip_tags($inner), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+                if ($text === '') {
+                    return $m[0];
                 }
-                $extra = ' loading="lazy" decoding="async"';
-                return '<img' . $extra . $attrs . '>';
+
+                $id = '';
+                if (preg_match('/\bid\s*=\s*(["\'])([^"\']+)\1/i', $attrs, $idMatch)) {
+                    $id = $this->sanitizeHeadingId($idMatch[2]);
+                }
+                if ($id === '') {
+                    $id = $this->slugifyHeading($text);
+                }
+                if ($id === '') {
+                    $id = 'section';
+                }
+                $base = $id;
+                $n = 2;
+                while (isset($used[$id])) {
+                    $id = $base . '-' . $n;
+                    $n++;
+                }
+                $used[$id] = true;
+
+                $items[] = [
+                    'id' => $id,
+                    'level' => $level,
+                    'text' => $text,
+                ];
+
+                // Strip existing id attribute then inject sanitized one.
+                $attrs = preg_replace('/\s*\bid\s*=\s*(["\'])[^"\']*\1/i', '', $attrs) ?? $attrs;
+                return '<' . $tag . $attrs . ' id="' . $this->escapeHtmlAttr($id) . '">' . $inner . '</' . $tag . '>';
             },
             $html
         );
+
+        $this->tocItems = $items;
+        return $result !== '' ? $result : $html;
+    }
+
+    private function sanitizeHeadingId(string $id): string
+    {
+        $id = strtolower(trim($id));
+        $id = preg_replace('/[^a-z0-9\-_]+/', '-', $id) ?? '';
+        $id = trim($id, '-_');
+        return $id;
+    }
+
+    private function slugifyHeading(string $text): string
+    {
+        $text = strtolower($text);
+        if (function_exists('iconv')) {
+            $trans = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $text);
+            if (is_string($trans) && $trans !== '') {
+                $text = $trans;
+            }
+        }
+        $text = preg_replace('/[^a-z0-9]+/', '-', $text) ?? '';
+        return trim($text, '-');
     }
 
     public function getFeaturedImageUrl(): string

@@ -101,6 +101,21 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Adds loading="lazy" and decoding="async" to featured images on list and post pages.</comment>
                 </field>
+                <field id="toc_enabled" translate="label comment" type="select" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Table of Contents</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>On post detail, auto-build a TOC from h2–h4 headings in the body (IDs added for anchor links).</comment>
+                </field>
+                <field id="toc_min_headings" translate="label comment" type="text" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Minimum Headings for TOC</label>
+                    <comment>TOC is shown only when the body has at least this many h2–h4 headings (1–20). Default: 2.</comment>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                    <depends>
+                        <field id="toc_enabled">1</field>
+                    </depends>
+                </field>
             </group>
 
             <group id="sidebar" translate="label" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1">

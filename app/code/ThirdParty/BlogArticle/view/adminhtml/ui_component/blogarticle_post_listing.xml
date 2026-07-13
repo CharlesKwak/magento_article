@@ -85,6 +85,15 @@
                 <sorting>asc</sorting>
             </settings>
         </column>
+        <column name="featured_image"
+                class="ThirdParty\BlogArticle\Ui\Component\Listing\Column\FeaturedImage">
+            <settings>
+                <label translate="true">Image</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <sortable>false</sortable>
+                <filter>false</filter>
+            </settings>
+        </column>
         <column name="title">
             <settings>
                 <filter>text</filter>

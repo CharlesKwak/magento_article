@@ -1,5 +1,28 @@
 # Release Notes
 
+## 2.23.0 - 2026-07-14
+
+### Added
+- **Admin post grid** featured **Image** thumbnail column (`FeaturedImage` UI column)
+- **Storefront table of contents** on post detail from body `h2`–`h4` headings (auto IDs + anchor links)
+- Config **Stores → Configuration → Blog Article → Display**: Show Table of Contents, Minimum Headings for TOC
+- TOC stylesheet `view/frontend/web/css/blogarticle-toc.css`
+
+### Changed
+- Module / package version **2.23.0**
+- `getPreparedContentHtml()` injects heading `id` attributes used by the TOC
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:static-content:deploy -f
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.23.0.
+
+---
+
 ## 2.22.0 - 2026-07-14
 
 ### Added

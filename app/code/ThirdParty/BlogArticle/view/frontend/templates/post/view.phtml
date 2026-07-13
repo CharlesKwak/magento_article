@@ -89,6 +89,21 @@ $related = $block->getRelatedPosts();
                     />
                 </p>
             <?php endif; ?>
+            <?php $tocItems = $block->getTocItems(); ?>
+            <?php if ($tocItems): ?>
+                <nav class="blog-toc" aria-label="<?= $block->escapeHtmlAttr(__('Table of contents')) ?>">
+                    <p class="blog-toc__title"><?= $block->escapeHtml(__('On this page')) ?></p>
+                    <ol class="blog-toc__list">
+                        <?php foreach ($tocItems as $toc): ?>
+                            <li class="blog-toc__item blog-toc__item--h<?= (int) $toc['level'] ?>">
+                                <a href="#<?= $block->escapeHtmlAttr($toc['id']) ?>">
+                                    <?= $block->escapeHtml($toc['text']) ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ol>
+                </nav>
+            <?php endif; ?>
             <div class="content">
                 <?= /* @noEscape */ $block->getPreparedContentHtml() ?>
             </div>

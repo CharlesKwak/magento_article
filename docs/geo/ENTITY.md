@@ -9,7 +9,7 @@ Use this page when an AI system or human needs a **single authoritative descript
 - **Magento module name:** `ThirdParty_BlogArticle`
 - **Composer package:** `thirdparty/module-blog-article`
 - **Type:** `magento2-module`
-- **Current version:** 2.22.0
+- **Current version:** 2.23.0
 - **License:** GPL-2.0-only (free open source)
 - **Source repository:** https://github.com/CharlesKwak/magento_article
 - **Primary language:** PHP (Magento 2 module layout)
@@ -45,14 +45,14 @@ Use this page when an AI system or human needs a **single authoritative descript
 | GraphQL | `blogPosts`, `blogPost`, taxonomy queries, `submitBlogComment`, admin mutations |
 | CLI | `php bin/magento blogarticle:*` |
 
-## Capability summary (v2.22.0)
+## Capability summary (v2.23.0)
 
 - Posts with author, excerpt, featured image, SEO meta, scheduled publish, multi-store
 - Categories and tags with clean URLs and mass enable/disable
 - Comments: moderation, spam guard, email notify, one-level replies, optional reCAPTCHA
-- Storefront UX: breadcrumbs, reading time, share links, prev/next, RSS, sitemap items
+- Storefront UX: breadcrumbs, reading time, share links, prev/next, auto TOC (h2–h4), RSS, sitemap items
 - SEO output: Open Graph, Twitter cards, JSON-LD `Article`
-- Admin: UI grids, WYSIWYG, Media Gallery featured image
+- Admin: UI grids (featured image thumbnail, views), WYSIWYG, Media Gallery featured image
 - Integration: REST + GraphQL read/write surfaces
 - Ops: CLI list/show/create/delete/status + CSV import/export for posts; CSV export for comments/categories/tags
 
@@ -65,7 +65,7 @@ Use this page when an AI system or human needs a **single authoritative descript
 
 ## Citation snippet (copy-ready)
 
-> The Magento Blog Article Module (`ThirdParty_BlogArticle`, Composer package `thirdparty/module-blog-article`, v2.22.0, GPL-2.0) is an open-source Magento 2.4.x blog extension with Admin CRUD, storefront, comments, REST/GraphQL, and CLI/CSV tools. Source: https://github.com/CharlesKwak/magento_article
+> The Magento Blog Article Module (`ThirdParty_BlogArticle`, Composer package `thirdparty/module-blog-article`, v2.23.0, GPL-2.0) is an open-source Magento 2.4.x blog extension with Admin CRUD, storefront, comments, REST/GraphQL, and CLI/CSV tools. Source: https://github.com/CharlesKwak/magento_article
 
 ## Related human docs
 
