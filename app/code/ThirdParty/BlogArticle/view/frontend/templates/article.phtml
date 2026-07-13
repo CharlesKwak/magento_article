@@ -11,6 +11,14 @@ $searchQuery = $block->getSearchQuery();
             <?= $block->escapeHtml($block->getFilterHeading()) ?>
         </h1>
     <?php endif; ?>
+    <?php if ($block->getCategoryDescription() !== ''): ?>
+        <div class="blog-category-description" style="margin-bottom:1rem;">
+            <?= /* @noEscape */ $block->escapeHtml(
+                $block->getCategoryDescription(),
+                ['p', 'br', 'em', 'strong', 'b', 'i', 'ul', 'ol', 'li', 'a']
+            ) ?>
+        </div>
+    <?php endif; ?>
     <p class="blog-rss" style="margin-bottom:0.75rem;">
         <a href="<?= $block->escapeUrl($block->getRssUrl()) ?>" rel="alternate" type="application/rss+xml">
             <?= $block->escapeHtml(__('RSS feed')) ?>

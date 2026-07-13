@@ -30,18 +30,38 @@ interface PostRepositoryInterface
      * @param int|null $categoryId
      * @param int|null $tagId
      * @param string|null $author Author display name or URL slug
+     * @param int|null $year Archive year (published_at / creation_time)
+     * @param int|null $month Archive month 1–12
      * @return \ThirdParty\BlogArticle\Api\Data\PostInterface[]
      */
-    public function getList($page = 1, $pageSize = 10, $search = null, $categoryId = null, $tagId = null, $author = null);
+    public function getList(
+        $page = 1,
+        $pageSize = 10,
+        $search = null,
+        $categoryId = null,
+        $tagId = null,
+        $author = null,
+        $year = null,
+        $month = null
+    );
 
     /**
      * @param string|null $search
      * @param int|null $categoryId
      * @param int|null $tagId
      * @param string|null $author Author display name or URL slug
+     * @param int|null $year Archive year
+     * @param int|null $month Archive month 1–12
      * @return int
      */
-    public function getListTotalCount($search = null, $categoryId = null, $tagId = null, $author = null);
+    public function getListTotalCount(
+        $search = null,
+        $categoryId = null,
+        $tagId = null,
+        $author = null,
+        $year = null,
+        $month = null
+    );
 
     /**
      * @param \ThirdParty\BlogArticle\Api\Data\PostInterface $post

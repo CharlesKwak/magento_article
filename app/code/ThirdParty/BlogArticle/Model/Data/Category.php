@@ -36,6 +36,16 @@ class Category extends DataObject implements CategoryInterface
         return $this->setData(self::URL_KEY, $urlKey);
     }
 
+    public function getDescription()
+    {
+        return $this->getData(self::DESCRIPTION);
+    }
+
+    public function setDescription($description)
+    {
+        return $this->setData(self::DESCRIPTION, $description);
+    }
+
     public function getIsActive()
     {
         return $this->getData(self::IS_ACTIVE) !== null ? (int) $this->getData(self::IS_ACTIVE) : null;

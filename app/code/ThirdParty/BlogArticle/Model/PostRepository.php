@@ -68,13 +68,23 @@ class PostRepository implements PostRepositoryInterface
         return $this->toDataModel($post);
     }
 
-    public function getList($page = 1, $pageSize = 10, $search = null, $categoryId = null, $tagId = null, $author = null)
-    {
+    public function getList(
+        $page = 1,
+        $pageSize = 10,
+        $search = null,
+        $categoryId = null,
+        $tagId = null,
+        $author = null,
+        $year = null,
+        $month = null
+    ) {
         $page = max(1, (int) $page);
         $pageSize = max(1, min(100, (int) $pageSize));
         $categoryId = $categoryId !== null && $categoryId !== '' ? (int) $categoryId : null;
         $tagId = $tagId !== null && $tagId !== '' ? (int) $tagId : null;
         $author = $author !== null && $author !== '' ? (string) $author : null;
+        $year = $year !== null && $year !== '' ? (int) $year : null;
+        $month = $month !== null && $month !== '' ? (int) $month : null;
 
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
@@ -84,6 +94,7 @@ class PostRepository implements PostRepositoryInterface
         $this->postFilter->applyCategoryId($collection, $categoryId);
         $this->postFilter->applyTagId($collection, $tagId);
         $this->postFilter->applyAuthorKey($collection, $author);
+        $this->postFilter->applyYearMonth($collection, $year, $month);
         $this->postFilter->applyDefaultSort($collection);
         $collection->setPageSize($pageSize);
         $collection->setCurPage($page);
@@ -95,11 +106,19 @@ class PostRepository implements PostRepositoryInterface
         return $items;
     }
 
-    public function getListTotalCount($search = null, $categoryId = null, $tagId = null, $author = null)
-    {
+    public function getListTotalCount(
+        $search = null,
+        $categoryId = null,
+        $tagId = null,
+        $author = null,
+        $year = null,
+        $month = null
+    ) {
         $categoryId = $categoryId !== null && $categoryId !== '' ? (int) $categoryId : null;
         $tagId = $tagId !== null && $tagId !== '' ? (int) $tagId : null;
         $author = $author !== null && $author !== '' ? (string) $author : null;
+        $year = $year !== null && $year !== '' ? (int) $year : null;
+        $month = $month !== null && $month !== '' ? (int) $month : null;
         $collection = $this->collectionFactory->create();
         $this->postFilter->applyActiveOnly($collection);
         $this->postFilter->applyPublishedOnly($collection);
@@ -108,6 +127,7 @@ class PostRepository implements PostRepositoryInterface
         $this->postFilter->applyCategoryId($collection, $categoryId);
         $this->postFilter->applyTagId($collection, $tagId);
         $this->postFilter->applyAuthorKey($collection, $author);
+        $this->postFilter->applyYearMonth($collection, $year, $month);
         return (int) $collection->getSize();
     }
 

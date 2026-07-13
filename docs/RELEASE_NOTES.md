@@ -1,5 +1,28 @@
 # Release Notes
 
+## 2.28.0 - 2026-07-14
+
+### Added
+- **Admin mass Duplicate** for posts (max 20 per run) → disabled drafts
+- **Category description** field (DB column + Admin edit + storefront category list intro)
+- GraphQL **`blogArchives(limit)`** monthly buckets
+- GraphQL / repository **`year` / `month`** filters on `blogPosts` / `getList`
+
+### Changed
+- Module / package version **2.28.0**
+- Category GraphQL type includes `description`
+- Taxonomy CSV export includes `description` column (empty for tags)
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+Adds nullable `description` on `thirdparty_blogarticle_category`.
+
+---
+
 ## 2.27.0 - 2026-07-14
 
 ### Added
@@ -19,7 +42,6 @@ php bin/magento setup:di:compile
 No new DB columns in 2.27.0.
 
 ---
-
 ## 2.26.0 - 2026-07-14
 
 ### Added

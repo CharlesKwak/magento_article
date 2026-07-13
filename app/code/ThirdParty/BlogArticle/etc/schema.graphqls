@@ -4,9 +4,19 @@ type BlogCategory {
     category_id: Int
     name: String
     url_key: String
+    description: String
     is_active: Int
     creation_time: String
     update_time: String
+}
+
+type BlogArchiveMonth {
+    year: Int
+    month: Int
+    count: Int
+    label: String
+    url_path: String
+    url: String
 }
 
 type BlogTag {
@@ -98,9 +108,11 @@ type Query {
         categoryId: Int
         tagId: Int
         author: String
+        year: Int
+        month: Int
     ): BlogPostList
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Posts")
-    @doc(description: "List posts. Optional author is display name or URL slug (spaces as hyphens).")
+    @doc(description: "List posts. Optional author is display name or URL slug (spaces as hyphens). year/month filter by publish date.")
 
     blogPost(id: Int, url_key: String): BlogPost
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Post")
@@ -116,6 +128,10 @@ type Query {
 
     blogTag(id: Int, url_key: String): BlogTag
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Tag")
+
+    blogArchives(limit: Int = 24): [BlogArchiveMonth]!
+    @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\Archives")
+    @doc(description: "Monthly archive buckets with post counts (limit 1–120).")
 
     blogStats: BlogStats
     @resolver(class: "ThirdParty\\BlogArticle\\Model\\Resolver\\BlogStats")

@@ -453,6 +453,22 @@ class Article extends Template implements IdentityInterface
     /**
      * Heading when a category or tag filter is active.
      */
+    /**
+     * Optional category description when the list is filtered by category.
+     */
+    public function getCategoryDescription(): string
+    {
+        $categoryId = $this->getCategoryIdFilter();
+        if (!$categoryId) {
+            return '';
+        }
+        $category = $this->categoryFactory->create()->load($categoryId);
+        if (!$category->getId() || !(int) $category->getIsActive()) {
+            return '';
+        }
+        return trim((string) $category->getData('description'));
+    }
+
     public function getFilterHeading(): string
     {
         $catKey = $this->getCategoryKeyFilter();

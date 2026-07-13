@@ -34,6 +34,13 @@ $isActive = $category->getId() ? (int) $category->getIsActive() : 1;
                    value="<?= $block->escapeHtmlAttr((string) $category->getUrlKey()) ?>"/>
         </div>
         <div style="margin-bottom:1rem;">
+            <label for="description"><?= $block->escapeHtml(__('Description')) ?></label><br/>
+            <textarea id="description" name="description" rows="5"
+                      style="width:100%;max-width:640px;"
+                      placeholder="<?= $block->escapeHtmlAttr(__('Optional intro text on the category list page')) ?>"
+            ><?= $block->escapeHtml((string) $category->getData('description')) ?></textarea>
+        </div>
+        <div style="margin-bottom:1rem;">
             <label for="is_active"><?= $block->escapeHtml(__('Status')) ?></label><br/>
             <select id="is_active" name="is_active">
                 <option value="1" <?= $isActive ? 'selected="selected"' : '' ?>><?= $block->escapeHtml(__('Enabled')) ?></option>

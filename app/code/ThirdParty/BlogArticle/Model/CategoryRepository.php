@@ -134,6 +134,13 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $model->setName($name);
         $model->setUrlKey($urlKey);
+        $description = $category->getDescription();
+        $model->setData(
+            'description',
+            $description !== null && trim((string) $description) !== ''
+                ? trim((string) $description)
+                : null
+        );
         $model->setIsActive((int) $isActive ? 1 : 0);
 
         try {
@@ -182,6 +189,8 @@ class CategoryRepository implements CategoryRepositoryInterface
         $data->setCategoryId((int) $category->getId());
         $data->setName((string) $category->getName());
         $data->setUrlKey((string) $category->getUrlKey());
+        $desc = $category->getData('description');
+        $data->setDescription($desc !== null && (string) $desc !== '' ? (string) $desc : null);
         $data->setIsActive((int) $category->getIsActive());
         $data->setCreationTime((string) $category->getCreationTime());
         $data->setUpdateTime((string) $category->getUpdateTime());

@@ -31,6 +31,15 @@ class Posts implements ResolverInterface
         if ($author === '') {
             $author = null;
         }
+        $year = isset($args['year']) ? (int) $args['year'] : null;
+        $month = isset($args['month']) ? (int) $args['month'] : null;
+        if ($year !== null && ($year < 1970 || $year > 2100)) {
+            $year = null;
+            $month = null;
+        }
+        if ($month !== null && ($month < 1 || $month > 12)) {
+            $month = null;
+        }
 
         $pageSize = max(1, min(100, $pageSize));
         $currentPage = max(1, $currentPage);
@@ -41,9 +50,18 @@ class Posts implements ResolverInterface
             $search,
             $categoryId,
             $tagId,
-            $author
+            $author,
+            $year,
+            $month
         );
-        $totalCount = $this->postRepository->getListTotalCount($search, $categoryId, $tagId, $author);
+        $totalCount = $this->postRepository->getListTotalCount(
+            $search,
+            $categoryId,
+            $tagId,
+            $author,
+            $year,
+            $month
+        );
         $totalPages = $pageSize > 0 ? (int) ceil($totalCount / $pageSize) : 0;
 
         $mapped = [];

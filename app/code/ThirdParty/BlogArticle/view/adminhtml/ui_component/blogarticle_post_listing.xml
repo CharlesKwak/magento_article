@@ -58,6 +58,17 @@
                     <label translate="true">Disable</label>
                 </settings>
             </action>
+            <action name="duplicate">
+                <settings>
+                    <confirm>
+                        <message translate="true">Duplicate selected posts as disabled drafts? (max 20 per run)</message>
+                        <title translate="true">Duplicate posts</title>
+                    </confirm>
+                    <url path="blogarticle/post/massDuplicate"/>
+                    <type>duplicate</type>
+                    <label translate="true">Duplicate</label>
+                </settings>
+            </action>
             <action name="delete">
                 <settings>
                     <confirm>

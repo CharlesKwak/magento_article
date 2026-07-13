@@ -4,6 +4,7 @@
             "category_id": true,
             "name": true,
             "url_key": true,
+            "description": true,
             "is_active": true,
             "creation_time": true,
             "update_time": true

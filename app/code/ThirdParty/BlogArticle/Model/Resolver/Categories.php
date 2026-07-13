@@ -34,6 +34,7 @@ class Categories implements ResolverInterface
                 'category_id' => $category->getCategoryId(),
                 'name' => $category->getName(),
                 'url_key' => $category->getUrlKey(),
+                'description' => $category->getDescription(),
                 'is_active' => $category->getIsActive(),
                 'creation_time' => $category->getCreationTime(),
                 'update_time' => $category->getUpdateTime(),
