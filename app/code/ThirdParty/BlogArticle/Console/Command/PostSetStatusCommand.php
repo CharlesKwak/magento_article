@@ -40,7 +40,7 @@ class PostSetStatusCommand extends Command
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $postId = (int) $input->getArgument(self::ARG_POST_ID);
         $status = strtolower(trim((string) $input->getArgument(self::ARG_STATUS)));

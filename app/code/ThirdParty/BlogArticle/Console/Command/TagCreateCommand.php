@@ -37,7 +37,7 @@ class TagCreateCommand extends Command
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = trim((string) $input->getOption('name'));
         if ($name === '') {

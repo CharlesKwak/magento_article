@@ -17,6 +17,7 @@ use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFactory;
 use ThirdParty\BlogArticle\Model\PostFilter;
+use ThirdParty\BlogArticle\Model\PreviewToken;
 use ThirdParty\BlogArticle\Model\PostProductLink;
 use ThirdParty\BlogArticle\Model\PostTagLink;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory as PostCollectionFactory;
@@ -47,10 +48,13 @@ class View extends Template implements IdentityInterface
     private $tagNameCache = [];
     private $tagMetaCache = [];
     private $hreflangBuilder;
+    private $previewToken;
     /** @var array<int, array{id:string,level:int,text:string}>|null */
     private $tocItems;
     /** @var string|null prepared body HTML cache */
     private $preparedContentHtml;
+    /** @var bool|null */
+    private $isPreviewMode;
 
     public function __construct(
         Context $context,
@@ -70,6 +74,7 @@ class View extends Template implements IdentityInterface
         PostCollectionFactory $postCollectionFactory,
         StoreManagerInterface $storeManager,
         HreflangBuilder $hreflangBuilder,
+        PreviewToken $previewToken,
         array $data = []
     ) {
         $this->postFactory = $postFactory;
@@ -88,6 +93,7 @@ class View extends Template implements IdentityInterface
         $this->postCollectionFactory = $postCollectionFactory;
         $this->storeManager = $storeManager;
         $this->hreflangBuilder = $hreflangBuilder;
+        $this->previewToken = $previewToken;
         parent::__construct($context, $data);
     }
 
@@ -118,6 +124,9 @@ class View extends Template implements IdentityInterface
      */
     public function getRobotsContent(): string
     {
+        if ($this->isPreviewMode()) {
+            return 'NOINDEX,NOFOLLOW';
+        }
         $post = $this->getPost();
         if (!$post) {
             return '';
@@ -127,6 +136,34 @@ class View extends Template implements IdentityInterface
             return 'INDEX,FOLLOW';
         }
         return $robots;
+    }
+
+    /**
+     * True when viewing via a valid signed ?preview= token (draft/scheduled).
+     */
+    public function isPreviewMode(): bool
+    {
+        if ($this->isPreviewMode !== null) {
+            return $this->isPreviewMode;
+        }
+        $this->isPreviewMode = false;
+        $token = trim((string) $this->getRequest()->getParam('preview', ''));
+        if ($token === '') {
+            return false;
+        }
+        // Resolve post id without full visibility gate for token check.
+        $post = $this->postFactory->create();
+        $urlKey = (string) $this->getRequest()->getParam('url_key', '');
+        $id = (int) $this->getRequest()->getParam('id', 0);
+        if ($urlKey !== '') {
+            $post->load($urlKey, 'url_key');
+        } elseif ($id) {
+            $post->load($id);
+        }
+        if ($post->getId() && $this->previewToken->isValid($token, (int) $post->getId())) {
+            $this->isPreviewMode = true;
+        }
+        return $this->isPreviewMode;
     }
 
     public function isLazyLoadImagesEnabled(): bool
@@ -226,12 +263,21 @@ class View extends Template implements IdentityInterface
             $post->load($id);
         }
 
-        if (!$post->getId() || !(int) $post->getIsActive()) {
+        if (!$post->getId()) {
+            $this->post = null;
+            return null;
+        }
+        $preview = trim((string) $this->getRequest()->getParam('preview', ''));
+        $allowPreview = $preview !== ''
+            && $this->previewToken->isValid($preview, (int) $post->getId());
+        $this->isPreviewMode = $allowPreview;
+
+        if (!(int) $post->getIsActive() && !$allowPreview) {
             $this->post = null;
             return null;
         }
         $publishedAt = $post->getPublishedAt();
-        if ($publishedAt) {
+        if ($publishedAt && !$allowPreview) {
             $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->getTimestamp();
             $pub = strtotime((string) $publishedAt . ' UTC');
             if ($pub && $pub > $now) {

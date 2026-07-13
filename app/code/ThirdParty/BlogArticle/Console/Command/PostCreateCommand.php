@@ -53,7 +53,7 @@ class PostCreateCommand extends Command
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $title = trim((string) $input->getOption('title'));
         $content = trim((string) $input->getOption('content'));

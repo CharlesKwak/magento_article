@@ -128,6 +128,12 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Thin top bar that fills as the visitor scrolls through the post body.</comment>
                 </field>
+                <field id="preview_token_ttl_hours" translate="label comment" type="text" sortOrder="70"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Draft Preview Token Lifetime (hours)</label>
+                    <comment>Signed Admin “Preview draft” links stay valid this long (1–168). Default: 48.</comment>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                </field>
             </group>
 
             <group id="sidebar" translate="label" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1">

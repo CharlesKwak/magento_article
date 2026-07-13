@@ -51,7 +51,7 @@ class PostListCommand extends Command
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $status = strtolower(trim((string) $input->getOption(self::OPTION_STATUS)));
         if ($status === '') {

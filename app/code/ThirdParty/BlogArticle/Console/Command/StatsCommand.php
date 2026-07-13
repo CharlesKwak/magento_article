@@ -28,7 +28,7 @@ class StatsCommand extends Command
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $stats = $this->statsManagement->get();
         $rows = [

@@ -1,5 +1,26 @@
 # Release Notes
 
+## 2.31.0 - 2026-07-14
+
+### Added
+- **RSS archive filters**: `year` / `month` on `/blog/rss/feed/` (list page RSS keeps archive params)
+- **Signed draft preview**: Admin **Preview draft** for disabled or scheduled posts (`?preview=` HMAC token)
+- Config **Display → Draft Preview Token Lifetime (hours)** (default 48)
+- Preview mode storefront banner + `NOINDEX,NOFOLLOW`; view_count not incremented
+
+### Changed
+- Module / package version **2.31.0**
+
+### Upgrade notes
+```bash
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+php bin/magento setup:di:compile
+```
+No new DB columns in 2.31.0. Tokens use Magento `crypt/key` for HMAC.
+
+---
+
 ## 2.30.0 - 2026-07-14
 
 ### Added
@@ -21,7 +42,6 @@ php bin/magento setup:di:compile
 No new DB columns in 2.30.0. Regenerate sitemap after deploy if needed.
 
 ---
-
 ## 2.29.0 - 2026-07-14
 
 ### Added

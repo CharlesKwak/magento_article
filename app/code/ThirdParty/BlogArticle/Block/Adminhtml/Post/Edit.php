@@ -12,6 +12,7 @@ use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFactory;
 use ThirdParty\BlogArticle\Model\PostProductLink;
 use ThirdParty\BlogArticle\Model\PostTagLink;
+use ThirdParty\BlogArticle\Model\PreviewToken;
 use ThirdParty\BlogArticle\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use ThirdParty\BlogArticle\Model\ResourceModel\Tag\CollectionFactory as TagCollectionFactory;
 
@@ -27,6 +28,7 @@ class Edit extends Template
     private $systemStore;
     private $wysiwygConfig;
     private $json;
+    private $previewToken;
     private $post;
 
     public function __construct(
@@ -41,6 +43,7 @@ class Edit extends Template
         SystemStore $systemStore,
         WysiwygConfig $wysiwygConfig,
         Json $json,
+        PreviewToken $previewToken,
         array $data = []
     ) {
         $this->postFactory = $postFactory;
@@ -53,6 +56,7 @@ class Edit extends Template
         $this->systemStore = $systemStore;
         $this->wysiwygConfig = $wysiwygConfig;
         $this->json = $json;
+        $this->previewToken = $previewToken;
         parent::__construct($context, $data);
     }
 
@@ -231,6 +235,7 @@ class Edit extends Template
 
     /**
      * Public storefront URL for the current post (empty if new / missing url_key).
+     * Disabled or scheduled posts get a signed ?preview= token.
      */
     public function getStorefrontPreviewUrl(): string
     {
@@ -250,9 +255,39 @@ class Edit extends Template
                 $store = $this->_storeManager->getDefaultStoreView()
                     ?: $this->_storeManager->getStore();
             }
-            return rtrim($store->getBaseUrl(), '/') . '/blog/' . ltrim($urlKey, '/');
+            $url = rtrim($store->getBaseUrl(), '/') . '/blog/' . ltrim($urlKey, '/');
+            if ($this->needsPreviewToken($post)) {
+                $token = $this->previewToken->create((int) $post->getId());
+                if ($token !== '') {
+                    $url .= (strpos($url, '?') === false ? '?' : '&') . 'preview=' . rawurlencode($token);
+                }
+            }
+            return $url;
         } catch (\Exception $e) {
             return '';
         }
+    }
+
+    /**
+     * Whether Admin should mint a preview token (disabled draft or future publish).
+     */
+    public function needsPreviewToken(?Post $post = null): bool
+    {
+        $post = $post ?: $this->getPost();
+        if (!$post || !$post->getId()) {
+            return false;
+        }
+        if (!(int) $post->getIsActive()) {
+            return true;
+        }
+        $publishedAt = $post->getPublishedAt();
+        if ($publishedAt) {
+            $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->getTimestamp();
+            $pub = strtotime((string) $publishedAt . ' UTC');
+            if ($pub && $pub > $now) {
+                return true;
+            }
+        }
+        return false;
     }
 }

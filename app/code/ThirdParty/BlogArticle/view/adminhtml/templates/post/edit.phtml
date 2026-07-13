@@ -16,7 +16,11 @@ $isActive = $post->getId() ? (int) $post->getIsActive() : 1;
                    href="<?= $block->escapeUrl($previewUrl) ?>"
                    target="_blank"
                    rel="noopener noreferrer">
-                    <?= $block->escapeHtml(__('View on storefront')) ?>
+                    <?= $block->escapeHtml(
+                        $block->needsPreviewToken()
+                            ? __('Preview draft')
+                            : __('View on storefront')
+                    ) ?>
                 </a>
             <?php endif; ?>
             &nbsp;|&nbsp;

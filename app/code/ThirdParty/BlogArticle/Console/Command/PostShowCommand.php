@@ -40,7 +40,7 @@ class PostShowCommand extends Command
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $identifier = trim((string) $input->getArgument(self::ARG_IDENTIFIER));
         if ($identifier === '') {

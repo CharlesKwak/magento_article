@@ -632,6 +632,14 @@ class Article extends Template implements IdentityInterface
         if ($author !== '') {
             $params['author'] = $author;
         }
+        $year = $this->getYearFilter();
+        if ($year !== null) {
+            $params['year'] = $year;
+            $month = $this->getMonthFilter();
+            if ($month !== null) {
+                $params['month'] = $month;
+            }
+        }
         return $this->getUrl('blog/rss/feed', $params);
     }
 

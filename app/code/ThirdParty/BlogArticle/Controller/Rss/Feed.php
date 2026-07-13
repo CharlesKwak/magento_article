@@ -19,6 +19,7 @@ use ThirdParty\BlogArticle\Model\TagFactory;
  *  - category / cat: category url_key
  *  - tag: tag url_key
  *  - author: author slug or name
+ *  - year / month: archive calendar filters
  */
 class Feed extends Action
 {
@@ -66,6 +67,15 @@ class Feed extends Action
         }
         $tagKey = trim((string) $this->getRequest()->getParam('tag', ''));
         $authorKey = trim((string) $this->getRequest()->getParam('author', ''));
+        $year = (int) $this->getRequest()->getParam('year', 0);
+        $month = (int) $this->getRequest()->getParam('month', 0);
+        if ($year < 1970 || $year > 2100) {
+            $year = 0;
+            $month = 0;
+        }
+        if ($month < 1 || $month > 12) {
+            $month = 0;
+        }
 
         $feedQuery = [];
         $channelTitle = $blogName;
@@ -99,6 +109,24 @@ class Feed extends Action
             $channelDesc = (string) __('Posts by %1', str_replace('-', ' ', $authorKey));
             $listUrl = $baseUrl . '/blog/author/' . rawurlencode($authorKey);
         }
+        if ($year > 0) {
+            $feedQuery['year'] = $year;
+            if ($month > 0) {
+                $feedQuery['month'] = $month;
+                try {
+                    $label = (new \DateTimeImmutable(sprintf('%04d-%02d-01', $year, $month)))->format('F Y');
+                } catch (\Exception $e) {
+                    $label = sprintf('%04d-%02d', $year, $month);
+                }
+                $channelTitle = (string) __('%1 — Archive %2', $blogName, $label);
+                $channelDesc = (string) __('Posts from %1', $label);
+                $listUrl = $baseUrl . sprintf('/blog/archive/%04d/%02d', $year, $month);
+            } else {
+                $channelTitle = (string) __('%1 — Archive %2', $blogName, (string) $year);
+                $channelDesc = (string) __('Posts from %1', (string) $year);
+                $listUrl = $baseUrl . sprintf('/blog/archive/%04d', $year);
+            }
+        }
 
         $feedUrl = $baseUrl . '/blog/rss/feed/';
         if ($feedQuery) {
@@ -112,6 +140,11 @@ class Feed extends Action
         $this->postFilter->applyCategoryId($collection, $categoryId);
         $this->postFilter->applyTagId($collection, $tagId);
         $this->postFilter->applyAuthorKey($collection, $authorKey !== '' ? $authorKey : null);
+        $this->postFilter->applyYearMonth(
+            $collection,
+            $year > 0 ? $year : null,
+            $month > 0 ? $month : null
+        );
         $this->postFilter->applyDefaultSort($collection);
         $collection->setPageSize(50);
 

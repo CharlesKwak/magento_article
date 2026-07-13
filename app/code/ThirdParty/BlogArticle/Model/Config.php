@@ -33,6 +33,7 @@ class Config
     public const XML_PATH_SIDEBAR_RECENT_COMMENTS_COUNT = 'blogarticle/sidebar/recent_comments_count';
     public const XML_PATH_RELATED_POSTS_LIMIT = 'blogarticle/display/related_posts_limit';
     public const XML_PATH_READING_PROGRESS = 'blogarticle/display/reading_progress';
+    public const XML_PATH_PREVIEW_TTL_HOURS = 'blogarticle/display/preview_token_ttl_hours';
     public const XML_PATH_PRODUCT_RELATED_ENABLED = 'blogarticle/catalog/show_related_posts';
     public const XML_PATH_PRODUCT_RELATED_LIMIT = 'blogarticle/catalog/related_posts_limit';
     public const XML_PATH_COMMENTS_ENABLED = 'blogarticle/comments/enabled';
@@ -353,6 +354,23 @@ class Config
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
+    }
+
+    /**
+     * Draft/scheduled storefront preview token lifetime in seconds (1–168 hours → seconds).
+     */
+    public function getPreviewTokenTtlSeconds(?int $storeId = null): int
+    {
+        $hours = (int) $this->scopeConfig->getValue(
+            self::XML_PATH_PREVIEW_TTL_HOURS,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        if ($hours < 1) {
+            $hours = 48;
+        }
+        $hours = min(168, $hours);
+        return $hours * 3600;
     }
 
     public function isProductRelatedPostsEnabled(?int $storeId = null): bool

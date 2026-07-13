@@ -44,7 +44,7 @@ class PostImportCommand extends Command
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $file = trim((string) $input->getArgument('file'));
         if ($file === '') {

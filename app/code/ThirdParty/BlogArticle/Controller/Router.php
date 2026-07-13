@@ -8,6 +8,7 @@ use Magento\Framework\App\RouterInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use ThirdParty\BlogArticle\Model\CategoryFactory;
 use ThirdParty\BlogArticle\Model\PostFactory;
+use ThirdParty\BlogArticle\Model\PreviewToken;
 use ThirdParty\BlogArticle\Model\TagFactory;
 
 /**
@@ -38,19 +39,22 @@ class Router implements RouterInterface
     private $categoryFactory;
     private $tagFactory;
     private $storeManager;
+    private $previewToken;
 
     public function __construct(
         ActionFactory $actionFactory,
         PostFactory $postFactory,
         CategoryFactory $categoryFactory,
         TagFactory $tagFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        PreviewToken $previewToken
     ) {
         $this->actionFactory = $actionFactory;
         $this->postFactory = $postFactory;
         $this->categoryFactory = $categoryFactory;
         $this->tagFactory = $tagFactory;
         $this->storeManager = $storeManager;
+        $this->previewToken = $previewToken;
     }
 
     /**
@@ -150,11 +154,17 @@ class Router implements RouterInterface
         }
 
         $post = $this->postFactory->create()->load($urlKey, 'url_key');
-        if (!$post->getId() || !(int) $post->getIsActive()) {
+        if (!$post->getId()) {
+            return null;
+        }
+        $preview = trim((string) $request->getParam('preview', ''));
+        $allowPreview = $preview !== ''
+            && $this->previewToken->isValid($preview, (int) $post->getId());
+        if (!(int) $post->getIsActive() && !$allowPreview) {
             return null;
         }
         $publishedAt = $post->getPublishedAt();
-        if ($publishedAt) {
+        if ($publishedAt && !$allowPreview) {
             $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->getTimestamp();
             $pub = strtotime((string) $publishedAt . ' UTC');
             if ($pub && $pub > $now) {

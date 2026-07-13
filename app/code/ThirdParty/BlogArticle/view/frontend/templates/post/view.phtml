@@ -32,6 +32,15 @@ $related = $block->getRelatedPosts();
         })();
         </script>
     <?php endif; ?>
+    <?php if ($post && $block->isPreviewMode()): ?>
+        <div class="message notice blog-preview-banner" style="margin-bottom:1rem;">
+            <span>
+                <?= $block->escapeHtml(
+                    __('Preview mode: this post is not publicly published. Search engines will not index this URL.')
+                ) ?>
+            </span>
+        </div>
+    <?php endif; ?>
     <p class="blog-back">
         <a href="<?= $block->escapeUrl($block->getListUrl()) ?>">
             ← <?= $block->escapeHtml(__('Back to blog')) ?>

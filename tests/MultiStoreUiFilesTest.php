@@ -17,6 +17,6 @@ class MultiStoreUiFilesTest extends TestCase
     public function testModuleVersionIs190(): void
     {
         $c = file_get_contents(dirname(__DIR__) . '/app/code/ThirdParty/BlogArticle/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.30.0"', $c);
+        $this->assertStringContainsString('setup_version="2.31.0"', $c);
     }
 }

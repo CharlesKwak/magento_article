@@ -48,7 +48,7 @@ class PostUpdateCommand extends Command
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $postId = (int) $input->getOption('id');
         if ($postId <= 0) {

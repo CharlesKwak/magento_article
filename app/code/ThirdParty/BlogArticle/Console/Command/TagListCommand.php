@@ -35,7 +35,7 @@ class TagListCommand extends Command
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $status = strtolower(trim((string) $input->getOption('status')));
         if (!in_array($status, ['all', 'enabled', 'disabled'], true)) {

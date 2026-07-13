@@ -56,8 +56,8 @@ class CliCreateDeleteMassTaxonomyFilesTest extends TestCase
     public function testModuleVersionIs290(): void
     {
         $c = file_get_contents($this->root() . '/etc/module.xml');
-        $this->assertStringContainsString('setup_version="2.30.0"', $c);
+        $this->assertStringContainsString('setup_version="2.31.0"', $c);
         $composer = file_get_contents(dirname(__DIR__) . '/composer.json');
-        $this->assertStringContainsString('"version": "2.30.0"', $composer);
+        $this->assertStringContainsString('"version": "2.31.0"', $composer);
     }
 }

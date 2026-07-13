@@ -29,7 +29,7 @@ class TagSetStatusCommand extends Command
         parent::configure();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $id = (int) $input->getArgument('tag_id');
         $status = strtolower(trim((string) $input->getArgument('status')));

@@ -8,6 +8,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use ThirdParty\BlogArticle\Model\PostFactory;
 use ThirdParty\BlogArticle\Model\PostViewCounter;
+use ThirdParty\BlogArticle\Model\PreviewToken;
 
 class View extends Action
 {
@@ -27,6 +28,7 @@ class View extends Action
     private $postFactory;
     private $storeManager;
     private $postViewCounter;
+    private $previewToken;
 
     public function __construct(
         Context $context,
@@ -34,7 +36,8 @@ class View extends Action
         ForwardFactory $resultForwardFactory,
         PostFactory $postFactory,
         StoreManagerInterface $storeManager,
-        PostViewCounter $postViewCounter
+        PostViewCounter $postViewCounter,
+        PreviewToken $previewToken
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
@@ -42,6 +45,7 @@ class View extends Action
         $this->postFactory = $postFactory;
         $this->storeManager = $storeManager;
         $this->postViewCounter = $postViewCounter;
+        $this->previewToken = $previewToken;
     }
 
     /**
@@ -59,12 +63,17 @@ class View extends Action
             $post->load($id);
         }
 
-        if (!$post->getId() || !(int) $post->getIsActive()) {
+        $preview = trim((string) $this->getRequest()->getParam('preview', ''));
+        $allowPreview = $preview !== ''
+            && $post->getId()
+            && $this->previewToken->isValid($preview, (int) $post->getId());
+
+        if (!$post->getId() || (!(int) $post->getIsActive() && !$allowPreview)) {
             $resultForward = $this->resultForwardFactory->create();
             return $resultForward->forward('noroute');
         }
         $publishedAt = $post->getPublishedAt();
-        if ($publishedAt) {
+        if ($publishedAt && !$allowPreview) {
             $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->getTimestamp();
             $pub = strtotime((string) $publishedAt . ' UTC');
             if ($pub && $pub > $now) {
@@ -79,10 +88,13 @@ class View extends Action
             return $resultForward->forward('noroute');
         }
 
-        try {
-            $this->postViewCounter->increment((int) $post->getId());
-        } catch (\Throwable $e) {
-            // never block storefront rendering on counter errors
+        // Do not count draft/scheduled previews toward view_count.
+        if (!$allowPreview) {
+            try {
+                $this->postViewCounter->increment((int) $post->getId());
+            } catch (\Throwable $e) {
+                // never block storefront rendering on counter errors
+            }
         }
 
         $resultPage = $this->resultPageFactory->create();
