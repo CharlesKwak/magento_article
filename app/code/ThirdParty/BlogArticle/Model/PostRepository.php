@@ -22,6 +22,7 @@ class PostRepository implements PostRepositoryInterface
     private UrlKeyGenerator $urlKeyGenerator;
     private CategoryFactory $categoryFactory;
     private PostTagLink $postTagLink;
+    private PostProductLink $postProductLink;
     private TagFactory $tagFactory;
     private StoreManagerInterface $storeManager;
     private Config $config;
@@ -35,6 +36,7 @@ class PostRepository implements PostRepositoryInterface
         UrlKeyGenerator $urlKeyGenerator,
         CategoryFactory $categoryFactory,
         PostTagLink $postTagLink,
+        PostProductLink $postProductLink,
         TagFactory $tagFactory,
         StoreManagerInterface $storeManager,
         Config $config,
@@ -47,6 +49,7 @@ class PostRepository implements PostRepositoryInterface
         $this->urlKeyGenerator = $urlKeyGenerator;
         $this->categoryFactory = $categoryFactory;
         $this->postTagLink = $postTagLink;
+        $this->postProductLink = $postProductLink;
         $this->tagFactory = $tagFactory;
         $this->storeManager = $storeManager;
         $this->config = $config;
@@ -198,6 +201,21 @@ class PostRepository implements PostRepositoryInterface
             $normalizedTagIds[] = $tagId;
         }
 
+        $productIds = $post->getProductIds();
+        if ($productIds === null) {
+            $productIds = $model->getId()
+                ? $this->postProductLink->getProductIdsForPost((int) $model->getId())
+                : [];
+        }
+        $normalizedProductIds = [];
+        foreach ((array) $productIds as $productId) {
+            $productId = (int) $productId;
+            if ($productId > 0) {
+                $normalizedProductIds[] = $productId;
+            }
+        }
+        $normalizedProductIds = array_values(array_unique($normalizedProductIds));
+
         $isActive = $post->getIsActive();
         if ($isActive === null) {
             $isActive = 1;
@@ -238,6 +256,11 @@ class PostRepository implements PostRepositoryInterface
         try {
             $model->save();
             $this->postTagLink->setTagsForPost((int) $model->getId(), $normalizedTagIds);
+            // Validates via the catalog and silently skips unknown ids, matching admin behavior.
+            $this->postProductLink->setProductsFromInput(
+                (int) $model->getId(),
+                implode(',', $normalizedProductIds)
+            );
         } catch (LocalizedException $e) {
             throw $e;
         } catch (\Exception $e) {
@@ -255,6 +278,7 @@ class PostRepository implements PostRepositoryInterface
         }
         try {
             $this->postTagLink->setTagsForPost((int) $postId, []);
+            $this->postProductLink->replaceLinks((int) $postId, []);
             $model->delete();
         } catch (\Exception $e) {
             throw new CouldNotDeleteException(__('Could not delete the blog post: %1', $e->getMessage()), $e);
@@ -370,6 +394,7 @@ class PostRepository implements PostRepositoryInterface
         $data->setCategoryId($post->getCategoryId() ? (int) $post->getCategoryId() : null);
         $data->setStoreId($post->getStoreId() ? (int) $post->getStoreId() : null);
         $data->setTagIds($this->postTagLink->getTagIdsForPost((int) $post->getId()));
+        $data->setProductIds($this->postProductLink->getProductIdsForPost((int) $post->getId()));
         $data->setCreationTime((string) $post->getCreationTime());
         $data->setUpdateTime((string) $post->getUpdateTime());
         $data->setPublishedAt($post->getPublishedAt() ? (string) $post->getPublishedAt() : null);

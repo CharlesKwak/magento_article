@@ -169,6 +169,23 @@ class Post extends DataObject implements PostInterface
         return $this->setData(self::TAG_IDS, array_values(array_map('intval', $tagIds)));
     }
 
+    public function getProductIds()
+    {
+        $ids = $this->getData(self::PRODUCT_IDS);
+        if ($ids === null) {
+            return null;
+        }
+        if (!is_array($ids)) {
+            return [];
+        }
+        return array_values(array_map('intval', $ids));
+    }
+
+    public function setProductIds(array $productIds)
+    {
+        return $this->setData(self::PRODUCT_IDS, array_values(array_map('intval', $productIds)));
+    }
+
     public function getCreationTime()
     {
         return $this->getData(self::CREATION_TIME);

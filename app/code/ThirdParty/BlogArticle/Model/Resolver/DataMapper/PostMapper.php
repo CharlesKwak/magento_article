@@ -4,9 +4,17 @@ declare(strict_types=1);
 namespace ThirdParty\BlogArticle\Model\Resolver\DataMapper;
 
 use ThirdParty\BlogArticle\Api\Data\PostInterface;
+use ThirdParty\BlogArticle\Model\PostProductLink;
 
 class PostMapper
 {
+    private PostProductLink $postProductLink;
+
+    public function __construct(PostProductLink $postProductLink)
+    {
+        $this->postProductLink = $postProductLink;
+    }
+
     /**
      * @param array $input
      * @param PostInterface $post
@@ -47,6 +55,9 @@ class PostMapper
         if (array_key_exists('tag_ids', $input) && is_array($input['tag_ids'])) {
             $post->setTagIds(array_map('intval', $input['tag_ids']));
         }
+        if (array_key_exists('product_ids', $input) && is_array($input['product_ids'])) {
+            $post->setProductIds(array_map('intval', $input['product_ids']));
+        }
     }
 
     /**
@@ -71,6 +82,8 @@ class PostMapper
             'category_id' => $item->getCategoryId(),
             'store_id' => $item->getStoreId(),
             'tag_ids' => $item->getTagIds() ?: [],
+            'product_ids' => $item->getProductIds() ?: [],
+            'product_skus' => $this->postProductLink->getProductSkusForPost((int) $item->getPostId()),
             'creation_time' => $item->getCreationTime(),
             'update_time' => $item->getUpdateTime(),
             'published_at' => $item->getPublishedAt(),

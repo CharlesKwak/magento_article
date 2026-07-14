@@ -10,14 +10,19 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
+use ThirdParty\BlogArticle\Model\Resolver\DataMapper\PostMapper;
 
 class Post implements ResolverInterface
 {
     private PostRepositoryInterface $postRepository;
+    private PostMapper $postMapper;
 
-    public function __construct(PostRepositoryInterface $postRepository)
-    {
+    public function __construct(
+        PostRepositoryInterface $postRepository,
+        PostMapper $postMapper
+    ) {
         $this->postRepository = $postRepository;
+        $this->postMapper = $postMapper;
     }
 
     /**
@@ -45,24 +50,6 @@ class Post implements ResolverInterface
             throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         }
 
-        return [
-            'post_id' => $item->getPostId(),
-            'title' => $item->getTitle(),
-            'author' => $item->getAuthor(),
-            'url_key' => $item->getUrlKey(),
-            'content' => $item->getContent(),
-            'excerpt' => $item->getExcerpt(),
-            'featured_image' => $item->getFeaturedImage(),
-            'meta_title' => $item->getMetaTitle(),
-            'meta_description' => $item->getMetaDescription(),
-            'is_active' => $item->getIsActive(),
-            'category_id' => $item->getCategoryId(),
-            'store_id' => $item->getStoreId(),
-            'tag_ids' => $item->getTagIds() ?: [],
-            'creation_time' => $item->getCreationTime(),
-            'update_time' => $item->getUpdateTime(),
-            'published_at' => $item->getPublishedAt(),
-            'model' => $item,
-        ];
+        return $this->postMapper->toGraphQlArray($item);
     }
 }

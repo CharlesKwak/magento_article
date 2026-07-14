@@ -23,6 +23,7 @@ interface PostInterface
     public const CATEGORY_ID = 'category_id';
     public const STORE_ID = 'store_id';
     public const TAG_IDS = 'tag_ids';
+    public const PRODUCT_IDS = 'product_ids';
     public const CREATION_TIME = 'creation_time';
     public const UPDATE_TIME = 'update_time';
     public const PUBLISHED_AT = 'published_at';
@@ -132,6 +133,13 @@ interface PostInterface
      * @return $this
      */
     public function setTagIds(array $tagIds);
+    /** @return int[]|null */
+    public function getProductIds();
+    /**
+     * @param int[] $productIds
+     * @return $this
+     */
+    public function setProductIds(array $productIds);
     /** @return string|null */
     public function getCreationTime();
     /**
