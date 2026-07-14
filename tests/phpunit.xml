@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="bootstrap.php" colors="true">
     <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>./</directory>
+        <testsuite name="Unit">
+            <directory>Unit</directory>
+        </testsuite>
+        <testsuite name="Smoke">
+            <directory>Smoke</directory>
+        </testsuite>
+        <testsuite name="Data">
+            <directory>Data</directory>
         </testsuite>
     </testsuites>
 </phpunit>

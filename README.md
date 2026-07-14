@@ -271,7 +271,7 @@ Smoke tests only (no full Magento instance):
 ```bash
 composer install
 ./vendor/bin/phpunit --configuration tests/phpunit.xml
-./tests/run_with_dummy_data.sh tests/DummyDataInputTest.php tests/dummy_posts.json
+./tests/run_with_dummy_data.sh tests/Data/DummyDataInputTest.php tests/Data/dummy_posts.json
 ```
 
 ---
