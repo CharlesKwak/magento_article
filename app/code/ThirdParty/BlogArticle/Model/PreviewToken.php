@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -10,8 +12,8 @@ use Magento\Framework\App\DeploymentConfig;
  */
 class PreviewToken
 {
-    private $deploymentConfig;
-    private $config;
+    private DeploymentConfig $deploymentConfig;
+    private Config $config;
 
     public function __construct(
         DeploymentConfig $deploymentConfig,

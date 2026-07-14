@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block\Sidebar;
 
 use Magento\Framework\View\Element\Template;
@@ -8,9 +10,9 @@ use ThirdParty\BlogArticle\Model\Config;
 
 class Archive extends Template
 {
-    private $archive;
-    private $config;
-    private $months;
+    private ArchiveModel $archive;
+    private Config $config;
+    private ?array $months = null;
 
     public function __construct(
         Context $context,

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Ui\Component\Listing\Column;
 
 use Magento\Framework\UrlInterface;
@@ -8,7 +10,7 @@ use Magento\Ui\Component\Listing\Columns\Column;
 
 class TagActions extends Column
 {
-    private $urlBuilder;
+    private UrlInterface $urlBuilder;
 
     public function __construct(
         ContextInterface $context,

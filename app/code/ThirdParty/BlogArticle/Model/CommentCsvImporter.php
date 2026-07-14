@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -15,12 +17,12 @@ use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
  */
 class CommentCsvImporter
 {
-    private $csv;
-    private $commentRepository;
-    private $commentFactory;
-    private $commentModelFactory;
-    private $postRepository;
-    private $postModelFactory;
+    private Csv $csv;
+    private CommentRepositoryInterface $commentRepository;
+    private CommentInterfaceFactory $commentFactory;
+    private CommentFactory $commentModelFactory;
+    private PostRepositoryInterface $postRepository;
+    private PostFactory $postModelFactory;
 
     public function __construct(
         Csv $csv,

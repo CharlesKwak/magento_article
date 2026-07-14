@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block;
 
 use Magento\Framework\View\Element\Html\Link as HtmlLink;
@@ -10,7 +12,7 @@ use ThirdParty\BlogArticle\Model\Config;
  */
 class Link extends HtmlLink
 {
-    private $config;
+    private Config $config;
 
     public function __construct(
         Context $context,

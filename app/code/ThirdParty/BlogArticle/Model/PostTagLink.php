@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\App\ResourceConnection;
@@ -10,10 +12,7 @@ class PostTagLink
 {
     public const TABLE = 'thirdparty_blogarticle_post_tag';
 
-    /**
-     * @var ResourceConnection
-     */
-    private $resource;
+    private ResourceConnection $resource;
 
     public function __construct(ResourceConnection $resource)
     {

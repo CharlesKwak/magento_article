@@ -1,19 +1,14 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\ResourceModel\Category;
 
 use Magento\Framework\ObjectManagerInterface;
 
 class CollectionFactory
 {
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @var string
-     */
-    private $instanceName;
+    private ObjectManagerInterface $objectManager;
+    private string $instanceName;
 
     public function __construct(
         ObjectManagerInterface $objectManager,

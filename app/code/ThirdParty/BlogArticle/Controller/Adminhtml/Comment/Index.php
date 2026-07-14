@@ -1,15 +1,18 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Comment;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class Index extends Action
+class Index extends Action implements HttpGetActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::comments';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::comments';
 
-    private $resultPageFactory;
+    private PageFactory $resultPageFactory;
 
     public function __construct(Context $context, PageFactory $resultPageFactory)
     {

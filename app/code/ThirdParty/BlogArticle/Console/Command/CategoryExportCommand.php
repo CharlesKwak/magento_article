@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -14,8 +16,8 @@ use ThirdParty\BlogArticle\Model\TaxonomyCsvExporter;
  */
 class CategoryExportCommand extends Command
 {
-    private $exporter;
-    private $collectionFactory;
+    private TaxonomyCsvExporter $exporter;
+    private CollectionFactory $collectionFactory;
 
     public function __construct(
         TaxonomyCsvExporter $exporter,

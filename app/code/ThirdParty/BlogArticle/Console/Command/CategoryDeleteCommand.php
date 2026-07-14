@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -16,8 +18,8 @@ use ThirdParty\BlogArticle\Model\CategoryFactory;
  */
 class CategoryDeleteCommand extends Command
 {
-    private $categoryRepository;
-    private $categoryFactory;
+    private CategoryRepositoryInterface $categoryRepository;
+    private CategoryFactory $categoryFactory;
 
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -13,10 +15,10 @@ use ThirdParty\BlogArticle\Model\RecaptchaValidator;
 
 class SubmitBlogComment implements ResolverInterface
 {
-    private $commentRepository;
-    private $commentFactory;
-    private $spamGuard;
-    private $recaptchaValidator;
+    private CommentRepositoryInterface $commentRepository;
+    private CommentInterfaceFactory $commentFactory;
+    private CommentSpamGuard $spamGuard;
+    private RecaptchaValidator $recaptchaValidator;
 
     public function __construct(
         CommentRepositoryInterface $commentRepository,

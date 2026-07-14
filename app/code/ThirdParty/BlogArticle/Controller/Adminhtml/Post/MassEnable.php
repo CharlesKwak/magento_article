@@ -1,18 +1,21 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Post;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory;
 
-class MassEnable extends Action
+class MassEnable extends Action implements HttpPostActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
 
-    private $filter;
-    private $collectionFactory;
+    private Filter $filter;
+    private CollectionFactory $collectionFactory;
 
     public function __construct(
         Context $context,

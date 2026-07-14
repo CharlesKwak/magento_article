@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -15,10 +17,10 @@ class FeaturedImageUploader
 {
     public const MEDIA_PATH = 'blogarticle';
 
-    private $uploaderFactory;
-    private $filesystem;
-    private $storeManager;
-    private $config;
+    private UploaderFactory $uploaderFactory;
+    private Filesystem $filesystem;
+    private StoreManagerInterface $storeManager;
+    private Config $config;
 
     public function __construct(
         UploaderFactory $uploaderFactory,

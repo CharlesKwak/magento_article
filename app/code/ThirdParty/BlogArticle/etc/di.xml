@@ -103,73 +103,73 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="blogarticle_stats" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\StatsCommand
+                    ThirdParty\BlogArticle\Console\Command\StatsCommand\Proxy
                 </item>
                 <item name="blogarticle_post_list" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\PostListCommand
+                    ThirdParty\BlogArticle\Console\Command\PostListCommand\Proxy
                 </item>
                 <item name="blogarticle_post_show" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\PostShowCommand
+                    ThirdParty\BlogArticle\Console\Command\PostShowCommand\Proxy
                 </item>
                 <item name="blogarticle_post_set_status" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\PostSetStatusCommand
+                    ThirdParty\BlogArticle\Console\Command\PostSetStatusCommand\Proxy
                 </item>
                 <item name="blogarticle_post_create" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\PostCreateCommand
+                    ThirdParty\BlogArticle\Console\Command\PostCreateCommand\Proxy
                 </item>
                 <item name="blogarticle_post_update" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\PostUpdateCommand
+                    ThirdParty\BlogArticle\Console\Command\PostUpdateCommand\Proxy
                 </item>
                 <item name="blogarticle_post_delete" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\PostDeleteCommand
+                    ThirdParty\BlogArticle\Console\Command\PostDeleteCommand\Proxy
                 </item>
                 <item name="blogarticle_post_duplicate" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\PostDuplicateCommand
+                    ThirdParty\BlogArticle\Console\Command\PostDuplicateCommand\Proxy
                 </item>
                 <item name="blogarticle_post_preview_url" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\PostPreviewUrlCommand
+                    ThirdParty\BlogArticle\Console\Command\PostPreviewUrlCommand\Proxy
                 </item>
                 <item name="blogarticle_category_list" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\CategoryListCommand
+                    ThirdParty\BlogArticle\Console\Command\CategoryListCommand\Proxy
                 </item>
                 <item name="blogarticle_category_create" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\CategoryCreateCommand
+                    ThirdParty\BlogArticle\Console\Command\CategoryCreateCommand\Proxy
                 </item>
                 <item name="blogarticle_category_set_status" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\CategorySetStatusCommand
+                    ThirdParty\BlogArticle\Console\Command\CategorySetStatusCommand\Proxy
                 </item>
                 <item name="blogarticle_tag_list" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\TagListCommand
+                    ThirdParty\BlogArticle\Console\Command\TagListCommand\Proxy
                 </item>
                 <item name="blogarticle_tag_create" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\TagCreateCommand
+                    ThirdParty\BlogArticle\Console\Command\TagCreateCommand\Proxy
                 </item>
                 <item name="blogarticle_tag_set_status" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\TagSetStatusCommand
+                    ThirdParty\BlogArticle\Console\Command\TagSetStatusCommand\Proxy
                 </item>
                 <item name="blogarticle_category_delete" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\CategoryDeleteCommand
+                    ThirdParty\BlogArticle\Console\Command\CategoryDeleteCommand\Proxy
                 </item>
                 <item name="blogarticle_tag_delete" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\TagDeleteCommand
+                    ThirdParty\BlogArticle\Console\Command\TagDeleteCommand\Proxy
                 </item>
                 <item name="blogarticle_post_import" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\PostImportCommand
+                    ThirdParty\BlogArticle\Console\Command\PostImportCommand\Proxy
                 </item>
                 <item name="blogarticle_post_export" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\PostExportCommand
+                    ThirdParty\BlogArticle\Console\Command\PostExportCommand\Proxy
                 </item>
                 <item name="blogarticle_comment_export" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\CommentExportCommand
+                    ThirdParty\BlogArticle\Console\Command\CommentExportCommand\Proxy
                 </item>
                 <item name="blogarticle_comment_import" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\CommentImportCommand
+                    ThirdParty\BlogArticle\Console\Command\CommentImportCommand\Proxy
                 </item>
                 <item name="blogarticle_category_export" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\CategoryExportCommand
+                    ThirdParty\BlogArticle\Console\Command\CategoryExportCommand\Proxy
                 </item>
                 <item name="blogarticle_tag_export" xsi:type="object">
-                    ThirdParty\BlogArticle\Console\Command\TagExportCommand
+                    ThirdParty\BlogArticle\Console\Command\TagExportCommand\Proxy
                 </item>
             </argument>
         </arguments>

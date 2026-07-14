@@ -1,24 +1,20 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Category;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use ThirdParty\BlogArticle\Model\CategoryFactory;
 
-class Edit extends Action
+class Edit extends Action implements HttpGetActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::categories';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::categories';
 
-    /**
-     * @var PageFactory
-     */
-    private $resultPageFactory;
-
-    /**
-     * @var CategoryFactory
-     */
-    private $categoryFactory;
+    private PageFactory $resultPageFactory;
+    private CategoryFactory $categoryFactory;
 
     public function __construct(
         Context $context,

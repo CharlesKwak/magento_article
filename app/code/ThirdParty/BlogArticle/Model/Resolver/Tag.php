@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -11,7 +13,7 @@ use ThirdParty\BlogArticle\Api\TagRepositoryInterface;
 
 class Tag implements ResolverInterface
 {
-    private $tagRepository;
+    private TagRepositoryInterface $tagRepository;
 
     public function __construct(TagRepositoryInterface $tagRepository)
     {

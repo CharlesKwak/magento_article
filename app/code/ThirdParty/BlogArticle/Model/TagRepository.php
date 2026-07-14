@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -12,11 +14,11 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Tag\CollectionFactory;
 
 class TagRepository implements TagRepositoryInterface
 {
-    private $tagFactory;
-    private $collectionFactory;
-    private $dataFactory;
-    private $urlKeyGenerator;
-    private $postTagLink;
+    private TagFactory $tagFactory;
+    private CollectionFactory $collectionFactory;
+    private TagInterfaceFactory $dataFactory;
+    private TagUrlKeyGenerator $urlKeyGenerator;
+    private PostTagLink $postTagLink;
 
     public function __construct(
         TagFactory $tagFactory,

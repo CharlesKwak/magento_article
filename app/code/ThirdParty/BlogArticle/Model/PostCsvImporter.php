@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -27,12 +29,12 @@ class PostCsvImporter
     public const FORMAT_NATIVE = 'native';
     public const FORMAT_WORDPRESS = 'wordpress';
 
-    private $csv;
-    private $postRepository;
-    private $postFactory;
-    private $postModelFactory;
-    private $wordPressCsvMapper;
-    private $postProductLink;
+    private Csv $csv;
+    private PostRepositoryInterface $postRepository;
+    private PostInterfaceFactory $postFactory;
+    private PostFactory $postModelFactory;
+    private WordPressCsvMapper $wordPressCsvMapper;
+    private PostProductLink $postProductLink;
 
     public function __construct(
         Csv $csv,

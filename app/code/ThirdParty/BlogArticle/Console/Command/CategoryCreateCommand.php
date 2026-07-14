@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -14,8 +16,8 @@ use ThirdParty\BlogArticle\Api\Data\CategoryInterfaceFactory;
  */
 class CategoryCreateCommand extends Command
 {
-    private $categoryRepository;
-    private $categoryFactory;
+    private CategoryRepositoryInterface $categoryRepository;
+    private CategoryInterfaceFactory $categoryFactory;
 
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,

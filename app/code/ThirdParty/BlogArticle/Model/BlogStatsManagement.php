@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\App\ResourceConnection;
@@ -11,12 +13,12 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Tag\CollectionFactory as TagColle
 
 class BlogStatsManagement implements BlogStatsManagementInterface
 {
-    private $statsFactory;
-    private $postCollectionFactory;
-    private $commentCollectionFactory;
-    private $categoryCollectionFactory;
-    private $tagCollectionFactory;
-    private $resource;
+    private BlogStatsInterfaceFactory $statsFactory;
+    private PostCollectionFactory $postCollectionFactory;
+    private CommentCollectionFactory $commentCollectionFactory;
+    private CategoryCollectionFactory $categoryCollectionFactory;
+    private TagCollectionFactory $tagCollectionFactory;
+    private ResourceConnection $resource;
 
     public function __construct(
         BlogStatsInterfaceFactory $statsFactory,

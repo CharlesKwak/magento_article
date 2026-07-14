@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Sitemap\ItemProvider;
 
 use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
@@ -9,7 +11,7 @@ use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
  */
 class Index implements ItemProviderInterface
 {
-    private $itemFactory;
+    private SitemapItemInterfaceFactory $itemFactory;
 
     public function __construct(SitemapItemInterfaceFactory $itemFactory)
     {

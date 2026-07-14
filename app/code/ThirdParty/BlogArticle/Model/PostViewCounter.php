@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\App\ResourceConnection;
@@ -8,7 +10,7 @@ use Magento\Framework\App\ResourceConnection;
  */
 class PostViewCounter
 {
-    private $resource;
+    private ResourceConnection $resource;
 
     public function __construct(ResourceConnection $resource)
     {

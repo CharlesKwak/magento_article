@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block\Widget;
 
 use Magento\Framework\View\Element\Template;
@@ -17,12 +19,11 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory;
 class Posts extends Template implements BlockInterface
 {
     protected $_template = 'ThirdParty_BlogArticle::widget/posts.phtml';
-
-    private $collectionFactory;
-    private $postFilter;
-    private $config;
-    private $storeManager;
-    private $posts;
+    private CollectionFactory $collectionFactory;
+    private PostFilter $postFilter;
+    private Config $config;
+    private StoreManagerInterface $storeManager;
+    private ?Collection $posts = null;
 
     public function __construct(
         Context $context,

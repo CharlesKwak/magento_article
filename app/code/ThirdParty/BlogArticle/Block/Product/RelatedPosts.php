@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block\Product;
 
 use Magento\Catalog\Model\Product;
@@ -17,13 +19,13 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory;
  */
 class RelatedPosts extends Template
 {
-    private $registry;
-    private $postProductLink;
-    private $collectionFactory;
-    private $postFilter;
-    private $config;
-    private $storeManager;
-    private $posts;
+    private Registry $registry;
+    private PostProductLink $postProductLink;
+    private CollectionFactory $collectionFactory;
+    private PostFilter $postFilter;
+    private Config $config;
+    private StoreManagerInterface $storeManager;
+    private ?array $posts = null;
 
     public function __construct(
         Context $context,

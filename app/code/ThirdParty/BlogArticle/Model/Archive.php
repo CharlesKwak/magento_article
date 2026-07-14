@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\App\ResourceConnection;
@@ -10,8 +12,8 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Archive
 {
-    private $resource;
-    private $storeManager;
+    private ResourceConnection $resource;
+    private StoreManagerInterface $storeManager;
 
     public function __construct(
         ResourceConnection $resource,

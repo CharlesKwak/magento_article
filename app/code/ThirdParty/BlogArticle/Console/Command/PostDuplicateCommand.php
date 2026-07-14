@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -14,7 +16,7 @@ use ThirdParty\BlogArticle\Model\PostDuplicator;
  */
 class PostDuplicateCommand extends Command
 {
-    private $postDuplicator;
+    private PostDuplicator $postDuplicator;
 
     public function __construct(
         PostDuplicator $postDuplicator,

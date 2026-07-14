@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -23,9 +25,9 @@ class CommentCsvExporter
         'creation_time',
     ];
 
-    private $csv;
-    private $filesystem;
-    private $collectionFactory;
+    private Csv $csv;
+    private Filesystem $filesystem;
+    private CollectionFactory $collectionFactory;
 
     public function __construct(
         Csv $csv,

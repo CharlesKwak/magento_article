@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Setup\Patch\Data;
 
 use Magento\Framework\DB\Sql\Expression;
@@ -11,10 +13,7 @@ use ThirdParty\BlogArticle\Setup\Patch\Schema\AddTagSupport;
  */
 class AddSampleTags implements DataPatchInterface
 {
-    /**
-     * @var ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
+    private ModuleDataSetupInterface $moduleDataSetup;
 
     public function __construct(ModuleDataSetupInterface $moduleDataSetup)
     {

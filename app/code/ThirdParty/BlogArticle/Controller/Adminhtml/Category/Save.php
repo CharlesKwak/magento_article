@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Category;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Request\DataPersistorInterface;
@@ -8,24 +11,13 @@ use Magento\Framework\Exception\LocalizedException;
 use ThirdParty\BlogArticle\Model\CategoryFactory;
 use ThirdParty\BlogArticle\Model\CategoryUrlKeyGenerator;
 
-class Save extends Action
+class Save extends Action implements HttpPostActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::categories';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::categories';
 
-    /**
-     * @var CategoryFactory
-     */
-    private $categoryFactory;
-
-    /**
-     * @var DataPersistorInterface
-     */
-    private $dataPersistor;
-
-    /**
-     * @var CategoryUrlKeyGenerator
-     */
-    private $urlKeyGenerator;
+    private CategoryFactory $categoryFactory;
+    private DataPersistorInterface $dataPersistor;
+    private CategoryUrlKeyGenerator $urlKeyGenerator;
 
     public function __construct(
         Context $context,

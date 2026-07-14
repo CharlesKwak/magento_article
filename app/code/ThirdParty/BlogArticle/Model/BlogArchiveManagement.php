@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\UrlInterface;
@@ -8,10 +10,10 @@ use ThirdParty\BlogArticle\Api\Data\BlogArchiveMonthInterfaceFactory;
 
 class BlogArchiveManagement implements BlogArchiveManagementInterface
 {
-    private $archive;
-    private $storeManager;
-    private $urlBuilder;
-    private $monthFactory;
+    private Archive $archive;
+    private StoreManagerInterface $storeManager;
+    private UrlInterface $urlBuilder;
+    private BlogArchiveMonthInterfaceFactory $monthFactory;
 
     public function __construct(
         Archive $archive,

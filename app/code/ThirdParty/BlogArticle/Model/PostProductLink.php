@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -10,8 +12,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
  */
 class PostProductLink
 {
-    private $resource;
-    private $productRepository;
+    private ResourceConnection $resource;
+    private ProductRepositoryInterface $productRepository;
 
     public function __construct(
         ResourceConnection $resource,

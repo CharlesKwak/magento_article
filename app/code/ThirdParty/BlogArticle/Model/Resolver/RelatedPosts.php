@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -9,8 +11,8 @@ use ThirdParty\BlogArticle\Model\Resolver\DataMapper\PostMapper;
 
 class RelatedPosts implements ResolverInterface
 {
-    private $postRepository;
-    private $postMapper;
+    private PostRepositoryInterface $postRepository;
+    private PostMapper $postMapper;
 
     public function __construct(
         PostRepositoryInterface $postRepository,

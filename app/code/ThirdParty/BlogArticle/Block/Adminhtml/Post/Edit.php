@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block\Adminhtml\Post;
 
 use Magento\Backend\Block\Template;
@@ -12,24 +14,26 @@ use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFactory;
 use ThirdParty\BlogArticle\Model\PostProductLink;
 use ThirdParty\BlogArticle\Model\PostTagLink;
+use ThirdParty\BlogArticle\Model\PostVisibility;
 use ThirdParty\BlogArticle\Model\PreviewToken;
 use ThirdParty\BlogArticle\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use ThirdParty\BlogArticle\Model\ResourceModel\Tag\CollectionFactory as TagCollectionFactory;
 
 class Edit extends Template
 {
-    private $postFactory;
+    private PostFactory $postFactory;
     protected $formKey;
-    private $dataPersistor;
-    private $categoryCollectionFactory;
-    private $tagCollectionFactory;
-    private $postTagLink;
-    private $postProductLink;
-    private $systemStore;
-    private $wysiwygConfig;
-    private $json;
-    private $previewToken;
-    private $post;
+    private DataPersistorInterface $dataPersistor;
+    private CategoryCollectionFactory $categoryCollectionFactory;
+    private TagCollectionFactory $tagCollectionFactory;
+    private PostTagLink $postTagLink;
+    private PostProductLink $postProductLink;
+    private SystemStore $systemStore;
+    private WysiwygConfig $wysiwygConfig;
+    private Json $json;
+    private PreviewToken $previewToken;
+    private PostVisibility $postVisibility;
+    private ?Post $post = null;
 
     public function __construct(
         Context $context,
@@ -44,6 +48,7 @@ class Edit extends Template
         WysiwygConfig $wysiwygConfig,
         Json $json,
         PreviewToken $previewToken,
+        PostVisibility $postVisibility,
         array $data = []
     ) {
         $this->postFactory = $postFactory;
@@ -57,6 +62,7 @@ class Edit extends Template
         $this->wysiwygConfig = $wysiwygConfig;
         $this->json = $json;
         $this->previewToken = $previewToken;
+        $this->postVisibility = $postVisibility;
         parent::__construct($context, $data);
     }
 
@@ -278,17 +284,6 @@ class Edit extends Template
         if (!$post || !$post->getId()) {
             return false;
         }
-        if (!(int) $post->getIsActive()) {
-            return true;
-        }
-        $publishedAt = $post->getPublishedAt();
-        if ($publishedAt) {
-            $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->getTimestamp();
-            $pub = strtotime((string) $publishedAt . ' UTC');
-            if ($pub && $pub > $now) {
-                return true;
-            }
-        }
-        return false;
+        return !$this->postVisibility->isActiveAndPublished($post);
     }
 }

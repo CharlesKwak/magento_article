@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Plugin;
 
 use Magento\Framework\App\RequestInterface;
@@ -12,10 +14,10 @@ use ThirdParty\BlogArticle\Model\Config;
  */
 class Topmenu
 {
-    private $config;
-    private $urlBuilder;
-    private $nodeFactory;
-    private $request;
+    private Config $config;
+    private UrlInterface $urlBuilder;
+    private NodeFactory $nodeFactory;
+    private RequestInterface $request;
 
     public function __construct(
         Config $config,

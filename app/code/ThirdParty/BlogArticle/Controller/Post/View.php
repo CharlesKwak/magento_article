@@ -1,51 +1,39 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Post;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Store\Model\StoreManagerInterface;
 use ThirdParty\BlogArticle\Model\PostFactory;
 use ThirdParty\BlogArticle\Model\PostViewCounter;
-use ThirdParty\BlogArticle\Model\PreviewToken;
+use ThirdParty\BlogArticle\Model\PostVisibility;
 
-class View extends Action
+class View extends Action implements HttpGetActionInterface
 {
-    /**
-     * @var PageFactory
-     */
-    private $resultPageFactory;
-
-    /**
-     * @var ForwardFactory
-     */
-    private $resultForwardFactory;
-
-    /**
-     * @var PostFactory
-     */
-    private $postFactory;
-    private $storeManager;
-    private $postViewCounter;
-    private $previewToken;
+    private PageFactory $resultPageFactory;
+    private ForwardFactory $resultForwardFactory;
+    private PostFactory $postFactory;
+    private PostViewCounter $postViewCounter;
+    private PostVisibility $postVisibility;
 
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
         PostFactory $postFactory,
-        StoreManagerInterface $storeManager,
         PostViewCounter $postViewCounter,
-        PreviewToken $previewToken
+        PostVisibility $postVisibility
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->postFactory = $postFactory;
-        $this->storeManager = $storeManager;
         $this->postViewCounter = $postViewCounter;
-        $this->previewToken = $previewToken;
+        $this->postVisibility = $postVisibility;
     }
 
     /**
@@ -64,26 +52,9 @@ class View extends Action
         }
 
         $preview = trim((string) $this->getRequest()->getParam('preview', ''));
-        $allowPreview = $preview !== ''
-            && $post->getId()
-            && $this->previewToken->isValid($preview, (int) $post->getId());
+        $allowPreview = $this->postVisibility->isPreviewAllowed($post, $preview);
 
-        if (!$post->getId() || (!(int) $post->getIsActive() && !$allowPreview)) {
-            $resultForward = $this->resultForwardFactory->create();
-            return $resultForward->forward('noroute');
-        }
-        $publishedAt = $post->getPublishedAt();
-        if ($publishedAt && !$allowPreview) {
-            $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->getTimestamp();
-            $pub = strtotime((string) $publishedAt . ' UTC');
-            if ($pub && $pub > $now) {
-                $resultForward = $this->resultForwardFactory->create();
-                return $resultForward->forward('noroute');
-            }
-        }
-        $postStore = (int) $post->getStoreId();
-        $currentStore = (int) $this->storeManager->getStore()->getId();
-        if ($postStore > 0 && $postStore !== $currentStore) {
+        if (!$this->postVisibility->isVisible($post, $allowPreview)) {
             $resultForward = $this->resultForwardFactory->create();
             return $resultForward->forward('noroute');
         }

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Seo;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -11,9 +13,9 @@ use ThirdParty\BlogArticle\Model\Config;
  */
 class HreflangBuilder
 {
-    private $storeManager;
-    private $scopeConfig;
-    private $config;
+    private StoreManagerInterface $storeManager;
+    private ScopeConfigInterface $scopeConfig;
+    private Config $config;
 
     public function __construct(
         StoreManagerInterface $storeManager,

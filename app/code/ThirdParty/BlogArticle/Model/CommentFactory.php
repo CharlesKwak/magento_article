@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 
 class CommentFactory
 {
-    private $objectManager;
-    private $instanceName;
+    private ObjectManagerInterface $objectManager;
+    private string $instanceName;
 
     public function __construct(ObjectManagerInterface $objectManager, $instanceName = Comment::class)
     {

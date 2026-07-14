@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -15,7 +17,7 @@ class PostSetStatusCommand extends Command
     private const ARG_POST_ID = 'post_id';
     private const ARG_STATUS = 'status';
 
-    private $postFactory;
+    private PostFactory $postFactory;
 
     public function __construct(PostFactory $postFactory, ?string $name = null)
     {

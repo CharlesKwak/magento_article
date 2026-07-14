@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -8,7 +10,7 @@ use ThirdParty\BlogArticle\Api\TagRepositoryInterface;
 
 class Tags implements ResolverInterface
 {
-    private $tagRepository;
+    private TagRepositoryInterface $tagRepository;
 
     public function __construct(TagRepositoryInterface $tagRepository)
     {

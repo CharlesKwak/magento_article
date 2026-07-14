@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\GraphQl;
 
 use Magento\Authorization\Model\UserContextInterface;

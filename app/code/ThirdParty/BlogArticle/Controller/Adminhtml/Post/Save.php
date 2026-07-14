@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Post;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Request\DataPersistorInterface;
@@ -11,16 +14,16 @@ use ThirdParty\BlogArticle\Model\PostProductLink;
 use ThirdParty\BlogArticle\Model\PostTagLink;
 use ThirdParty\BlogArticle\Model\UrlKeyGenerator;
 
-class Save extends Action
+class Save extends Action implements HttpPostActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
 
-    private $postFactory;
-    private $dataPersistor;
-    private $urlKeyGenerator;
-    private $postTagLink;
-    private $postProductLink;
-    private $imageUploader;
+    private PostFactory $postFactory;
+    private DataPersistorInterface $dataPersistor;
+    private UrlKeyGenerator $urlKeyGenerator;
+    private PostTagLink $postTagLink;
+    private PostProductLink $postProductLink;
+    private FeaturedImageUploader $imageUploader;
 
     public function __construct(
         Context $context,

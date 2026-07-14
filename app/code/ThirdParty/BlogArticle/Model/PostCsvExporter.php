@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -32,11 +34,11 @@ class PostCsvExporter
         'update_time',
     ];
 
-    private $csv;
-    private $filesystem;
-    private $collectionFactory;
-    private $postTagLink;
-    private $postFilter;
+    private Csv $csv;
+    private Filesystem $filesystem;
+    private CollectionFactory $collectionFactory;
+    private PostTagLink $postTagLink;
+    private PostFilter $postFilter;
 
     public function __construct(
         Csv $csv,

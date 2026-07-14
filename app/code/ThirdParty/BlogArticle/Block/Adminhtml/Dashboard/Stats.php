@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block\Adminhtml\Dashboard;
 
 use Magento\Backend\Block\Template;
@@ -12,9 +14,9 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory as PostCol
  */
 class Stats extends Template
 {
-    private $postCollectionFactory;
-    private $commentCollectionFactory;
-    private $resource;
+    private PostCollectionFactory $postCollectionFactory;
+    private CommentCollectionFactory $commentCollectionFactory;
+    private ResourceConnection $resource;
 
     public function __construct(
         Context $context,

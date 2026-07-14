@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Setup\Patch\Data;
 
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -10,10 +12,7 @@ use ThirdParty\BlogArticle\Setup\Patch\Schema\AddUrlKeyAndStatusColumns;
  */
 class BackfillUrlKeysAndStatus implements DataPatchInterface
 {
-    /**
-     * @var ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
+    private ModuleDataSetupInterface $moduleDataSetup;
 
     public function __construct(ModuleDataSetupInterface $moduleDataSetup)
     {

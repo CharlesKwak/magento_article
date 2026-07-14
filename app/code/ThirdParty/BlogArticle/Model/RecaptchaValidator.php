@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -13,10 +15,10 @@ class RecaptchaValidator
 {
     private const VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
 
-    private $config;
-    private $curl;
-    private $remoteAddress;
-    private $logger;
+    private Config $config;
+    private Curl $curl;
+    private RemoteAddress $remoteAddress;
+    private LoggerInterface $logger;
 
     public function __construct(
         Config $config,

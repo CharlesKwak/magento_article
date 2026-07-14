@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -13,7 +15,7 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Tag\CollectionFactory;
  */
 class TagListCommand extends Command
 {
-    private $collectionFactory;
+    private CollectionFactory $collectionFactory;
 
     public function __construct(CollectionFactory $collectionFactory, ?string $name = null)
     {

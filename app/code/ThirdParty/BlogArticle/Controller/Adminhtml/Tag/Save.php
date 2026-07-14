@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Tag;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Request\DataPersistorInterface;
@@ -8,24 +11,13 @@ use Magento\Framework\Exception\LocalizedException;
 use ThirdParty\BlogArticle\Model\TagFactory;
 use ThirdParty\BlogArticle\Model\TagUrlKeyGenerator;
 
-class Save extends Action
+class Save extends Action implements HttpPostActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::tags';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::tags';
 
-    /**
-     * @var TagFactory
-     */
-    private $tagFactory;
-
-    /**
-     * @var DataPersistorInterface
-     */
-    private $dataPersistor;
-
-    /**
-     * @var TagUrlKeyGenerator
-     */
-    private $urlKeyGenerator;
+    private TagFactory $tagFactory;
+    private DataPersistorInterface $dataPersistor;
+    private TagUrlKeyGenerator $urlKeyGenerator;
 
     public function __construct(
         Context $context,

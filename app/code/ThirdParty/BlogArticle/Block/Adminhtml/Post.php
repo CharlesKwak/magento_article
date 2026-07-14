@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block\Adminhtml;
 
 use Magento\Backend\Block\Template;
@@ -12,40 +14,13 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory;
 
 class Post extends Template
 {
-    /**
-     * @var CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
-     * @var FormKey
-     */
+    protected CollectionFactory $collectionFactory;
     protected $formKey;
-
-    /**
-     * @var UrlInterface
-     */
-    private $frontendUrlBuilder;
-
-    /**
-     * @var PostFilter
-     */
-    private $postFilter;
-
-    /**
-     * @var CategoryCollectionFactory
-     */
-    private $categoryCollectionFactory;
-
-    /**
-     * @var CategoryFactory
-     */
-    private $categoryFactory;
-
-    /**
-     * @var array
-     */
-    private $categoryNameCache = [];
+    private UrlInterface $frontendUrlBuilder;
+    private PostFilter $postFilter;
+    private CategoryCollectionFactory $categoryCollectionFactory;
+    private CategoryFactory $categoryFactory;
+    private array $categoryNameCache = [];
 
     public function __construct(
         Context $context,

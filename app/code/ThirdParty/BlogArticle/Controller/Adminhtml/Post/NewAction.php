@@ -1,18 +1,18 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Post;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 
-class NewAction extends Action
+class NewAction extends Action implements HttpGetActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
 
-    /**
-     * @var ForwardFactory
-     */
-    private $resultForwardFactory;
+    private ForwardFactory $resultForwardFactory;
 
     public function __construct(
         Context $context,

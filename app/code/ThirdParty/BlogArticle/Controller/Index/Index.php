@@ -1,17 +1,20 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Index;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use ThirdParty\BlogArticle\Model\CategoryFactory;
 use ThirdParty\BlogArticle\Model\TagFactory;
 
-class Index extends Action
+class Index extends Action implements HttpGetActionInterface
 {
-    private $resultPageFactory;
-    private $categoryFactory;
-    private $tagFactory;
+    private PageFactory $resultPageFactory;
+    private CategoryFactory $categoryFactory;
+    private TagFactory $tagFactory;
 
     public function __construct(
         Context $context,

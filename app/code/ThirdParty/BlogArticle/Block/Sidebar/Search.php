@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block\Sidebar;
 
 use Magento\Framework\View\Element\Template;
@@ -7,7 +9,7 @@ use ThirdParty\BlogArticle\Model\Config;
 
 class Search extends Template
 {
-    private $config;
+    private Config $config;
 
     public function __construct(
         Context $context,

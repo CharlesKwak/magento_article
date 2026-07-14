@@ -1,24 +1,20 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Post;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use ThirdParty\BlogArticle\Model\PostFactory;
 
-class Edit extends Action
+class Edit extends Action implements HttpGetActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
 
-    /**
-     * @var PageFactory
-     */
-    private $resultPageFactory;
-
-    /**
-     * @var PostFactory
-     */
-    private $postFactory;
+    private PageFactory $resultPageFactory;
+    private PostFactory $postFactory;
 
     public function __construct(
         Context $context,

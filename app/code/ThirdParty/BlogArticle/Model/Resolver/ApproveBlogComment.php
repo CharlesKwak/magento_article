@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -11,8 +13,8 @@ use ThirdParty\BlogArticle\Model\GraphQl\Authorization;
 
 class ApproveBlogComment implements ResolverInterface
 {
-    private $authorization;
-    private $commentRepository;
+    private Authorization $authorization;
+    private CommentRepositoryInterface $commentRepository;
 
     public function __construct(
         Authorization $authorization,

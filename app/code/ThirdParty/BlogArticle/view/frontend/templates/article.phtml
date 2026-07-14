@@ -13,7 +13,7 @@ $searchQuery = $block->getSearchQuery();
     <?php endif; ?>
     <?php if ($block->getFilterDescription() !== ''): ?>
         <div class="blog-filter-description" style="margin-bottom:1rem;">
-            <?= /* @noEscape */ $block->escapeHtml(
+            <?= $block->escapeHtml(
                 $block->getFilterDescription(),
                 ['p', 'br', 'em', 'strong', 'b', 'i', 'ul', 'ol', 'li', 'a']
             ) ?>

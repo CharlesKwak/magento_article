@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Comment;
 
 use Magento\Framework\App\Action\Action;
@@ -13,11 +15,11 @@ use ThirdParty\BlogArticle\Model\RecaptchaValidator;
 
 class Post extends Action implements HttpPostActionInterface
 {
-    private $formKeyValidator;
-    private $commentRepository;
-    private $commentFactory;
-    private $spamGuard;
-    private $recaptchaValidator;
+    private FormKeyValidator $formKeyValidator;
+    private CommentRepositoryInterface $commentRepository;
+    private CommentInterfaceFactory $commentFactory;
+    private CommentSpamGuard $spamGuard;
+    private RecaptchaValidator $recaptchaValidator;
 
     public function __construct(
         Context $context,

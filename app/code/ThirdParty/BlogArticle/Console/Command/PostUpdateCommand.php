@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -14,7 +16,7 @@ use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
  */
 class PostUpdateCommand extends Command
 {
-    private $postRepository;
+    private PostRepositoryInterface $postRepository;
 
     public function __construct(
         PostRepositoryInterface $postRepository,

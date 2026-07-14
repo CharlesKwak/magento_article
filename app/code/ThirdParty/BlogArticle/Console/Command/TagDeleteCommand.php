@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -16,8 +18,8 @@ use ThirdParty\BlogArticle\Model\TagFactory;
  */
 class TagDeleteCommand extends Command
 {
-    private $tagRepository;
-    private $tagFactory;
+    private TagRepositoryInterface $tagRepository;
+    private TagFactory $tagFactory;
 
     public function __construct(
         TagRepositoryInterface $tagRepository,

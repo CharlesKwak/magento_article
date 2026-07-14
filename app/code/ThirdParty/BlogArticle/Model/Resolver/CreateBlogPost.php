@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -12,10 +14,10 @@ use ThirdParty\BlogArticle\Model\Resolver\DataMapper\PostMapper;
 
 class CreateBlogPost implements ResolverInterface
 {
-    private $authorization;
-    private $postRepository;
-    private $postFactory;
-    private $postMapper;
+    private Authorization $authorization;
+    private PostRepositoryInterface $postRepository;
+    private PostInterfaceFactory $postFactory;
+    private PostMapper $postMapper;
 
     public function __construct(
         Authorization $authorization,

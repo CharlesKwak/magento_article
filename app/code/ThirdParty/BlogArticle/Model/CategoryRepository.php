@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -13,30 +15,11 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory as PostCol
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
-    /**
-     * @var CategoryFactory
-     */
-    private $categoryFactory;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var CategoryInterfaceFactory
-     */
-    private $dataFactory;
-
-    /**
-     * @var CategoryUrlKeyGenerator
-     */
-    private $urlKeyGenerator;
-
-    /**
-     * @var PostCollectionFactory
-     */
-    private $postCollectionFactory;
+    private CategoryFactory $categoryFactory;
+    private CollectionFactory $collectionFactory;
+    private CategoryInterfaceFactory $dataFactory;
+    private CategoryUrlKeyGenerator $urlKeyGenerator;
+    private PostCollectionFactory $postCollectionFactory;
 
     public function __construct(
         CategoryFactory $categoryFactory,

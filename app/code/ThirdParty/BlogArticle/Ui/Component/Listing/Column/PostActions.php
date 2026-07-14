@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Ui\Component\Listing\Column;
 
 use Magento\Framework\UrlInterface;
@@ -13,8 +15,8 @@ class PostActions extends Column
     public const URL_PATH_DELETE = 'blogarticle/post/delete';
     public const URL_PATH_DUPLICATE = 'blogarticle/post/duplicate';
 
-    private $urlBuilder;
-    private $storeManager;
+    private UrlInterface $urlBuilder;
+    private StoreManagerInterface $storeManager;
 
     public function __construct(
         ContextInterface $context,

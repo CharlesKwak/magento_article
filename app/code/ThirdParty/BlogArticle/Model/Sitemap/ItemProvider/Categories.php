@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Sitemap\ItemProvider;
 
 use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
@@ -10,8 +12,8 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Category\CollectionFactory;
  */
 class Categories implements ItemProviderInterface
 {
-    private $collectionFactory;
-    private $itemFactory;
+    private CollectionFactory $collectionFactory;
+    private SitemapItemInterfaceFactory $itemFactory;
 
     public function __construct(
         CollectionFactory $collectionFactory,

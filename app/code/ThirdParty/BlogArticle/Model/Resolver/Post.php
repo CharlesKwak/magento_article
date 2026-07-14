@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -11,10 +13,7 @@ use ThirdParty\BlogArticle\Api\PostRepositoryInterface;
 
 class Post implements ResolverInterface
 {
-    /**
-     * @var PostRepositoryInterface
-     */
-    private $postRepository;
+    private PostRepositoryInterface $postRepository;
 
     public function __construct(PostRepositoryInterface $postRepository)
     {

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block\Sidebar;
 
 use Magento\Framework\View\Element\Template;
@@ -6,16 +8,18 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use ThirdParty\BlogArticle\Model\Config;
 use ThirdParty\BlogArticle\Model\PostFactory;
+use ThirdParty\BlogArticle\Model\PostVisibility;
 use ThirdParty\BlogArticle\Model\ResourceModel\Comment\CollectionFactory as CommentCollectionFactory;
 
 class RecentComments extends Template
 {
-    private $commentCollectionFactory;
-    private $postFactory;
-    private $config;
-    private $storeManager;
-    private $items;
-    private $postCache = [];
+    private CommentCollectionFactory $commentCollectionFactory;
+    private PostFactory $postFactory;
+    private Config $config;
+    private StoreManagerInterface $storeManager;
+    private PostVisibility $postVisibility;
+    private ?array $items = null;
+    private array $postCache = [];
 
     public function __construct(
         Context $context,
@@ -23,12 +27,14 @@ class RecentComments extends Template
         PostFactory $postFactory,
         Config $config,
         StoreManagerInterface $storeManager,
+        PostVisibility $postVisibility,
         array $data = []
     ) {
         $this->commentCollectionFactory = $commentCollectionFactory;
         $this->postFactory = $postFactory;
         $this->config = $config;
         $this->storeManager = $storeManager;
+        $this->postVisibility = $postVisibility;
         parent::__construct($context, $data);
     }
 
@@ -104,27 +110,8 @@ class RecentComments extends Template
             return $this->postCache[$postId];
         }
         $post = $this->postFactory->create()->load($postId);
-        if (!$post->getId() || !(int) $post->getIsActive()) {
-            $this->postCache[$postId] = null;
-            return null;
-        }
-        $postStore = $post->getStoreId() !== null && $post->getStoreId() !== ''
-            ? (int) $post->getStoreId()
-            : 0;
-        if ($postStore > 0 && $storeId > 0 && $postStore !== $storeId) {
-            $this->postCache[$postId] = null;
-            return null;
-        }
-        $published = $post->getPublishedAt();
-        if ($published) {
-            $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->format('Y-m-d H:i:s');
-            if ((string) $published > $now) {
-                $this->postCache[$postId] = null;
-                return null;
-            }
-        }
-        $this->postCache[$postId] = $post;
-        return $post;
+        $this->postCache[$postId] = $this->postVisibility->isVisible($post, false, $storeId) ? $post : null;
+        return $this->postCache[$postId];
     }
 
     protected function _toHtml()

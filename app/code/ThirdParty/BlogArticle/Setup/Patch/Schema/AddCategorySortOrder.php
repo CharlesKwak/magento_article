@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Setup\Patch\Schema;
 
 use Magento\Framework\DB\Ddl\Table;
@@ -10,7 +12,7 @@ use Magento\Framework\Setup\Patch\SchemaPatchInterface;
  */
 class AddCategorySortOrder implements SchemaPatchInterface
 {
-    private $moduleDataSetup;
+    private ModuleDataSetupInterface $moduleDataSetup;
 
     public function __construct(ModuleDataSetupInterface $moduleDataSetup)
     {

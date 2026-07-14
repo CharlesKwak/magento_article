@@ -1,18 +1,19 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Post;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use ThirdParty\BlogArticle\Model\PostFactory;
 
-class Delete extends Action
+class Delete extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
 
-    /**
-     * @var PostFactory
-     */
-    private $postFactory;
+    private PostFactory $postFactory;
 
     public function __construct(
         Context $context,

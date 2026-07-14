@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use ThirdParty\BlogArticle\Model\ResourceModel\Tag\CollectionFactory;
 
 class TagUrlKeyGenerator
 {
-    private $collectionFactory;
-    private $urlKeyGenerator;
+    private CollectionFactory $collectionFactory;
+    private UrlKeyGenerator $urlKeyGenerator;
 
     public function __construct(CollectionFactory $collectionFactory, UrlKeyGenerator $urlKeyGenerator)
     {

@@ -1,19 +1,14 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use ThirdParty\BlogArticle\Model\ResourceModel\Category\CollectionFactory;
 
 class CategoryUrlKeyGenerator
 {
-    /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var UrlKeyGenerator
-     */
-    private $urlKeyGenerator;
+    private CollectionFactory $collectionFactory;
+    private UrlKeyGenerator $urlKeyGenerator;
 
     public function __construct(
         CollectionFactory $collectionFactory,

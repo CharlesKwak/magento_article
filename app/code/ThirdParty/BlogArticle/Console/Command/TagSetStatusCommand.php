@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -12,7 +14,7 @@ use ThirdParty\BlogArticle\Model\TagFactory;
  */
 class TagSetStatusCommand extends Command
 {
-    private $tagFactory;
+    private TagFactory $tagFactory;
 
     public function __construct(TagFactory $tagFactory, ?string $name = null)
     {

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -16,8 +18,8 @@ use ThirdParty\BlogArticle\Model\PostFactory;
  */
 class PostDeleteCommand extends Command
 {
-    private $postRepository;
-    private $postFactory;
+    private PostRepositoryInterface $postRepository;
+    private PostFactory $postFactory;
 
     public function __construct(
         PostRepositoryInterface $postRepository,

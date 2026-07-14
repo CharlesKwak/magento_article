@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -14,8 +16,8 @@ use ThirdParty\BlogArticle\Api\TagRepositoryInterface;
  */
 class TagCreateCommand extends Command
 {
-    private $tagRepository;
-    private $tagFactory;
+    private TagRepositoryInterface $tagRepository;
+    private TagInterfaceFactory $tagFactory;
 
     public function __construct(
         TagRepositoryInterface $tagRepository,

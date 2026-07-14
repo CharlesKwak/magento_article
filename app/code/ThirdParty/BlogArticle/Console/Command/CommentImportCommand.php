@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -14,7 +16,7 @@ use ThirdParty\BlogArticle\Model\CommentCsvImporter;
  */
 class CommentImportCommand extends Command
 {
-    private $importer;
+    private CommentCsvImporter $importer;
 
     public function __construct(CommentCsvImporter $importer, ?string $name = null)
     {

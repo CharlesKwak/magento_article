@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -12,8 +14,8 @@ use ThirdParty\BlogArticle\Model\GraphQl\Authorization;
 
 class DeleteBlogPost implements ResolverInterface
 {
-    private $authorization;
-    private $postRepository;
+    private Authorization $authorization;
+    private PostRepositoryInterface $postRepository;
 
     public function __construct(
         Authorization $authorization,

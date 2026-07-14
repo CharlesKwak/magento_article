@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block\Adminhtml;
 
 use Magento\Backend\Block\Template;
@@ -8,14 +10,7 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Tag\CollectionFactory;
 
 class Tag extends Template
 {
-    /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var FormKey
-     */
+    private CollectionFactory $collectionFactory;
     protected $formKey;
 
     public function __construct(

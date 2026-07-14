@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -13,9 +15,9 @@ use ThirdParty\BlogArticle\Model\Archive;
  */
 class Archives implements ResolverInterface
 {
-    private $archive;
-    private $storeManager;
-    private $urlBuilder;
+    private Archive $archive;
+    private StoreManagerInterface $storeManager;
+    private UrlInterface $urlBuilder;
 
     public function __construct(
         Archive $archive,

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -13,9 +15,9 @@ class CommentSpamGuard
     public const HONEYPOT_FIELD = 'website_url';
     public const TIMESTAMP_FIELD = 'form_ts';
 
-    private $config;
-    private $remoteAddress;
-    private $dateTime;
+    private Config $config;
+    private RemoteAddress $remoteAddress;
+    private DateTime $dateTime;
 
     /** @var array simple per-request memory; flood uses DB-less file cache optional - use timestamp session */
     private static $recentIps = [];

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -50,8 +52,8 @@ class Config
     public const XML_PATH_RECAPTCHA_MIN_SCORE = 'blogarticle/comments/recaptcha_min_score';
     public const XML_PATH_UPLOAD_MAX_KB = 'blogarticle/media/max_upload_kb';
 
-    private $scopeConfig;
-    private $encryptor;
+    private ScopeConfigInterface $scopeConfig;
+    private EncryptorInterface $encryptor;
 
     public function __construct(
         ScopeConfigInterface $scopeConfig,

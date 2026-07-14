@@ -1,14 +1,16 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller;
 
 use Magento\Framework\App\Action\Forward;
 use Magento\Framework\App\ActionFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\RouterInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Url;
 use ThirdParty\BlogArticle\Model\CategoryFactory;
 use ThirdParty\BlogArticle\Model\PostFactory;
-use ThirdParty\BlogArticle\Model\PreviewToken;
+use ThirdParty\BlogArticle\Model\PostVisibility;
 use ThirdParty\BlogArticle\Model\TagFactory;
 
 /**
@@ -34,27 +36,24 @@ class Router implements RouterInterface
         'robots.txt',
     ];
 
-    private $actionFactory;
-    private $postFactory;
-    private $categoryFactory;
-    private $tagFactory;
-    private $storeManager;
-    private $previewToken;
+    private ActionFactory $actionFactory;
+    private PostFactory $postFactory;
+    private CategoryFactory $categoryFactory;
+    private TagFactory $tagFactory;
+    private PostVisibility $postVisibility;
 
     public function __construct(
         ActionFactory $actionFactory,
         PostFactory $postFactory,
         CategoryFactory $categoryFactory,
         TagFactory $tagFactory,
-        StoreManagerInterface $storeManager,
-        PreviewToken $previewToken
+        PostVisibility $postVisibility
     ) {
         $this->actionFactory = $actionFactory;
         $this->postFactory = $postFactory;
         $this->categoryFactory = $categoryFactory;
         $this->tagFactory = $tagFactory;
-        $this->storeManager = $storeManager;
-        $this->previewToken = $previewToken;
+        $this->postVisibility = $postVisibility;
     }
 
     /**
@@ -86,7 +85,7 @@ class Router implements RouterInterface
                 ->setControllerName('index')
                 ->setActionName('index')
                 ->setParam('cat', $urlKey)
-                ->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
+                ->setAlias(Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
             return $this->actionFactory->create(Forward::class);
         }
 
@@ -104,7 +103,7 @@ class Router implements RouterInterface
                 ->setControllerName('index')
                 ->setActionName('index')
                 ->setParam('tag', $urlKey)
-                ->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
+                ->setAlias(Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
             return $this->actionFactory->create(Forward::class);
         }
 
@@ -118,7 +117,7 @@ class Router implements RouterInterface
                 ->setControllerName('index')
                 ->setActionName('index')
                 ->setParam('author', $authorKey)
-                ->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
+                ->setAlias(Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
             return $this->actionFactory->create(Forward::class);
         }
 
@@ -139,7 +138,7 @@ class Router implements RouterInterface
             if ($month > 0) {
                 $request->setParam('month', $month);
             }
-            $request->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
+            $request->setAlias(Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
             return $this->actionFactory->create(Forward::class);
         }
 
@@ -154,26 +153,9 @@ class Router implements RouterInterface
         }
 
         $post = $this->postFactory->create()->load($urlKey, 'url_key');
-        if (!$post->getId()) {
-            return null;
-        }
         $preview = trim((string) $request->getParam('preview', ''));
-        $allowPreview = $preview !== ''
-            && $this->previewToken->isValid($preview, (int) $post->getId());
-        if (!(int) $post->getIsActive() && !$allowPreview) {
-            return null;
-        }
-        $publishedAt = $post->getPublishedAt();
-        if ($publishedAt && !$allowPreview) {
-            $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->getTimestamp();
-            $pub = strtotime((string) $publishedAt . ' UTC');
-            if ($pub && $pub > $now) {
-                return null;
-            }
-        }
-        $postStore = (int) $post->getStoreId();
-        $currentStore = (int) $this->storeManager->getStore()->getId();
-        if ($postStore > 0 && $postStore !== $currentStore) {
+        $allowPreview = $this->postVisibility->isPreviewAllowed($post, $preview);
+        if (!$this->postVisibility->isVisible($post, $allowPreview)) {
             return null;
         }
 
@@ -181,7 +163,7 @@ class Router implements RouterInterface
             ->setControllerName('post')
             ->setActionName('view')
             ->setParam('url_key', $urlKey)
-            ->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
+            ->setAlias(Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
 
         return $this->actionFactory->create(Forward::class);
     }

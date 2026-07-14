@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block;
 
 use Magento\Framework\DataObject\IdentityInterface;
@@ -20,75 +22,20 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Tag\CollectionFactory as TagColle
 
 class Article extends Template implements IdentityInterface
 {
-    /**
-     * @var CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
-     * @var PostFilter
-     */
-    private $postFilter;
-
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var CategoryCollectionFactory
-     */
-    private $categoryCollectionFactory;
-
-    /**
-     * @var CategoryFactory
-     */
-    private $categoryFactory;
-
-    /**
-     * @var TagCollectionFactory
-     */
-    private $tagCollectionFactory;
-
-    /**
-     * @var TagFactory
-     */
-    private $tagFactory;
-
-    /**
-     * @var PostTagLink
-     */
-    private $postTagLink;
-
-    /**
-     * @var FeaturedImageUploader
-     */
-    private $imageUploader;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var HreflangBuilder
-     */
-    private $hreflangBuilder;
-
-    /**
-     * @var Collection|null
-     */
-    private $posts;
-
-    /**
-     * @var array
-     */
-    private $categoryNameCache = [];
-
-    /**
-     * @var array
-     */
-    private $tagNameCache = [];
+    protected CollectionFactory $collectionFactory;
+    private PostFilter $postFilter;
+    private Config $config;
+    private CategoryCollectionFactory $categoryCollectionFactory;
+    private CategoryFactory $categoryFactory;
+    private TagCollectionFactory $tagCollectionFactory;
+    private TagFactory $tagFactory;
+    private PostTagLink $postTagLink;
+    private FeaturedImageUploader $imageUploader;
+    private StoreManagerInterface $storeManager;
+    private HreflangBuilder $hreflangBuilder;
+    private ?Collection $posts = null;
+    private array $categoryNameCache = [];
+    private array $tagNameCache = [];
 
     public function __construct(
         Context $context,

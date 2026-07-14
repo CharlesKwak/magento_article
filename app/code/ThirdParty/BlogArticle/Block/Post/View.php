@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block\Post;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -17,7 +19,7 @@ use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
 use ThirdParty\BlogArticle\Model\Post;
 use ThirdParty\BlogArticle\Model\PostFactory;
 use ThirdParty\BlogArticle\Model\PostFilter;
-use ThirdParty\BlogArticle\Model\PreviewToken;
+use ThirdParty\BlogArticle\Model\PostVisibility;
 use ThirdParty\BlogArticle\Model\PostProductLink;
 use ThirdParty\BlogArticle\Model\PostTagLink;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory as PostCollectionFactory;
@@ -26,35 +28,34 @@ use ThirdParty\BlogArticle\Model\TagFactory;
 
 class View extends Template implements IdentityInterface
 {
-    private $postFactory;
-    private $postRepository;
-    private $postTagLink;
-    private $postProductLink;
-    private $productRepository;
-    private $tagFactory;
-    private $categoryFactory;
-    private $imageUploader;
-    private $commentRepository;
-    private $config;
-    private $formKey;
-    private $dateTime;
-    private $postFilter;
-    private $postCollectionFactory;
-    private $storeManager;
-    private $post;
-    private $related;
-    private $relatedProducts;
-    private $neighbors;
-    private $tagNameCache = [];
-    private $tagMetaCache = [];
-    private $hreflangBuilder;
-    private $previewToken;
+    private PostFactory $postFactory;
+    private PostRepositoryInterface $postRepository;
+    private PostTagLink $postTagLink;
+    private PostProductLink $postProductLink;
+    private ProductRepositoryInterface $productRepository;
+    private TagFactory $tagFactory;
+    private CategoryFactory $categoryFactory;
+    private FeaturedImageUploader $imageUploader;
+    private CommentRepositoryInterface $commentRepository;
+    private Config $config;
+    private FormKey $formKey;
+    private DateTime $dateTime;
+    private PostFilter $postFilter;
+    private PostCollectionFactory $postCollectionFactory;
+    private StoreManagerInterface $storeManager;
+    private ?Post $post = null;
+    private ?array $related = null;
+    private ?array $relatedProducts = null;
+    private ?array $neighbors = null;
+    private array $tagNameCache = [];
+    private array $tagMetaCache = [];
+    private HreflangBuilder $hreflangBuilder;
+    private PostVisibility $postVisibility;
     /** @var array<int, array{id:string,level:int,text:string}>|null */
-    private $tocItems;
+    private ?array $tocItems = null;
     /** @var string|null prepared body HTML cache */
-    private $preparedContentHtml;
-    /** @var bool|null */
-    private $isPreviewMode;
+    private ?string $preparedContentHtml = null;
+    private ?bool $isPreviewMode = null;
 
     public function __construct(
         Context $context,
@@ -74,7 +75,7 @@ class View extends Template implements IdentityInterface
         PostCollectionFactory $postCollectionFactory,
         StoreManagerInterface $storeManager,
         HreflangBuilder $hreflangBuilder,
-        PreviewToken $previewToken,
+        PostVisibility $postVisibility,
         array $data = []
     ) {
         $this->postFactory = $postFactory;
@@ -93,7 +94,7 @@ class View extends Template implements IdentityInterface
         $this->postCollectionFactory = $postCollectionFactory;
         $this->storeManager = $storeManager;
         $this->hreflangBuilder = $hreflangBuilder;
-        $this->previewToken = $previewToken;
+        $this->postVisibility = $postVisibility;
         parent::__construct($context, $data);
     }
 
@@ -160,9 +161,7 @@ class View extends Template implements IdentityInterface
         } elseif ($id) {
             $post->load($id);
         }
-        if ($post->getId() && $this->previewToken->isValid($token, (int) $post->getId())) {
-            $this->isPreviewMode = true;
-        }
+        $this->isPreviewMode = $this->postVisibility->isPreviewAllowed($post, $token);
         return $this->isPreviewMode;
     }
 
@@ -268,22 +267,11 @@ class View extends Template implements IdentityInterface
             return null;
         }
         $preview = trim((string) $this->getRequest()->getParam('preview', ''));
-        $allowPreview = $preview !== ''
-            && $this->previewToken->isValid($preview, (int) $post->getId());
-        $this->isPreviewMode = $allowPreview;
+        $this->isPreviewMode = $this->postVisibility->isPreviewAllowed($post, $preview);
 
-        if (!(int) $post->getIsActive() && !$allowPreview) {
+        if (!$this->postVisibility->isVisible($post, $this->isPreviewMode)) {
             $this->post = null;
             return null;
-        }
-        $publishedAt = $post->getPublishedAt();
-        if ($publishedAt && !$allowPreview) {
-            $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->getTimestamp();
-            $pub = strtotime((string) $publishedAt . ' UTC');
-            if ($pub && $pub > $now) {
-                $this->post = null;
-                return null;
-            }
         }
 
         $this->post = $post;

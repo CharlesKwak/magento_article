@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\ResourceModel;
 
 class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb

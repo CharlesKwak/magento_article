@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -12,8 +14,8 @@ use ThirdParty\BlogArticle\Model\Config;
  */
 class PostCommentsConnection implements ResolverInterface
 {
-    private $commentRepository;
-    private $config;
+    private CommentRepositoryInterface $commentRepository;
+    private Config $config;
 
     public function __construct(
         CommentRepositoryInterface $commentRepository,

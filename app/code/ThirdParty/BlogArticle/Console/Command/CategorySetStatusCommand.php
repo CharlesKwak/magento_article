@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -12,7 +14,7 @@ use ThirdParty\BlogArticle\Model\CategoryFactory;
  */
 class CategorySetStatusCommand extends Command
 {
-    private $categoryFactory;
+    private CategoryFactory $categoryFactory;
 
     public function __construct(CategoryFactory $categoryFactory, ?string $name = null)
     {

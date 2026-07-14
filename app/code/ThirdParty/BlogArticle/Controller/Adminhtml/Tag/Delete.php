@@ -1,17 +1,21 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Tag;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use ThirdParty\BlogArticle\Model\TagFactory;
 use ThirdParty\BlogArticle\Model\PostTagLink;
 
-class Delete extends Action
+class Delete extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::tags';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::tags';
 
-    private $tagFactory;
-    private $postTagLink;
+    private TagFactory $tagFactory;
+    private PostTagLink $postTagLink;
 
     public function __construct(
         Context $context,

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Observer;
 
 use Magento\Framework\App\CacheInterface;
@@ -14,15 +16,8 @@ use ThirdParty\BlogArticle\Model\Post;
  */
 class FlushBlogCache implements ObserverInterface
 {
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
-     * @var PageCacheType
-     */
-    private $pageCache;
+    private CacheInterface $cache;
+    private PageCacheType $pageCache;
 
     public function __construct(
         CacheInterface $cache,

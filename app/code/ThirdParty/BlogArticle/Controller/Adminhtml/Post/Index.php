@@ -1,14 +1,15 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Post;
 
-class Index extends \Magento\Backend\App\Action
-{
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
-    /**
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $resultPageFactory;
+class Index extends \Magento\Backend\App\Action implements HttpGetActionInterface
+{
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
+
+    protected \Magento\Framework\View\Result\PageFactory $resultPageFactory;
 
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

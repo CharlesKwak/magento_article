@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver\DataMapper;
 
 use ThirdParty\BlogArticle\Api\Data\PostInterface;

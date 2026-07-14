@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block\Adminhtml\Tag;
 
 use Magento\Backend\Block\Template;
@@ -10,25 +12,10 @@ use ThirdParty\BlogArticle\Model\TagFactory;
 
 class Edit extends Template
 {
-    /**
-     * @var TagFactory
-     */
-    private $tagFactory;
-
-    /**
-     * @var FormKey
-     */
+    private TagFactory $tagFactory;
     protected $formKey;
-
-    /**
-     * @var DataPersistorInterface
-     */
-    private $dataPersistor;
-
-    /**
-     * @var Tag|null
-     */
-    private $tag;
+    private DataPersistorInterface $dataPersistor;
+    private ?Tag $tag = null;
 
     public function __construct(
         Context $context,

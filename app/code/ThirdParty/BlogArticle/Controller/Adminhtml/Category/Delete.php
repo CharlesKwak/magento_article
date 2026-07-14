@@ -1,24 +1,21 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Category;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use ThirdParty\BlogArticle\Model\CategoryFactory;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory as PostCollectionFactory;
 
-class Delete extends Action
+class Delete extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::categories';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::categories';
 
-    /**
-     * @var CategoryFactory
-     */
-    private $categoryFactory;
-
-    /**
-     * @var PostCollectionFactory
-     */
-    private $postCollectionFactory;
+    private CategoryFactory $categoryFactory;
+    private PostCollectionFactory $postCollectionFactory;
 
     public function __construct(
         Context $context,

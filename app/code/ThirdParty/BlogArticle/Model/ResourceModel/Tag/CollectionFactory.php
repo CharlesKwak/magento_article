@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\ResourceModel\Tag;
 
 use Magento\Framework\ObjectManagerInterface;
 
 class CollectionFactory
 {
-    private $objectManager;
-    private $instanceName;
+    private ObjectManagerInterface $objectManager;
+    private string $instanceName;
 
     public function __construct(ObjectManagerInterface $objectManager, $instanceName = Collection::class)
     {

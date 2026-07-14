@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -13,12 +15,12 @@ use ThirdParty\BlogArticle\Model\ResourceModel\Comment\CollectionFactory;
 
 class CommentRepository implements CommentRepositoryInterface
 {
-    private $commentFactory;
-    private $collectionFactory;
-    private $dataFactory;
-    private $postRepository;
-    private $config;
-    private $notifier;
+    private CommentFactory $commentFactory;
+    private CollectionFactory $collectionFactory;
+    private CommentInterfaceFactory $dataFactory;
+    private PostRepositoryInterface $postRepository;
+    private Config $config;
+    private CommentNotifier $notifier;
 
     public function __construct(
         CommentFactory $commentFactory,

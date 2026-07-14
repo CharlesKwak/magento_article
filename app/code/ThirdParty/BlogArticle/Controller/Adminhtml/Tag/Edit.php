@@ -1,24 +1,20 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Tag;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use ThirdParty\BlogArticle\Model\TagFactory;
 
-class Edit extends Action
+class Edit extends Action implements HttpGetActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::tags';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::tags';
 
-    /**
-     * @var PageFactory
-     */
-    private $resultPageFactory;
-
-    /**
-     * @var TagFactory
-     */
-    private $tagFactory;
+    private PageFactory $resultPageFactory;
+    private TagFactory $tagFactory;
 
     public function __construct(
         Context $context,

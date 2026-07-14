@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Post;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
@@ -8,14 +11,14 @@ use Magento\Ui\Component\MassAction\Filter;
 use ThirdParty\BlogArticle\Model\PostDuplicator;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory;
 
-class MassDuplicate extends Action
+class MassDuplicate extends Action implements HttpPostActionInterface
 {
     public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
     private const MAX_ITEMS = 20;
 
-    private $filter;
-    private $collectionFactory;
-    private $postDuplicator;
+    private Filter $filter;
+    private CollectionFactory $collectionFactory;
+    private PostDuplicator $postDuplicator;
 
     public function __construct(
         Context $context,

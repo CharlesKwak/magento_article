@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Magento module registration.
  * Guarded so Composer autoload can load this file during standalone PHPUnit

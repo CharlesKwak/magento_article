@@ -1,17 +1,21 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Post;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use ThirdParty\BlogArticle\Model\PostDuplicator;
 
-class Duplicate extends Action
+class Duplicate extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
 
-    private $postDuplicator;
+    private PostDuplicator $postDuplicator;
 
     public function __construct(
         Context $context,

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -11,7 +13,7 @@ use ThirdParty\BlogArticle\Api\BlogStatsManagementInterface;
  */
 class StatsCommand extends Command
 {
-    private $statsManagement;
+    private BlogStatsManagementInterface $statsManagement;
 
     public function __construct(
         BlogStatsManagementInterface $statsManagement,

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Ui\Component\Listing\Column;
 
 use Magento\Framework\Escaper;
@@ -12,8 +14,8 @@ use ThirdParty\BlogArticle\Model\FeaturedImageUploader;
  */
 class FeaturedImage extends Column
 {
-    private $imageUploader;
-    private $escaper;
+    private FeaturedImageUploader $imageUploader;
+    private Escaper $escaper;
 
     public function __construct(
         ContextInterface $context,

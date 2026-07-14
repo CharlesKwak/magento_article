@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Magento\Store\Model\StoreManagerInterface;
@@ -14,9 +16,9 @@ use ThirdParty\BlogArticle\Model\PreviewToken;
  */
 class PostPreviewUrlCommand extends Command
 {
-    private $postFactory;
-    private $previewToken;
-    private $storeManager;
+    private PostFactory $postFactory;
+    private PreviewToken $previewToken;
+    private StoreManagerInterface $storeManager;
 
     public function __construct(
         PostFactory $postFactory,

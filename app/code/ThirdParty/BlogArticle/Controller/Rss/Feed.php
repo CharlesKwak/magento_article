@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Rss;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\RawFactory;
@@ -21,16 +24,16 @@ use ThirdParty\BlogArticle\Model\TagFactory;
  *  - author: author slug or name
  *  - year / month: archive calendar filters
  */
-class Feed extends Action
+class Feed extends Action implements HttpGetActionInterface
 {
-    private $resultRawFactory;
-    private $collectionFactory;
-    private $postFilter;
-    private $storeManager;
-    private $imageUploader;
-    private $config;
-    private $categoryFactory;
-    private $tagFactory;
+    private RawFactory $resultRawFactory;
+    private CollectionFactory $collectionFactory;
+    private PostFilter $postFilter;
+    private StoreManagerInterface $storeManager;
+    private FeaturedImageUploader $imageUploader;
+    private Config $config;
+    private CategoryFactory $categoryFactory;
+    private TagFactory $tagFactory;
 
     public function __construct(
         Context $context,

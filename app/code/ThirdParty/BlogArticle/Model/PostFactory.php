@@ -1,19 +1,14 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 
 class PostFactory
 {
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @var string
-     */
-    private $instanceName;
+    private ObjectManagerInterface $objectManager;
+    private string $instanceName;
 
     public function __construct(
         ObjectManagerInterface $objectManager,

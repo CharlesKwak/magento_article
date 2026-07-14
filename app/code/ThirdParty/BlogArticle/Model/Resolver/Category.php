@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -11,10 +13,7 @@ use ThirdParty\BlogArticle\Api\CategoryRepositoryInterface;
 
 class Category implements ResolverInterface
 {
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepository;
+    private CategoryRepositoryInterface $categoryRepository;
 
     public function __construct(CategoryRepositoryInterface $categoryRepository)
     {

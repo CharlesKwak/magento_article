@@ -1,15 +1,19 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Comment;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use ThirdParty\BlogArticle\Api\CommentRepositoryInterface;
 
-class Approve extends Action
+class Approve extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::comments';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::comments';
 
-    private $commentRepository;
+    private CommentRepositoryInterface $commentRepository;
 
     public function __construct(Context $context, CommentRepositoryInterface $commentRepository)
     {

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -9,10 +11,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
  */
 class PostDuplicator
 {
-    private $postFactory;
-    private $urlKeyGenerator;
-    private $postTagLink;
-    private $postProductLink;
+    private PostFactory $postFactory;
+    private UrlKeyGenerator $urlKeyGenerator;
+    private PostTagLink $postTagLink;
+    private PostProductLink $postProductLink;
 
     public function __construct(
         PostFactory $postFactory,

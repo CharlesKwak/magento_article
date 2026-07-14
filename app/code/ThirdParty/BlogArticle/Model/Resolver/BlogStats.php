@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -12,8 +14,8 @@ use ThirdParty\BlogArticle\Model\GraphQl\Authorization;
  */
 class BlogStats implements ResolverInterface
 {
-    private $authorization;
-    private $statsManagement;
+    private Authorization $authorization;
+    private BlogStatsManagementInterface $statsManagement;
 
     public function __construct(
         Authorization $authorization,

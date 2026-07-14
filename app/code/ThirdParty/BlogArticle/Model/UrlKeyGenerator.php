@@ -1,14 +1,13 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory;
 
 class UrlKeyGenerator
 {
-    /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
+    private CollectionFactory $collectionFactory;
 
     public function __construct(CollectionFactory $collectionFactory)
     {

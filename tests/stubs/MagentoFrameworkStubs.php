@@ -57,6 +57,97 @@ namespace Magento\Framework {
     }
 }
 
+namespace Magento\Framework\Model {
+    if (!class_exists(AbstractModel::class, false)) {
+        /**
+         * Lightweight stand-in so entity models (Post, Category, …) can be
+         * instantiated with plain array data in smoke tests.
+         */
+        abstract class AbstractModel
+        {
+            /** @var array<string, mixed> */
+            protected $_data = [];
+
+            public function __construct(array $data = [])
+            {
+                $this->_data = $data;
+            }
+
+            public function getId()
+            {
+                return $this->_data['id'] ?? null;
+            }
+
+            public function setId($id)
+            {
+                $this->_data['id'] = $id;
+                return $this;
+            }
+
+            public function getData($key = '')
+            {
+                if ($key === '') {
+                    return $this->_data;
+                }
+                return $this->_data[$key] ?? null;
+            }
+
+            public function setData($key, $value = null)
+            {
+                if (is_array($key)) {
+                    $this->_data = $key;
+                } else {
+                    $this->_data[$key] = $value;
+                }
+                return $this;
+            }
+
+            /**
+             * Magic getX()/setX() mapped to snake_case data keys.
+             */
+            public function __call($method, $args)
+            {
+                $key = strtolower((string) preg_replace('/(.)([A-Z])/', '$1_$2', substr($method, 3)));
+                if (strpos($method, 'get') === 0) {
+                    return $this->_data[$key] ?? null;
+                }
+                if (strpos($method, 'set') === 0) {
+                    $this->_data[$key] = $args[0] ?? null;
+                    return $this;
+                }
+                throw new \BadMethodCallException($method);
+            }
+
+            /**
+             * @param string $resourceModel
+             */
+            protected function _init($resourceModel): void
+            {
+            }
+        }
+    }
+}
+
+namespace Magento\Framework\DataObject {
+    if (!interface_exists(IdentityInterface::class, false)) {
+        interface IdentityInterface
+        {
+            /**
+             * @return string[]
+             */
+            public function getIdentities();
+        }
+    }
+}
+
+namespace Magento\Store\Model {
+    if (!interface_exists(StoreManagerInterface::class, false)) {
+        interface StoreManagerInterface
+        {
+        }
+    }
+}
+
 namespace Magento\Framework\Model\ResourceModel\Db\Collection {
     if (!class_exists(AbstractCollection::class, false)) {
         /**

@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Controller\Adminhtml\Post;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
@@ -8,13 +11,13 @@ use Magento\Ui\Component\MassAction\Filter;
 use ThirdParty\BlogArticle\Model\PostTagLink;
 use ThirdParty\BlogArticle\Model\ResourceModel\Post\CollectionFactory;
 
-class MassDelete extends Action
+class MassDelete extends Action implements HttpPostActionInterface
 {
-    const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
+    public const ADMIN_RESOURCE = 'ThirdParty_BlogArticle::posts';
 
-    private $filter;
-    private $collectionFactory;
-    private $postTagLink;
+    private Filter $filter;
+    private CollectionFactory $collectionFactory;
+    private PostTagLink $postTagLink;
 
     public function __construct(
         Context $context,

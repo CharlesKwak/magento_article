@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -8,10 +10,7 @@ use ThirdParty\BlogArticle\Api\CategoryRepositoryInterface;
 
 class Categories implements ResolverInterface
 {
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepository;
+    private CategoryRepositoryInterface $categoryRepository;
 
     public function __construct(CategoryRepositoryInterface $categoryRepository)
     {

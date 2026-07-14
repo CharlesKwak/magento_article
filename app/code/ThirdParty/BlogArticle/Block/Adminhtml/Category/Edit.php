@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Block\Adminhtml\Category;
 
 use Magento\Backend\Block\Template;
@@ -10,25 +12,10 @@ use ThirdParty\BlogArticle\Model\CategoryFactory;
 
 class Edit extends Template
 {
-    /**
-     * @var CategoryFactory
-     */
-    private $categoryFactory;
-
-    /**
-     * @var FormKey
-     */
+    private CategoryFactory $categoryFactory;
     protected $formKey;
-
-    /**
-     * @var DataPersistorInterface
-     */
-    private $dataPersistor;
-
-    /**
-     * @var Category|null
-     */
-    private $category;
+    private DataPersistorInterface $dataPersistor;
+    private ?Category $category = null;
 
     public function __construct(
         Context $context,

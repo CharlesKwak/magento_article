@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -23,8 +25,8 @@ class TaxonomyCsvExporter
         'update_time',
     ];
 
-    private $csv;
-    private $filesystem;
+    private Csv $csv;
+    private Filesystem $filesystem;
 
     public function __construct(Csv $csv, Filesystem $filesystem)
     {

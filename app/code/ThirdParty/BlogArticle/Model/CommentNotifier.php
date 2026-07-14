@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model;
 
 use Magento\Framework\App\Area;
@@ -17,12 +19,12 @@ class CommentNotifier
 {
     public const XML_TEMPLATE_ID = 'blogarticle_comment_notification';
 
-    private $config;
-    private $transportBuilder;
-    private $inlineTranslation;
-    private $storeManager;
-    private $postRepository;
-    private $logger;
+    private Config $config;
+    private TransportBuilder $transportBuilder;
+    private StateInterface $inlineTranslation;
+    private StoreManagerInterface $storeManager;
+    private PostRepositoryInterface $postRepository;
+    private LoggerInterface $logger;
 
     public function __construct(
         Config $config,

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Setup;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -249,7 +251,6 @@ class InstallSchema implements InstallSchemaInterface
                 )->setComment('BlogArticle Post-Tag Link');
             $connection->createTable($linkTable);
         }
-
 
         $commentTableName = $installer->getTable('thirdparty_blogarticle_comment');
         if (!$connection->isTableExists($commentTableName)) {

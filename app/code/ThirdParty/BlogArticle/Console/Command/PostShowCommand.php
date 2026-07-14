@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -15,8 +17,8 @@ class PostShowCommand extends Command
 {
     private const ARG_IDENTIFIER = 'identifier';
 
-    private $postFactory;
-    private $postTagLink;
+    private PostFactory $postFactory;
+    private PostTagLink $postTagLink;
 
     public function __construct(
         PostFactory $postFactory,

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Cron;
 
 use Magento\Framework\App\CacheInterface;
@@ -11,9 +13,9 @@ use ThirdParty\BlogArticle\Model\Post;
  */
 class FlushScheduledPostCache
 {
-    private $resource;
-    private $cache;
-    private $dateTime;
+    private ResourceConnection $resource;
+    private CacheInterface $cache;
+    private DateTime $dateTime;
 
     public function __construct(
         ResourceConnection $resource,

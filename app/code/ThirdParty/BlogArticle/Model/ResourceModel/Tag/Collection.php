@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace ThirdParty\BlogArticle\Model\ResourceModel\Tag;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
