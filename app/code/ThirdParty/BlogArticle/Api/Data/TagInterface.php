@@ -15,30 +15,51 @@ interface TagInterface
 
     /** @return int|null */
     public function getTagId();
-    /** @param int $tagId @return $this */
+    /**
+     * @param int $tagId
+     * @return $this
+     */
     public function setTagId($tagId);
     /** @return string|null */
     public function getName();
-    /** @param string $name @return $this */
+    /**
+     * @param string $name
+     * @return $this
+     */
     public function setName($name);
     /** @return string|null */
     public function getUrlKey();
-    /** @param string $urlKey @return $this */
+    /**
+     * @param string $urlKey
+     * @return $this
+     */
     public function setUrlKey($urlKey);
     /** @return string|null */
     public function getDescription();
-    /** @param string|null $description @return $this */
+    /**
+     * @param string|null $description
+     * @return $this
+     */
     public function setDescription($description);
     /** @return int|null */
     public function getIsActive();
-    /** @param int $isActive @return $this */
+    /**
+     * @param int $isActive
+     * @return $this
+     */
     public function setIsActive($isActive);
     /** @return string|null */
     public function getCreationTime();
-    /** @param string $creationTime @return $this */
+    /**
+     * @param string $creationTime
+     * @return $this
+     */
     public function setCreationTime($creationTime);
     /** @return string|null */
     public function getUpdateTime();
-    /** @param string $updateTime @return $this */
+    /**
+     * @param string $updateTime
+     * @return $this
+     */
     public function setUpdateTime($updateTime);
 }

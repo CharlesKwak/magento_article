@@ -29,75 +29,129 @@ interface PostInterface
 
     /** @return int|null */
     public function getPostId();
-    /** @param int $postId @return $this */
+    /**
+     * @param int $postId
+     * @return $this
+     */
     public function setPostId($postId);
     /** @return string|null */
     public function getTitle();
-    /** @param string $title @return $this */
+    /**
+     * @param string $title
+     * @return $this
+     */
     public function setTitle($title);
     /** @return string|null */
     public function getAuthor();
-    /** @param string|null $author @return $this */
+    /**
+     * @param string|null $author
+     * @return $this
+     */
     public function setAuthor($author);
     /** @return string|null */
     public function getUrlKey();
-    /** @param string $urlKey @return $this */
+    /**
+     * @param string $urlKey
+     * @return $this
+     */
     public function setUrlKey($urlKey);
     /** @return string|null */
     public function getContent();
-    /** @param string $content @return $this */
+    /**
+     * @param string $content
+     * @return $this
+     */
     public function setContent($content);
     /** @return string|null */
     public function getExcerpt();
-    /** @param string|null $excerpt @return $this */
+    /**
+     * @param string|null $excerpt
+     * @return $this
+     */
     public function setExcerpt($excerpt);
     /** @return string|null */
     public function getFeaturedImage();
-    /** @param string|null $featuredImage @return $this */
+    /**
+     * @param string|null $featuredImage
+     * @return $this
+     */
     public function setFeaturedImage($featuredImage);
     /** @return string|null */
     public function getMetaTitle();
-    /** @param string|null $metaTitle @return $this */
+    /**
+     * @param string|null $metaTitle
+     * @return $this
+     */
     public function setMetaTitle($metaTitle);
     /** @return string|null */
     public function getMetaDescription();
-    /** @param string|null $metaDescription @return $this */
+    /**
+     * @param string|null $metaDescription
+     * @return $this
+     */
     public function setMetaDescription($metaDescription);
     /** @return string|null */
     public function getMetaRobots();
-    /** @param string|null $metaRobots @return $this */
+    /**
+     * @param string|null $metaRobots
+     * @return $this
+     */
     public function setMetaRobots($metaRobots);
     /** @return int|null */
     public function getIsActive();
-    /** @param int $isActive @return $this */
+    /**
+     * @param int $isActive
+     * @return $this
+     */
     public function setIsActive($isActive);
     /** @return int|null */
     public function getViewCount();
-    /** @param int $viewCount @return $this */
+    /**
+     * @param int $viewCount
+     * @return $this
+     */
     public function setViewCount($viewCount);
     /** @return int|null */
     public function getCategoryId();
-    /** @param int|null $categoryId @return $this */
+    /**
+     * @param int|null $categoryId
+     * @return $this
+     */
     public function setCategoryId($categoryId);
     /** @return int|null */
     public function getStoreId();
-    /** @param int|null $storeId @return $this */
+    /**
+     * @param int|null $storeId
+     * @return $this
+     */
     public function setStoreId($storeId);
     /** @return int[]|null */
     public function getTagIds();
-    /** @param int[] $tagIds @return $this */
+    /**
+     * @param int[] $tagIds
+     * @return $this
+     */
     public function setTagIds(array $tagIds);
     /** @return string|null */
     public function getCreationTime();
-    /** @param string $creationTime @return $this */
+    /**
+     * @param string $creationTime
+     * @return $this
+     */
     public function setCreationTime($creationTime);
     /** @return string|null */
     public function getUpdateTime();
-    /** @param string $updateTime @return $this */
+    /**
+     * @param string $updateTime
+     * @return $this
+     */
     public function setUpdateTime($updateTime);
     /** @return string|null */
     public function getPublishedAt();
-    /** @param string|null $publishedAt @return $this */
+    /**
+     * @param string|null $publishedAt
+     * @return $this
+     */
     public function setPublishedAt($publishedAt);
 }
 

@@ -16,34 +16,58 @@ interface CommentInterface
 
     /** @return int|null */
     public function getCommentId();
-    /** @param int $commentId @return $this */
+    /**
+     * @param int $commentId
+     * @return $this
+     */
     public function setCommentId($commentId);
     /** @return int|null */
     public function getPostId();
-    /** @param int $postId @return $this */
+    /**
+     * @param int $postId
+     * @return $this
+     */
     public function setPostId($postId);
     /** @return int|null */
     public function getParentId();
-    /** @param int|null $parentId @return $this */
+    /**
+     * @param int|null $parentId
+     * @return $this
+     */
     public function setParentId($parentId);
     /** @return string|null */
     public function getAuthorName();
-    /** @param string $authorName @return $this */
+    /**
+     * @param string $authorName
+     * @return $this
+     */
     public function setAuthorName($authorName);
     /** @return string|null */
     public function getAuthorEmail();
-    /** @param string|null $authorEmail @return $this */
+    /**
+     * @param string|null $authorEmail
+     * @return $this
+     */
     public function setAuthorEmail($authorEmail);
     /** @return string|null */
     public function getContent();
-    /** @param string $content @return $this */
+    /**
+     * @param string $content
+     * @return $this
+     */
     public function setContent($content);
     /** @return int|null */
     public function getIsApproved();
-    /** @param int $isApproved @return $this */
+    /**
+     * @param int $isApproved
+     * @return $this
+     */
     public function setIsApproved($isApproved);
     /** @return string|null */
     public function getCreationTime();
-    /** @param string $creationTime @return $this */
+    /**
+     * @param string $creationTime
+     * @return $this
+     */
     public function setCreationTime($creationTime);
 }
