@@ -61,6 +61,10 @@ class AddSampleBlogPosts implements DataPatchInterface
                 $rows[0]['is_active'] = 1;
                 $rows[1]['is_active'] = 1;
             }
+            if ($connection->tableColumnExists($table, 'meta_description')) {
+                $rows[0]['meta_description'] = 'Welcome post introducing the blog and how sample articles are seeded.';
+                $rows[1]['meta_description'] = 'How to edit or add blog posts from Content → Blog Posts in the Magento Admin.';
+            }
 
             $connection->insertMultiple($table, $rows);
         }
