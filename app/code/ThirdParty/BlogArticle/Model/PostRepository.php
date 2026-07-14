@@ -325,7 +325,7 @@ class PostRepository implements PostRepositoryInterface
         $this->postFilter->applyPublishedOnly($collection);
         $this->postFilter->applyStoreId($collection, $storeId);
         if ($excludeIds) {
-            $collection->addFieldToFilter('post_id', ['nin' => $excludeIds]);
+            $collection->addFieldToFilter('main_table.post_id', ['nin' => $excludeIds]);
         }
         if ($categoryId) {
             $collection->addFieldToFilter('category_id', $categoryId);

@@ -45,9 +45,6 @@
         <resources>
             <resource ref="ThirdParty_BlogArticle::posts"/>
         </resources>
-        <data>
-            <parameter name="post.post_id" force="true">%postId%</parameter>
-        </data>
     </route>
     <route url="/V1/blogarticle/posts/:postId" method="DELETE">
         <service class="ThirdParty\BlogArticle\Api\PostRepositoryInterface" method="deleteById"/>
@@ -86,9 +83,6 @@
         <resources>
             <resource ref="ThirdParty_BlogArticle::categories"/>
         </resources>
-        <data>
-            <parameter name="category.category_id" force="true">%categoryId%</parameter>
-        </data>
     </route>
     <route url="/V1/blogarticle/categories/:categoryId" method="DELETE">
         <service class="ThirdParty\BlogArticle\Api\CategoryRepositoryInterface" method="deleteById"/>
@@ -117,9 +111,6 @@
     <route url="/V1/blogarticle/tags/:tagId" method="PUT">
         <service class="ThirdParty\BlogArticle\Api\TagRepositoryInterface" method="save"/>
         <resources><resource ref="ThirdParty_BlogArticle::tags"/></resources>
-        <data>
-            <parameter name="tag.tag_id" force="true">%tagId%</parameter>
-        </data>
     </route>
     <route url="/V1/blogarticle/tags/:tagId" method="DELETE">
         <service class="ThirdParty\BlogArticle\Api\TagRepositoryInterface" method="deleteById"/>
@@ -156,9 +147,6 @@
     <route url="/V1/blogarticle/comments/:commentId" method="PUT">
         <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="save"/>
         <resources><resource ref="ThirdParty_BlogArticle::comments"/></resources>
-        <data>
-            <parameter name="comment.comment_id" force="true">%commentId%</parameter>
-        </data>
     </route>
     <route url="/V1/blogarticle/comments/:commentId/approve" method="PUT">
         <service class="ThirdParty\BlogArticle\Api\CommentRepositoryInterface" method="approve"/>
